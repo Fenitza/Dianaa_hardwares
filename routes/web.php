@@ -14,5 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
+ 
 });
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('/account', [UserController::class, 'account'])->name('account');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+
+Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
+Route::get('/services', [ServicesController::class, 'index'])->name('services');
+Route::get('/careers', [CareersController::class, 'index'])->name('careers');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
