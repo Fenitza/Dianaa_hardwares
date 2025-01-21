@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Website Title</title>
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
@@ -33,9 +34,9 @@
                         </form>
                     </div>
                     <div class="bottom-links">
-                        <a href="#">All Products</a> |
-                        <a href="{{ route('account') }}">My Account</a> |
-                        <a href="{{ route('cart') }}">Cart</a>
+                        <a href="#"><i class="fa fa-box"></i> All Products</a> |
+                        <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> |
+                        <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a>
                     </div>
                 </div>
             </div>
