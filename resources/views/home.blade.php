@@ -51,8 +51,9 @@
 <!-- Product Tab Section -->
 <div class="products-section">
 <div class="quick-links">
-        <h3>Quick Links</h3>
+        
         <ul>
+            <li><a href="#">Quick Links</a></li>
             <li><a href="#">Hex Head</a></li>
             <li><a href="#">Socket Head</a></li>
             <li><a href="#">Washers</a></li>
