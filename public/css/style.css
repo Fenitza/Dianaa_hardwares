@@ -162,7 +162,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 30px 100px;
+    padding: 10px 100px;
     background-color: #f8f8f8de; /* Light gray background */
     margin-bottom: 20px; /* Adds some space below the section */
 }
@@ -231,7 +231,7 @@ header {
 .product-carousel {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 35px;
     overflow-x: auto; /* Allows horizontal scrolling if boxes exceed the viewport width */
 }
 
@@ -255,10 +255,10 @@ header {
 /* Home section Product Tab styles */
 .products-section {
     display: flex;
-    flex-wrap: wrap; /* Allows the cards to wrap to the next line */
+    flex-wrap: nowrap; /* Allows the cards to wrap to the next line */
     justify-content: space-between; /* Distributes spacing evenly between cards */
-    padding: 20px;
-    width: 100%; /* Ensure it fills the full width of its container */
+    padding: 50px;
+    width: 95; /* Ensure it fills the full width of its container */
 }
 
 .quick-links {
@@ -293,25 +293,25 @@ header {
 .product-main-content {
     flex-grow: 1; /* Takes up remaining space */
     padding-left: 20px; /* Space from quick links */
-    
+    width: 40%;
 }
 
 .tabs {
     display: flex;
-    justify-content: space-around;
-    background-color: #f0f0f0;
+    justify-content: left;
+    background-color: #0056b3;
 }
 
 .tab-button {
     padding: 10px 20px;
     border: none;
-    background: none;
+    background-color: #0056b3;
     cursor: pointer;
     font-size: 16px;
 }
 
 .tab-button.active, .tab-button:hover {
-    background-color: #ddd;
+    background-color: #a6cd33;
 }
 
 .product-container {
@@ -319,6 +319,7 @@ header {
     justify-content: space-around;
     padding: 20px;
     background-color: #fff;
+    
 }
 
 .product-category {
