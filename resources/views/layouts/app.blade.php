@@ -12,7 +12,7 @@
         <div class="header-container">
             <!-- Left Section: Logo -->
             <div class="left-section">
-                <a href="{{ url('/') }}"><img src="{{ asset('images/logo.png') }}" alt="Logo"></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('images/logo/logo.png') }}" alt="Logo"></a>
             </div>
 
             <!-- Right Section -->
