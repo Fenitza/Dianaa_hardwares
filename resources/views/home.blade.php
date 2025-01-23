@@ -91,6 +91,7 @@
                 <h3>Product Name</h3>
                 <p>£100.00</p>
             </div>
+            
             </div>
             <div class="product-category" id="new-arrival">
                 <!-- Product Cards for New Arrival -->
@@ -120,6 +121,81 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="product-service-offers">
+    <div class="product-service-item">
+        <i class="fas fa-grin-beam fa-2x"></i>
+        <span>100% Satisfaction<br>If you are unable</span>
+    </div>
+    <div class="product-service-item">
+        <i class="fas fa-tags fa-2x"></i>
+        <span>Save 20% When You<br>Use credit card</span>
+    </div>
+    <div class="product-service-item">
+        <i class="fas fa-shipping-fast fa-2x"></i>
+        <span>Fast Free Shipment<br>Load any computer's</span>
+    </div>
+    <div class="product-service-item">
+        <i class="fas fa-undo fa-2x"></i>
+        <span>14-Day Money Back<br>If you are unable</span>
+    </div>
+    </div>
+    <!-- Footer -->
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>Products</h4>
+            <ul>
+                <li><a href="#">Prices drop</a></li>
+                <li><a href="#">New products</a></li>
+                <li><a href="#">Best sales</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Our company</h4>
+            <ul>
+                <li><a href="#">Delivery</a></li>
+                <li><a href="#">Legal Notice</a></li>
+                <li><a href="#">Terms and conditions of use</a></li>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Secure payment</a></li>
+                <li><a href="#">Contact us</a></li>
+                <li><a href="#">Sitemap</a></li>
+                <li><a href="#">Stores</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Your account</h4>
+            <ul>
+                <li><a href="#">Personal info</a></li>
+                <li><a href="#">Orders</a></li>
+                <li><a href="#">Credit slips</a></li>
+                <li><a href="#">Addresses</a></li>
+                <li><a href="#">Wishlist</a></li>
+                <li><a href="#">Compare</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Store Information</h4>
+            <p>ToolShop, Russia</p>
+            <p>Tel: 123 456 789</p>
+            <p>Email: demo@demo.com</p>
+            <div class="payment-methods">
+                <i class="fab fa-cc-visa" aria-hidden="true"></i>
+                <i class="fab fa-cc-paypal" aria-hidden="true"></i>
+                <i class="fab fa-cc-mastercard" aria-hidden="true"></i>
+                <i class="fab fa-cc-amex" aria-hidden="true"></i>
+                <i class="fab fa-cc-discover" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
 
 @endsection

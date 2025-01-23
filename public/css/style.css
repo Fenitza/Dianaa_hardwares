@@ -165,6 +165,7 @@ header {
     padding: 10px 100px;
     background-color: #f8f8f8de; /* Light gray background */
     margin-bottom: 20px; /* Adds some space below the section */
+    margin-top: 20px; /* Adds some space above the section */
 }
 
 .company-text h2 {
@@ -257,8 +258,8 @@ header {
     display: flex;
     flex-wrap: nowrap; /* Allows the cards to wrap to the next line */
     justify-content: space-between; /* Distributes spacing evenly between cards */
-    padding: 50px;
-    width: 95; /* Ensure it fills the full width of its container */
+    padding: 50px 30px;
+    width: 95%; /* Ensure it fills the full width of its container */
 }
 
 .quick-links {
@@ -300,18 +301,22 @@ header {
     display: flex;
     justify-content: left;
     background-color: #0056b3;
+
 }
 
 .tab-button {
     padding: 10px 20px;
     border: none;
     background-color: #0056b3;
+    color: white;
     cursor: pointer;
     font-size: 16px;
 }
 
 .tab-button.active, .tab-button:hover {
     background-color: #a6cd33;
+    color: black;
+    font-weight: bold;
 }
 
 .product-container {
@@ -331,26 +336,140 @@ header {
 }
 
 .product-card {
-    width: 200px;
-    text-align: center;
-    margin: 10px;
+    width: 180px; /* Fixed width for each card */
+    text-align: center; /* Center the text inside the card */
+    margin: 10px; /* Spacing around each card */
+    background-color: #ffffff; /* White background for the card */
+    border: 1px solid #ccc; /* Grey border around the card */
+    padding: 15px; /* Padding inside the card for spacing around the content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+    border-radius: 5px; /* Slightly rounded corners for a smoother look */
+    display: flex; /* Enables the use of Flexbox for contents */
+    flex-direction: column; /* Stack the contents vertically */
+    justify-content: space-between; /* Distribute space between items */
+    align-items: center; /* Align items to the center horizontally */
+    overflow: hidden; /* Ensures nothing spills out of the card */
 }
 
 .product-card img {
-    width: 100%;
-    height: auto;
+    width: 100%; /* Make the image fill the width of the card */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 10px; /* Space below the image */
 }
 
 .product-card h3 {
-    font-size: 16px;
-    color: #333;
-    margin: 5px 0;
+    font-size: 16px; /* Size of the product name */
+    color: #333; /* Dark grey color for text */
+    margin-top: 5px; /* Margin at the top of the product name */
+    margin-bottom: 5px; /* Margin at the bottom of the product name */
 }
 
 .product-card p {
-    font-size: 14px;
-    color: #666;
+    font-size: 14px; /* Size of the price text */
+    color: #666; /* Medium grey color for the price text */
+    margin: 0; /* No additional margin to keep the card compact */
 }
+
+/* Services Section */
+.product-service-item i {
+    color: #0056b3; /* Example color; adjust as needed */
+    margin-bottom: 10px; /* Space between the icon and text */
+}
+
+.product-service-offers {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white; /* Light background color */
+    padding: 20px 0;
+}
+
+.product-service-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.service-item span {
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+/* Footer */
+.site-footer {
+    background-color: #2d2e6a; /* Set the footer background color */
+    color: white;
+    padding: 20px 40px; /* Adjust padding for the entire footer */
+    font-family: Arial, sans-serif; /* Ensures consistency in typography */
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top */
+    max-width: 1200px; /* Maximum width of the footer content */
+    margin: 0 auto; /* Center the footer container */
+}
+
+.footer-column {
+    margin-right: 20px; /* Space between columns */
+}
+
+.footer-column h4 {
+    font-size: 16px; /* Adjust font size for heading */
+    border-bottom: 2px solid #ffffff50; /* Subtle underline for the header */
+    padding-bottom: 10px; /* Padding below the header text */
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0; /* Remove default padding */
+    margin: 10px 0 0; /* Top margin for the list, none on the sides and bottom */
+}
+
+.footer-column li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 8px 0; /* Padding for each link */
+    font-size: 14px; /* Smaller font size for the links */
+}
+
+.footer-column li a:hover {
+    text-decoration: underline; /* Underline on hover for better interaction visibility */
+}
+
+.payment-methods {
+    display: flex;
+    align-items: center; /* Align payment icons vertically */
+}
+
+.payment-methods i {
+    font-size: 24px; /* Adjust icon size */
+    margin-right: 10px; /* Space between icons */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-column {
+        margin-right: 0;
+        margin-bottom: 20px; /* Space between columns when stacked */
+    }
+
+    .payment-methods {
+        justify-content: center; /* Center payment icons */
+    }
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -402,7 +521,7 @@ header {
         align-items: center;
     }
 
-    .service-item {
+    .services-item {
         width: 100%; /* Full width for better mobile responsiveness */
         margin-bottom: 10px; /* Adds space between stacked items */
     }
@@ -414,5 +533,13 @@ header {
     .product-box {
         width: 90%; /* Makes each box take up most of the screen on small devices */
         margin: 10px auto; /* Centers the boxes and adds margin for spacing */
+    }
+
+    .service-offers {
+        flex-direction: column;
+    }
+
+    .product-service-item {
+        margin-bottom: 20px;
     }
 }
