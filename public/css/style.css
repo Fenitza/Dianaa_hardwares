@@ -452,27 +452,19 @@ header {
     margin-right: 10px; /* Space between icons */
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .footer-column {
-        margin-right: 0;
-        margin-bottom: 20px; /* Space between columns when stacked */
-    }
-
-    .payment-methods {
-        justify-content: center; /* Center payment icons */
-    }
-}
-
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* header */
+    .header {
+        padding: 10px 15px; /* Slightly smaller padding */
+        font-size: 14px; /* Smaller text */
+    }
+
+    .body {
+        font-size: 14px; /* Smaller body text */
+    }
+
     .header-container {
         flex-direction: column;
         align-items: center;
@@ -496,7 +488,7 @@ header {
         margin-bottom: 10px;
         margin-right: 0;
     }
-
+    /* hero section */
     .hero-section {
         padding: 50px 10px;
     }
@@ -516,6 +508,7 @@ header {
         padding: 8px 16px;
     }
 
+    /* Company details */
     .services {
         flex-direction: column;
         align-items: center;
@@ -526,6 +519,7 @@ header {
         margin-bottom: 10px; /* Adds space between stacked items */
     }
 
+    /* product carousel */
     .product-carousel {
         flex-direction: column;
         align-items: center;
@@ -535,11 +529,27 @@ header {
         margin: 10px auto; /* Centers the boxes and adds margin for spacing */
     }
 
+    /* Services */
     .service-offers {
         flex-direction: column;
     }
 
     .product-service-item {
         margin-bottom: 20px;
+    }
+
+    /* footer */
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-column {
+        margin-right: 0;
+        margin-bottom: 20px; /* Space between columns when stacked */
+    }
+
+    .payment-methods {
+        justify-content: center; /* Center payment icons */
     }
 }
