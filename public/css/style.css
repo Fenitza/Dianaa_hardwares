@@ -119,32 +119,6 @@ header {
     color: #ffc107;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .right-section {
-        align-items: center;
-    }
-
-    .top-right-links {
-        text-align: center;
-    }
-
-    .bottom-right-section {
-        flex-direction: column;
-        align-items: center;
-        margin-top: 10px;
-    }
-
-    .search-bar {
-        margin-bottom: 10px;
-        margin-right: 0;
-    }
-}
 
 .hero-section {
     text-align: center;
@@ -182,28 +156,6 @@ header {
     text-decoration: none;
     font-size: 16px;
     margin-bottom: 20px;
-}
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 50px 10px;
-    }
-
-    .hero-section h1 {
-        font-size: 32px;
-        margin-bottom: 20px;
-    }
-
-    .hero-section p {
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-
-    .shop-now-btn {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-
 }
 /* Home section Company Details styles */
 .company-details {
@@ -276,19 +228,6 @@ header {
     margin-bottom: 10px; /* Space between icon and text */
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .services {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .services-item {
-        width: 100%; /* Full width for better mobile responsiveness */
-        margin-bottom: 10px; /* Adds space between stacked items */
-    }
-
-}
 /* Home section product carousel */
 .product-carousel {
     display: flex;
@@ -312,18 +251,6 @@ header {
     width: 100%; /* Ensures the image stretches to cover the box */
     height: auto; /* Keeps the aspect ratio intact */
     display: block; /* Removes any extra space beneath the image */
-}
-/* Responsive adjustments */
-@media (max-width: 768px) {
-
-    .product-carousel {
-        flex-direction: column;
-        align-items: center;
-    }
-    .product-box {
-        width: 90%; /* Makes each box take up most of the screen on small devices */
-        margin: 10px auto; /* Centers the boxes and adds margin for spacing */
-    }
 }
 
 /* Home section Product Tab styles */
@@ -471,17 +398,6 @@ header {
     text-align: center;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .product-service-offers {
-        flex-direction: column;
-    }
-    
-    .product-service-item {
-        margin-bottom: 20px;
-    }
-}
-
 /* Footer */
 .site-footer {
     background-color: #2d2e6a; /* Set the footer background color */
@@ -550,5 +466,80 @@ header {
 
     .payment-methods {
         justify-content: center; /* Center payment icons */
+    }
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .right-section {
+        align-items: center;
+    }
+
+    .top-right-links {
+        text-align: center;
+    }
+
+    .bottom-right-section {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .search-bar {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .hero-section {
+        padding: 50px 10px;
+    }
+
+    .hero-section h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .hero-section p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .shop-now-btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .services {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .services-item {
+        width: 100%; /* Full width for better mobile responsiveness */
+        margin-bottom: 10px; /* Adds space between stacked items */
+    }
+
+    .product-carousel {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-box {
+        width: 90%; /* Makes each box take up most of the screen on small devices */
+        margin: 10px auto; /* Centers the boxes and adds margin for spacing */
+    }
+
+    .service-offers {
+        flex-direction: column;
+    }
+
+    .product-service-item {
+        margin-bottom: 20px;
     }
 }
