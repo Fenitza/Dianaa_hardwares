@@ -529,6 +529,32 @@ header {
         margin: 10px auto; /* Centers the boxes and adds margin for spacing */
     }
 
+    /* product tab details */
+    .products-section {
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .quick-links {
+        width: 100%; /* Quick links take full width */
+        margin-bottom: 20px; /* Add bottom margin for spacing */
+    }
+
+    .product-main-content {
+        width: 100%; /* Main content takes full width */
+    }
+
+    .tabs {
+        flex-direction: column; /* Stack tabs vertically on small screens */
+    }
+
+    .product-container {
+        flex-direction: column; /* Ensure product cards are stacked vertically */
+    }
+
+    .product-card {
+        width: calc(100% - 20px); /* Full width minus padding for small screens */
+    }
+
     /* Services */
     .service-offers {
         flex-direction: column;
@@ -553,3 +579,27 @@ header {
         justify-content: center; /* Center payment icons */
     }
 }
+
+@media (max-width: 1024px) {
+    .products-section {
+        padding: 30px 15px; /* Reduced padding */
+    }
+
+    .quick-links {
+        width: 25%; /* Slightly increase width to maintain visibility */
+    }
+
+    .product-main-content {
+        width: 75%; /* Adjust width to complement quick-links width */
+    }
+
+    .product-container {
+        flex-direction: column; /* Stack the products vertically */
+    }
+
+    .product-card {
+        width: 100%; /* Full width to take up the container */
+        margin: 10px 0; /* Adjust margins to only vertical */
+    }
+}
+
