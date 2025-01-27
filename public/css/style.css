@@ -370,6 +370,48 @@ header {
     margin: 0; /* No additional margin to keep the card compact */
 }
 
+/* Product Categories */
+
+.product-categories h2 {
+    text-align: center;
+    color: #333;
+}
+
+.categories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* This aligns items as seen in your screenshot */
+    padding: 20px;
+}
+
+.category-item {
+    width: 18%;
+    text-align: center;
+    margin: 10px;
+}
+
+.category-item img {
+    width: 100px; /* Adjust based on actual size needed */
+    height: auto;
+}
+
+.category-item p {
+    margin-top: 5px;
+    color: white;
+    background-color: #2d2e6a ;
+}
+
+.product-categories button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0066cc; /* Adjust color as needed */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
 /* Services Section */
 .product-service-item i {
     color: #0056b3; /* Example color; adjust as needed */

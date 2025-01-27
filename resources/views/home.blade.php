@@ -123,6 +123,63 @@
     </div>
     </div>
 
+    <!-- Product Categories  -->
+    <div class="product-categories">
+        <h2>PRODUCT CATEGORIES</h2>
+        <div class="categories-grid">
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Fasteners">
+                <p>Fasteners</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Safety">
+                <p>Safety</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Janitorial and Cleaning">
+                <p>Janitorial and Cleaning</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Fasteners">
+                <p>Fasteners</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Safety">
+                <p>Safety</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Janitorial and Cleaning">
+                <p>Janitorial and Cleaning</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Fasteners">
+                <p>Fasteners</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Safety">
+                <p>Safety</p>
+            </div>
+            <div class="category-item">
+                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Janitorial and Cleaning">
+                <p>Janitorial and Cleaning</p>
+            </div>
+            
+            <!-- Repeat for other categories -->
+        </div>
+        <button>Explore All Products</button>
+    </div>
+    <div class="container text-center">
+    <h2>PRODUCT CATEGORIES</h2>
+    <div class="row">
+        <div class="col-6 col-md-3 col-lg-2">
+            <img src="path_to_fasteners_image.jpg" alt="Fasteners" class="img-fluid">
+            <p>Fasteners</p>
+        </div>
+        <!-- Repeat for each category, adjusting col classes -->
+    </div>
+    <button class="btn btn-primary mt-4">Explore All Products</button>
+</div>
+
     <!-- Services Section -->
     <div class="product-service-offers">
     <div class="product-service-item">

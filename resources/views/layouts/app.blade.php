@@ -6,6 +6,7 @@
     <title>Your Website Title</title>
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9B0CUoE4RJC3Cp2T11tHKEg3pii2K63nn2" crossorigin="anonymous">
 </head>
 <body>
     <header>
