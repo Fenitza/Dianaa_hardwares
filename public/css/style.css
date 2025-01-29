@@ -119,22 +119,25 @@ header {
     color: #ffc107;
 }
 
-
+/* Home hero section */
 .hero-section {
-    text-align: center;
-    color: white;
-    font-family: Arial, sans-serif;
+    background-size: cover;
     padding: 100px 20px;
-    position: relative;
-    height: 120px;
+    background-position: center;
+    overflow: hidden;
 }
 
-.hero-content {
-    position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translate(-50%, -50%);
-    text-align: left;
+.text-white{
+    padding-left: 50px; 
+    max-width: 500px;
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Red */
+    color: #ffffff; /* White */
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
 }
 
 .hero-section h1 {
@@ -145,18 +148,33 @@ header {
 
 .hero-section p {
     font-size: 18px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     color: rgb(172, 169, 169);
 }
 
-.shop-now-btn {
-    background-color: red;
-    color: rgb(255, 255, 255);
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 16px;
-    margin-bottom: 20px;
+/* Company details styling */
+.company-text h2 {
+    font-weight: bold;
 }
+
+.text-primary {
+    color: #007bff; /* Bootstrap primary color */
+}
+
+.service-item i {
+    margin-bottom: 10px; /* Adds space below icons */
+}
+
+.service-item p {
+    font-size: 16px; /* Ensures text is neither too large nor too small */
+}
+
+/* General padding for icons and text within services */
+.service-item {
+    padding: 20px;
+    text-align: center; /* Centers the icons and text */
+}
+
 /* Home section Company Details styles */
 .company-details {
     display: flex;
