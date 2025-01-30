@@ -3,13 +3,6 @@
 
 @section('content')
 <!-- Hero Section -->
-<!-- <div class="hero-section" style="background-image: url('{{ asset('images/banners/hand_tools2.jpg') }}'); background-size: cover; background-position: center; color: white;">
-        <div class="hero-content">
-            <p>30% Discount</p>
-            <h1>Best Hand Tools <br> Collection</h1>
-            <a href="#" class="shop-now-btn">Shop Now</a>
-        </div>
-    </div> -->
 
     <div class="hero-section" style="background-image: url('{{ asset('images/banners/hand_tools2.jpg') }}');">
     <div class="container h-100 d-flex align-items-center" style="padding-top: 0; margin-top: -50px;">
@@ -43,32 +36,6 @@
     </div>
 </div>
 
-<!-- Company Details Section -->
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>We are Construction - <span class="text-primary">Leading provider of industrial and mechanical solutions.</span></h2>
-            <p>Founded in 1970, our company has grown by leaps and bounds and had been setting new standards.<br>
-            Starting put with only ability, enthusiasm and a clear vision of destination, our team has earned every single reputation and award.</p>
-        </div>
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-hammer fa-3x"></i>
-                    <p>Construction</p>
-                </div>
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-paint-roller fa-3x"></i>
-                    <p>Renovations</p>
-                </div>
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-seedling fa-3x"></i>
-                    <p>Green Building</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Product Carousel Section -->
 <div class="product-carousel">
@@ -85,6 +52,8 @@
         <img src="{{ asset('images/banners/ergodyne_banner.png') }}" alt="Justrite Ultimate Flammable Liquid Safety">
     </a>
 </div>
+
+
 
 <!-- Product Tab Section -->
 <div class="products-section">
