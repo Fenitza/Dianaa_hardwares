@@ -55,7 +55,7 @@
 
 
 
-<!-- Product Tab Section -->
+<!-- Product Tab Section
 <div class="products-section">
 <div class="quick-links">
         
@@ -77,7 +77,7 @@
         </div>
         <div class="product-container">
             <div class="product-category active" id="features">
-                <!-- Product Cards for Features -->
+                Product Cards for Features
                 <div class="product-card">
                 <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
                 <h3>Product Name</h3>
@@ -101,7 +101,7 @@
             
             </div>
             <div class="product-category" id="new-arrival">
-                <!-- Product Cards for New Arrival -->
+                Product Cards for New Arrival
                 <div class="product-card">
                 <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
                 <h3>Product Name</h3>
@@ -114,7 +114,7 @@
             </div>
             </div>
             <div class="product-category" id="best-sellers">
-                <!-- Product Cards for Best Sellers -->
+                Product Cards for Best Sellers
                 <div class="product-card">
                 <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
                 <h3>Product Name</h3>
@@ -128,7 +128,123 @@
             </div>
         </div>
     </div>
+    </div> -->
+
+
+    <!-- Category and Product Section -->
+     <div class="tabs-container">
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <!-- Category List -->
+            <ul class="list-group">
+                <li class="list-group-item active">Hex Head</li>
+                <li class="list-group-item">Socket Head</li>
+                <li class="list-group-item">Washers</li>
+                <!-- More categories -->
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <!-- Products Tab -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#features">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#new-arrival">New Arrival</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#best-sellers">Best Sellers</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <!-- Features Products -->
+                <div class="tab-pane fade show active" id="features" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <!-- Product Card -->
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£100.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <!-- Product Card -->
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£100.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- More products -->
+                    </div>
+                </div>
+
+
+                <!-- Additional tabs content -->
+                 <!-- New Arrival Products -->
+                <div class="tab-pane fade" id="new-arrival" role="tabpanel">
+                    <div class="row">
+                        <!-- Product Card -->
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£200.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£300.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- More products -->
+                    </div>
+                </div>
+
+                <!-- Best Sellers Products -->
+                <div class="tab-pane fade" id="best-sellers" role="tabpanel">
+                    <div class="row">
+                        <!-- Product Card -->
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£400.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£200.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- More products -->
+                    </div>
+                </div>
+                 
+            </div>
+        </div>
     </div>
+</div>
+</div>
+
 
     <!-- Product Categories  -->
     <div class="product-categories">
@@ -206,56 +322,7 @@
         <span>14-Day Money Back<br>If you are unable</span>
     </div>
     </div>
-    <!-- Footer -->
-    <footer class="site-footer">
-    <div class="footer-container">
-        <div class="footer-column">
-            <h4>Products</h4>
-            <ul>
-                <li><a href="#">Prices drop</a></li>
-                <li><a href="#">New products</a></li>
-                <li><a href="#">Best sales</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h4>Our company</h4>
-            <ul>
-                <li><a href="#">Delivery</a></li>
-                <li><a href="#">Legal Notice</a></li>
-                <li><a href="#">Terms and conditions of use</a></li>
-                <li><a href="#">About us</a></li>
-                <li><a href="#">Secure payment</a></li>
-                <li><a href="#">Contact us</a></li>
-                <li><a href="#">Sitemap</a></li>
-                <li><a href="#">Stores</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h4>Your account</h4>
-            <ul>
-                <li><a href="#">Personal info</a></li>
-                <li><a href="#">Orders</a></li>
-                <li><a href="#">Credit slips</a></li>
-                <li><a href="#">Addresses</a></li>
-                <li><a href="#">Wishlist</a></li>
-                <li><a href="#">Compare</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h4>Store Information</h4>
-            <p>ToolShop, Russia</p>
-            <p>Tel: 123 456 789</p>
-            <p>Email: demo@demo.com</p>
-            <div class="payment-methods">
-                <i class="fab fa-cc-visa" aria-hidden="true"></i>
-                <i class="fab fa-cc-paypal" aria-hidden="true"></i>
-                <i class="fab fa-cc-mastercard" aria-hidden="true"></i>
-                <i class="fab fa-cc-amex" aria-hidden="true"></i>
-                <i class="fab fa-cc-discover" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
-</footer>
+   
 
 
 
