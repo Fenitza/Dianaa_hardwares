@@ -35,7 +35,7 @@
                         </form>
                     </div>
                     <div class="bottom-links">
-                        <a href="#"><i class="fa fa-box"></i> All Products</a> |
+                        <a href="{{ route('products') }}"><i class="fa fa-box"></i> All Products</a> |
                         <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> |
                         <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a>
                     </div>
@@ -46,6 +46,26 @@
 
 
     @yield('content')
+
+     <!-- Services Section -->
+     <div class="product-service-offers">
+    <div class="product-service-item">
+        <i class="fas fa-grin-beam fa-2x"></i>
+        <span>100% Satisfaction<br>If you are unable</span>
+    </div>
+    <div class="product-service-item">
+        <i class="fas fa-tags fa-2x"></i>
+        <span>Save 20% When You<br>Use credit card</span>
+    </div>
+    <div class="product-service-item">
+        <i class="fas fa-shipping-fast fa-2x"></i>
+        <span>Fast Free Shipment<br>Load any computer's</span>
+    </div>
+    <div class="product-service-item">
+        <i class="fas fa-undo fa-2x"></i>
+        <span>14-Day Money Back<br>If you are unable</span>
+    </div>
+    </div>
 
      <!-- Footer -->
      <footer class="site-footer">
@@ -104,6 +124,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <!-- Include Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your custom script -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const categoryItems = document.querySelectorAll('.list-group-item');
+    categoryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const target = this.getAttribute('data-target');
+            const tabToShow = document.querySelector(`a[href="${target}"]`);
+            new bootstrap.Tab(tabToShow).show();  // This makes the tab active
+        });
+    });
+});
+</script>
 
 
 </body>

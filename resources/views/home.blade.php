@@ -14,27 +14,33 @@
     </div>
 </div>
 
+
 <!-- Company Details Section -->
-    <div class="company-details">
-    <div class="company-text">
-        <h2>We are Construction - <span class="intro">Leading provider of industrial and mechanical solutions.</span></h2>
-        <p>Founded in 1970, our company has grown by leaps and bounds and had been setting new standards.<br> Starting put with only ability, enthusiasm and a clear vision of destination, our team has earned every single reputation and award.</p>
-    </div>
-    <div class="services">
-        <div class="service-item">
-            <i class="fas fa-hammer fa-3x"></i>
-            <p>Construction</p>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>We are Construction - <span class="intro">Leading provider of industrial and mechanical solutions.</span></h2>
+            <p>Founded in 1970, our company has grown by leaps and bounds and had been setting new standards.<br> Starting out with only ability, enthusiasm and a clear vision of destination, our team has earned every single reputation and award.</p>
         </div>
-        <div class="service-item">
-            <i class="fas fa-paint-roller fa-3x"></i>
-            <p>Renovations</p>
-        </div>
-        <div class="service-item">
-            <i class="fas fa-seedling fa-3x"></i>
-            <p>Green Building</p>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-around align-items-center h-100">
+                <div class="service-item text-center p-3 bg-white border rounded shadow-sm">
+                    <i class="fas fa-hammer fa-3x mb-3"></i>
+                    <p>Construction</p>
+                </div>
+                <div class="service-item text-center p-3 bg-white border rounded shadow-sm">
+                    <i class="fas fa-paint-roller fa-3x mb-3"></i>
+                    <p>Renovations</p>
+                </div>
+                <div class="service-item text-center p-3 bg-white border rounded shadow-sm">
+                    <i class="fas fa-seedling fa-3x mb-3"></i>
+                    <p>Green Building</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 
 <!-- Product Carousel Section -->
@@ -54,17 +60,17 @@
 </div>
 
 
-    <!-- Category and Product Section -->
+    <!-- Category and Product Section tabs -->
     <div class="tabs-container">
     <div class="row mt-3">
         <div class="col-md-3">
             <!-- Category List -->
             <ul class="list-group">
-                <li class="list-group-item active">Bolts</li>
-                <li class="list-group-item">Screws</li>
-                <li class="list-group-item">Sockets</li>
-                <li class="list-group-item ">Nuts</li>
-                <li class="list-group-item">Washers</li>
+            <li class="list-group-item active" data-target="#features">Bolts</li>
+                <li class="list-group-item" data-target="#new-arrival">Screws</li>
+                <li class="list-group-item" data-target="#best-sellers">Sockets</li>
+                <li class="list-group-item" data-target="#features">Nuts</li>
+                <li class="list-group-item" data-target="#new-arrival">Washers</li>
             </ul>
         </div>
         <div class="col-md-9">
@@ -202,83 +208,89 @@
 </div>
 </div>
 
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
 
-    <!-- Product Categories  -->
-    <div class="product-categories">
-        <h2>PRODUCT CATEGORIES</h2>
-        <div class="categories-grid">
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Fasteners">
-                <p>Fasteners</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Safety">
-                <p>Safety</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Janitorial and Cleaning">
-                <p>Janitorial and Cleaning</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Fasteners">
-                <p>Fasteners</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Safety">
-                <p>Safety</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Janitorial and Cleaning">
-                <p>Janitorial and Cleaning</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Fasteners">
-                <p>Fasteners</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Safety">
-                <p>Safety</p>
-            </div>
-            <div class="category-item">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Janitorial and Cleaning">
-                <p>Janitorial and Cleaning</p>
-            </div>
-            
-            <!-- Repeat for other categories -->
-        </div>
-        <button>Explore All Products</button>
-    </div>
-    <div class="container text-center">
-    <h2>PRODUCT CATEGORIES</h2>
+
+<!-- Product Categories -->
+<div class="container my-4">
+    <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
     <div class="row">
-        <div class="col-6 col-md-3 col-lg-2">
-            <img src="path_to_fasteners_image.jpg" alt="Fasteners" class="img-fluid">
-            <p>Fasteners</p>
+    <!-- Individual Categories -->
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Fasteners</p>
+                </div>
+            </div>
         </div>
-        <!-- Repeat for each category, adjusting col classes -->
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Safety</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Fasteners</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Safety</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Fasteners</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Safety</p>
+                </div>
+            </div>
+        </div><div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Fasteners</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card-category">
+            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <div class="card-body text-center">
+                    <p class="card-text-category">Safety</p>
+                </div>
+            </div>
+        </div>
+        <!-- Repeat blocks for each category -->
+
+        <!-- Explore All Products Button -->
+        <div class="col-12 text-center mt-4">
+            <a href="#" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
+        </div>
     </div>
-    <button class="btn btn-primary mt-4">Explore All Products</button>
 </div>
 
-    <!-- Services Section -->
-    <div class="product-service-offers">
-    <div class="product-service-item">
-        <i class="fas fa-grin-beam fa-2x"></i>
-        <span>100% Satisfaction<br>If you are unable</span>
-    </div>
-    <div class="product-service-item">
-        <i class="fas fa-tags fa-2x"></i>
-        <span>Save 20% When You<br>Use credit card</span>
-    </div>
-    <div class="product-service-item">
-        <i class="fas fa-shipping-fast fa-2x"></i>
-        <span>Fast Free Shipment<br>Load any computer's</span>
-    </div>
-    <div class="product-service-item">
-        <i class="fas fa-undo fa-2x"></i>
-        <span>14-Day Money Back<br>If you are unable</span>
-    </div>
-    </div>
+
+   
    
 
 

@@ -152,77 +152,27 @@ header {
     color: rgb(172, 169, 169);
 }
 
-/* Home section Company Details styles */
-.company-details {
-    width:1300px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 10px 100px;
-    background-color: #f8f8f8de; /* Light gray background */
-    margin-bottom: 20px; /* Adds some space below the section */
-    margin-top: 20px; /* Adds some space above the section */
-}
-
-.company-text h2 {
-    font-size: 24px; /* Larger size for heading */
-    font-weight: bold; /* Bolder font weight for emphasis */
-    color: #333; /* Darker color for better readability */
-}
-
-.company-text span.intro {
-    font-size: 24px; /* Slightly larger font size for introductory text */
-    color: #555; /* Slightly lighter than the heading */
-    font-weight: normal; /* Normal weight to differentiate from the heading */
-}
-
-.company-text p {
-    font-size: 16px; /* Standard text size */
-    color: #666; /* Lighter color for regular text */
-    margin-top: 10px; /* Space between paragraphs */
-}
-.company-text, .services {
-    flex-basis: 50%; /* Sets each child to take up 50% of the parent container's width */
-    padding: 10px; /* Adds padding inside each section for some internal spacing */
-}
-
-.services {
-    display: flex;
-    justify-content: space-evenly; /* Distributes space evenly between items */
-    align-items: center; /* Centers items vertically */
-    padding: 20px;
-    gap: 10px; /* Optional: adds some space between the boxes */
-}
-
+/* Company Details Section */
 .service-item {
-    text-align: center; /* Centers the text and icon */
-    padding: 20px;
-    flex: 1; /* Each service item will take equal space */
-    min-width: 50px; /* Minimum width of each service box */
-    min-height: 100px;
-    background-color: #ffffff; /* White background for each service box */
-    border: 1px solid #ccc; /* Subtle border for the boxes */
-    border-radius: 5px; /* Rounded corners for the boxes */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-    flex-direction: column; /* Stacks icon and text vertically */
-    justify-content: center; /* Aligns content vertically centered */
-    align-items: center; /* Aligns content horizontally centered */
+    width: 200px;  /* Adjust the width as necessary */
+    height: 150px; /* Adjust the height as necessary */
+    text-align: center;
+    padding: 20px 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px; /* Adjust the 20px to increase or decrease spacing */
+    
 }
 
 .service-item i {
-    font-size: 30px; /* Icon size */
-    color: #2d2e6a; /* Icon color matching your theme */
-    margin-bottom:  50px 10px; /* Space between the icon and text */
-}
-
-.service-item p {
-    margin: 0; /* Removes default margin to handle spacing */
-}
-
-.service-item img, .service-item i {
-    width: 50px; /* Size of the icon */
-    height: 50px; /* Maintain aspect ratio */
-    margin-bottom: 10px; /* Space between icon and text */
+    color: #2d2e6a; /* Bootstrap primary blue for example, adjust as needed */
+    margin-bottom: 10px;
 }
 
 /* Home section product carousel */
@@ -260,7 +210,6 @@ header {
 
 .list-group {
     list-style: none;
-    margin-top: 50px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%; /* Ensure it uses full width of the parent column */
     background-color:white; /* White background */
@@ -270,7 +219,7 @@ header {
 
 .list-group-item {
     width: 100%;
-    padding: 20px 20px;
+    padding: 50px 20px 20px;
     border: 1px solid #ddd;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -330,9 +279,10 @@ header {
 }
 
 .card-img-top {
+    margin-top:5px;
     width: 100%;
     height: 180px; /* Fixed height for consistency */
-    object-fit: auto; /* Ensure the image covers the area without distorting */
+    object-fit: contain; /* Ensure the image covers the area without distorting */
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -359,7 +309,10 @@ header {
     }
 
     .card-img-top {
+        margin-top:5px;
         height: 150px;
+        object-fit: contain; 
+
     }
 }
 
@@ -370,48 +323,31 @@ header {
     }
 }
 
-/* Product Categories */
-
-.product-categories h2 {
-    text-align: center;
-    color: #333;
+/* spacer */
+.custom-spacer {
+    height: 50px; /* or whatever height you prefer */
 }
 
-.categories-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around; /* This aligns items as seen in your screenshot */
-    padding: 20px;
-}
-
-.category-item {
-    width: 18%;
-    text-align: center;
-    margin: 10px;
-}
-
-.category-item img {
-    width: 100px; /* Adjust based on actual size needed */
-    height: auto;
-}
-
-.category-item p {
-    margin-top: 5px;
+/* Categories */
+.card-text-category{
+    background-color: #2d2e6a;
     color: white;
-    background-color: #2d2e6a ;
+    padding: 10px 10px;
+
 }
 
-.product-categories button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #2d2e6a; /* Adjust color as needed */
-    color: white;
-    border: none;
-    cursor: pointer;
+.card-category {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+    margin-bottom: 0;
 }
 
-
+.card-category:hover {
+    box-shadow: 0 5px 15px #A5CD36;
+}
 /* Services Section */
 .product-service-item i {
     color: #0056b3; /* Example color; adjust as needed */
@@ -438,6 +374,29 @@ header {
     font-size: 14px;
     color: #333;
     text-align: center;
+}
+
+
+/* Products Screen tabs */
+.navbar{
+    margin-top:20px;
+    margin-left: 30px;
+}
+
+
+.product-nav-link {
+    background-color: #c6ec5d; /* Light green background */
+    color: #2d2e6a; /* Text color */
+    text-decoration: none;
+    margin: 8px; /*Spacing between tabs */
+    padding: 10px 30px;
+    font-size: 16px;
+    border-radius:5px;
+    border-color:#2d2e6a;
+}
+.product-nav-link:hover {
+    background-color: #2d2e6a; /* Slightly darker green on hover */
+    color: white;
 }
 
 /* Footer */
@@ -571,31 +530,8 @@ header {
         margin: 10px auto; /* Centers the boxes and adds margin for spacing */
     }
 
-    /* product tab details */
-    .products-section {
-        flex-direction: column; /* Stack elements vertically */
-    }
-
-    .quick-links {
-        width: 100%; /* Quick links take full width */
-        margin-bottom: 20px; /* Add bottom margin for spacing */
-    }
-
-    .product-main-content {
-        width: 100%; /* Main content takes full width */
-    }
-
-    .tabs {
-        flex-direction: column; /* Stack tabs vertically on small screens */
-    }
-
-    .product-container {
-        flex-direction: column; /* Ensure product cards are stacked vertically */
-    }
-
-    .product-card {
-        width: calc(100% - 20px); /* Full width minus padding for small screens */
-    }
+    
+        
 
     /* Services */
     .service-offers {
@@ -622,26 +558,4 @@ header {
     }
 }
 
-@media (max-width: 1024px) {
-    .products-section {
-        padding: 30px 15px; /* Reduced padding */
-    }
-
-    .quick-links {
-        width: 25%; /* Slightly increase width to maintain visibility */
-    }
-
-    .product-main-content {
-        width: 75%; /* Adjust width to complement quick-links width */
-    }
-
-    .product-container {
-        flex-direction: column; /* Stack the products vertically */
-    }
-
-    .product-card {
-        width: 100%; /* Full width to take up the container */
-        margin: 10px 0; /* Adjust margins to only vertical */
-    }
-}
 
