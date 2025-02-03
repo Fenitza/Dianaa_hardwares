@@ -54,93 +54,17 @@
 </div>
 
 
-
-<!-- Product Tab Section
-<div class="products-section">
-<div class="quick-links">
-        
-        <ul>
-            <li><a href="#">Quick Links</a></li>
-            <li><a href="#">Hex Head</a></li>
-            <li><a href="#">Socket Head</a></li>
-            <li><a href="#">Washers</a></li>
-            <li><a href="#">Nuts</a></li>
-            <li><a href="#">Standard Products</a></li>
-            <li><a href="#">Coatings</a></li>
-        </ul>
-    </div>
-    <div class="product-main-content">
-        <div class="tabs">
-            <button class="tab-button active" onclick="showCategory('features')">Features</button>
-            <button class="tab-button" onclick="showCategory('new-arrival')">New Arrival</button>
-            <button class="tab-button" onclick="showCategory('best-sellers')">Best Sellers</button>
-        </div>
-        <div class="product-container">
-            <div class="product-category active" id="features">
-                Product Cards for Features
-                <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            
-            </div>
-            <div class="product-category" id="new-arrival">
-                Product Cards for New Arrival
-                <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            </div>
-            <div class="product-category" id="best-sellers">
-                Product Cards for Best Sellers
-                <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            <div class="product-card">
-                <img src="{{ asset('images/Products/product_1.jpg') }}" alt="Product 1">
-                <h3>Product Name</h3>
-                <p>£100.00</p>
-            </div>
-            </div>
-        </div>
-    </div>
-    </div> -->
-
-
     <!-- Category and Product Section -->
-     <div class="tabs-container">
+    <div class="tabs-container">
     <div class="row mt-3">
         <div class="col-md-3">
             <!-- Category List -->
             <ul class="list-group">
-                <li class="list-group-item active">Hex Head</li>
-                <li class="list-group-item">Socket Head</li>
+                <li class="list-group-item active">Bolts</li>
+                <li class="list-group-item">Screws</li>
+                <li class="list-group-item">Sockets</li>
+                <li class="list-group-item ">Nuts</li>
                 <li class="list-group-item">Washers</li>
-                <!-- More categories -->
             </ul>
         </div>
         <div class="col-md-9">
@@ -160,6 +84,39 @@
                 <!-- Features Products -->
                 <div class="tab-pane fade show active" id="features" role="tabpanel">
                     <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <!-- Product Card -->
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£100.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <!-- Product Card -->
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£100.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <!-- Product Card -->
+                            <div class="card">
+                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Name</h5>
+                                    <p class="card-text">£100.00</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <!-- Product Card -->
                             <div class="card">
