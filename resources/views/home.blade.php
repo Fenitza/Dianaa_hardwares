@@ -61,10 +61,10 @@
 
 
     <!-- Category and Product Section tabs -->
-    <div class="tabs-container">
+    <!-- <div class="tabs-container">
     <div class="row mt-3">
         <div class="col-md-3">
-            <!-- Category List -->
+            Category List
             <ul class="list-group">
             <li class="list-group-item active" data-target="#features">Bolts</li>
                 <li class="list-group-item" data-target="#new-arrival">Screws</li>
@@ -72,7 +72,22 @@
                 <li class="list-group-item" data-target="#features">Nuts</li>
                 <li class="list-group-item" data-target="#new-arrival">Washers</li>
             </ul>
+        </div> -->
+
+        <div class="tabs-container">
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <!-- Dynamic Category List -->
+            <ul class="list-group">
+                @foreach ($categories as $category)
+                    <li class="list-group-item" data-target="#{{ strtolower(str_replace(' ', '-', $category->name)) }}">
+                        {{ $category->name }}
+                    </li>
+                @endforeach
+            </ul>
         </div>
+    </div>
+</div>
         <div class="col-md-9">
             <!-- Products Tab -->
             <ul class="nav nav-tabs">
