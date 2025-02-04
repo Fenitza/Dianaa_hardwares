@@ -9,6 +9,7 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\CareersController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CategoryController;
 
 
 
@@ -37,3 +38,5 @@ Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/careers', [CareersController::class, 'index'])->name('careers');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+
+Route::get('/', [CategoryController::class, 'index']);
