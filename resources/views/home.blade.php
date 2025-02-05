@@ -87,13 +87,11 @@
         <script>console.log({{ json_encode($category->toArray()) }});</script>
     @endforeach
             </ul>
-        
-    
-
+</div>
 
         <div class="col-md-9">
             <!-- Products Tab -->
-            <ul class="nav nav-tabs">
+            <!-- <ul class="nav nav-tabs">
                 <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#features">Features</a>
                 </li>
@@ -105,11 +103,11 @@
                 </li>
             </ul>
             <div class="tab-content">
-                <!-- Features Products -->
+                Features Products
                 <div class="tab-pane fade show active" id="features" role="tabpanel">
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-sm-6">
-                            <!-- Product Card -->
+                            Product Card
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
                                 <div class="card-body">
@@ -120,7 +118,7 @@
                         </div>
 
                         <div class="col-lg-3 col-md-4 col-sm-6">
-                            <!-- Product Card -->
+                            Product Card
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
                                 <div class="card-body">
@@ -131,7 +129,7 @@
                         </div>
 
                         <div class="col-lg-3 col-md-4 col-sm-6">
-                            <!-- Product Card -->
+                            Product Card
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
                                 <div class="card-body">
@@ -142,7 +140,7 @@
                         </div>
 
                         <div class="col-lg-3 col-md-4 col-sm-6">
-                            <!-- Product Card -->
+                            Product Card
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
                                 <div class="card-body">
@@ -153,7 +151,7 @@
                         </div>
 
                         <div class="col-lg-3 col-md-4 col-sm-6">
-                            <!-- Product Card -->
+                            Product Card
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
                                 <div class="card-body">
@@ -162,16 +160,16 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- More products -->
+                        More products
                     </div>
                 </div>
 
 
-                <!-- Additional tabs content -->
-                 <!-- New Arrival Products -->
+                Additional tabs content
+                 New Arrival Products
                 <div class="tab-pane fade" id="new-arrival" role="tabpanel">
                     <div class="row">
-                        <!-- Product Card -->
+                        Product Card
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
@@ -190,14 +188,14 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- More products -->
+                        More products
                     </div>
                 </div>
 
-                <!-- Best Sellers Products -->
+                Best Sellers Products
                 <div class="tab-pane fade" id="best-sellers" role="tabpanel">
                     <div class="row">
-                        <!-- Product Card -->
+                        Product Card
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <div class="card">
                                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
@@ -216,15 +214,49 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- More products -->
+                        More products
                     </div>
                 </div>
                  
             </div>
         </div>
     </div>
+</div> -->
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+        @php
+            $types = ['Featured', 'New Arrival', 'Best Sellers'];
+        @endphp
+        @foreach ($types as $type)
+            <li class="nav-item">
+                <a class="nav-link{{ $loop->first ? ' active' : '' }}" id="{{ strtolower($type) }}-tab" data-bs-toggle="tab" href="#{{ strtolower($type) }}" role="tab">{{ $type }}</a>
+            </li>
+        @endforeach
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        @foreach ($types as $type)
+            <div class="tab-pane fade{{ $loop->first ? ' show active' : '' }}" id="{{ strtolower($type) }}" role="tabpanel">
+                @foreach ($categories as $category)
+                    @foreach ($category->subcategories as $subcategory)
+                        @foreach ($subcategory->products as $product)
+                            @if (strtolower($product->type) === strtolower($type))
+                                <div class="card" style="width: 18rem;">
+                                    <img src="{{ asset('storage/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $product->name }}</h5>
+                                        <p class="card-text">{{ $product->description }}</p>
+                                        <p class="card-text">£{{ $product->price }}</p>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    @endforeach
+                @endforeach
+            </div>
+        @endforeach
+    </div>
 </div>
-</div>
+
 
 <!-- Spacer Block -->
 <div class="custom-spacer"></div>
