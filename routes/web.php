@@ -40,3 +40,4 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 Route::get('/', [CategoryController::class, 'index']);
+Route::get('/products/{category}', [ProductController::class, 'showByCategory'])->name('products.category');

@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Subcategory extends Model
 {
     protected $table = 'subcategories';
+    protected $primaryKey = 'SubCategoryID';
 
     public function category()
     {
-        // Specify the foreign key 'CategoryID' here as well
         return $this->belongsTo(Category::class, 'CategoryID');
     }
 

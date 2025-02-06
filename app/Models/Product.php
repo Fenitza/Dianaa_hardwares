@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'CategoryID');
-    }
+    protected $table = 'products';
+    protected $primaryKey = 'ProductID';
 
-public function products()
+    public function subcategory()
     {
-        return $this->hasMany(Product::class, 'SubCategoryID');
+        return $this->belongsTo(Subcategory::class, 'SubCategoryID');
     }
 }

@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Category;
+
 class ProductController extends Controller
 {
     public function index()
     {
-        return view('pages.products');
+        // Fetch categories with their subcategories
+        // The with() method preloads the subcategories for each category, which avoids the N+1 query issue
+        $categories = Category::with('subcategories')->get();
+
+        // Pass categories to the view
+        return view('pages.products', ['categories' => $categories]);
     }
 }

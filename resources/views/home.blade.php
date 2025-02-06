@@ -61,201 +61,75 @@
 
 
     <!-- Category and Product Section tabs -->
-    <!-- <div class="tabs-container">
+<div class="tabs-container">
     <div class="row mt-3">
         <div class="col-md-3">
-            Category List
-            <ul class="list-group">
-            <li class="list-group-item active" data-target="#features">Bolts</li>
-                <li class="list-group-item" data-target="#new-arrival">Screws</li>
-                <li class="list-group-item" data-target="#best-sellers">Sockets</li>
-                <li class="list-group-item" data-target="#features">Nuts</li>
-                <li class="list-group-item" data-target="#new-arrival">Washers</li>
-            </ul>
-        </div> -->
-
-        <div class="tabs-container">
-            <div class="row mt-3">
-                <div class="col-md-3">
             <!-- Dynamic Category List -->
             <ul class="list-group">
             @foreach ($categories as $category)
-        <li class="list-group-item" data-target="#{{ strtolower(str_replace(' ', '-', $category->name)) }}">
-            {{ $category->Name }}
-        </li>
-        <!-- Debugging output -->
-        <script>console.log({{ json_encode($category->toArray()) }});</script>
+        <li class="list-group-item {{ $loop->first ? 'active' : '' }}" data-target="#{{ strtolower(str_replace(' ', '-', $category->name)) }}" onclick="filterProducts(event, '{{ $category->name?? 'Bolts' }}', '{{ $selectedType ?? 'Featured' }}')">
+    {{ $category->Name }}
     @endforeach
             </ul>
-</div>
-
+        </div>
         <div class="col-md-9">
-            <!-- Products Tab -->
-            <!-- <ul class="nav nav-tabs">
-                <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#features">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#new-arrival">New Arrival</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#best-sellers">Best Sellers</a>
-                </li>
+            <!-- Nav Tabs for Product Types -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                @foreach (['Featured', 'New Arrival', 'Best Sellers'] as $type)
+                    <li class="nav-item">
+                        <a class="nav-link{{ $loop->first ? ' active' : '' }}" id="{{ strtolower($type) }}-tab" data-bs-toggle="tab" href="#{{ strtolower($type) }}" role="tab">{{ $type }}</a>
+                    </li>
+                @endforeach
             </ul>
-            <div class="tab-content">
-                Features Products
-                <div class="tab-pane fade show active" id="features" role="tabpanel">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            Product Card
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£100.00</p>
-                                </div>
-                            </div>
+            <!-- Tab Content for Products -->
+            <div class="tab-content" id="myTabContent">
+                @foreach (['Featured', 'New Arrival', 'Best Sellers'] as $type)
+                    <div class="tab-pane fade{{ $loop->first ? ' show active' : '' }}" id="{{ strtolower($type) }}" role="tabpanel">
+                        <div class="row">
+                        @if($filteredProducts->isEmpty())
+                            <p>No products found for the selected type.</p>
+                            @else
+                            @foreach ($filteredProducts as $product)
+                                @if (strtolower($product->Type) === strtolower($type))
+                                    <div class="col-md-4 col-sm-6 mb-4">
+                                        <div class="card">
+                                            <!-- <img src="{{ asset('storage/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}">
+                                              -->
+                                              <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $product->Name }}</h5>
+                                                <p class="card-text">{{ $product->Description }}</p>
+                                                <p class="card-text">£{{ $product->SalePrice }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                            @endforeach
+                        @endif
                         </div>
-
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            Product Card
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£100.00</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            Product Card
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£100.00</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            Product Card
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£100.00</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            Product Card
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£100.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        More products
                     </div>
-                </div>
-
-
-                Additional tabs content
-                 New Arrival Products
-                <div class="tab-pane fade" id="new-arrival" role="tabpanel">
-                    <div class="row">
-                        Product Card
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£200.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£300.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        More products
-                    </div>
-                </div>
-
-                Best Sellers Products
-                <div class="tab-pane fade" id="best-sellers" role="tabpanel">
-                    <div class="row">
-                        Product Card
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£400.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="card">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Name</h5>
-                                    <p class="card-text">£200.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        More products
-                    </div>
-                </div>
-                 
+                    <script>
+    // Log filtered products to the console for debugging
+   
+        console.log("Filtered Products:", @json($filteredProducts));
+        
+   
+</script>
+                @endforeach
+                
             </div>
         </div>
     </div>
-</div> -->
-
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-        @php
-            $types = ['Featured', 'New Arrival', 'Best Sellers'];
-        @endphp
-        @foreach ($types as $type)
-            <li class="nav-item">
-                <a class="nav-link{{ $loop->first ? ' active' : '' }}" id="{{ strtolower($type) }}-tab" data-bs-toggle="tab" href="#{{ strtolower($type) }}" role="tab">{{ $type }}</a>
-            </li>
-        @endforeach
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        @foreach ($types as $type)
-            <div class="tab-pane fade{{ $loop->first ? ' show active' : '' }}" id="{{ strtolower($type) }}" role="tabpanel">
-                @foreach ($categories as $category)
-                    @foreach ($category->subcategories as $subcategory)
-                        @foreach ($subcategory->products as $product)
-                            @if (strtolower($product->type) === strtolower($type))
-                                <div class="card" style="width: 18rem;">
-                                    <img src="{{ asset('storage/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $product->name }}</h5>
-                                        <p class="card-text">{{ $product->description }}</p>
-                                        <p class="card-text">£{{ $product->price }}</p>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                    @endforeach
-                @endforeach
-            </div>
-        @endforeach
-    </div>
 </div>
+
+<!-- <script>
+    function filterProducts(event, category, type) {
+    event.preventDefault(); // Prevent the default link action
+    const url = `/?category=${encodeURIComponent(category)}&type=${encodeURIComponent(type)}`;
+    window.location.href = url;
+}
+</script> -->
 
 
 <!-- Spacer Block -->
@@ -266,71 +140,17 @@
 <div class="container my-4">
     <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
     <div class="row">
-    <!-- Individual Categories -->
+    @foreach ($categories as $category)
         <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
             <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <!-- <img src="{{ asset('storage/' . $category->image) }}" class="card-img-top" alt="{{ $category->name }}"> -->
+                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
                 <div class="card-body text-center">
-                    <p class="card-text-category">Fasteners</p>
+                    <p class="card-text-category">{{ $category->Name }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Safety</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Fasteners</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Safety</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Fasteners</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Safety</p>
-                </div>
-            </div>
-        </div><div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Fasteners</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
-                <div class="card-body text-center">
-                    <p class="card-text-category">Safety</p>
-                </div>
-            </div>
-        </div>
-        <!-- Repeat blocks for each category -->
+    @endforeach
 
         <!-- Explore All Products Button -->
         <div class="col-12 text-center mt-4">
@@ -338,14 +158,6 @@
         </div>
     </div>
 </div>
-
-
-   
-   
-
-
-
-
 
 
 @endsection
