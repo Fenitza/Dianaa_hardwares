@@ -378,26 +378,38 @@ header {
 
 
 /* Products Screen tabs */
-.navbar{
-    margin-top:20px;
-    margin-left: 30px;
+.products-container .nav-tabs {
+    border-bottom: none; /* Removes the default bottom border */
+    display: flex;
+    justify-content: flex-start; /* Evenly space tabs */
+    background-color: #ffffff; /* Light background for the whole nav */
+    padding: 0.5rem 0; /* Padding around the tabs */
+    margin-top: 10px;
+    margin-left: 50px;
 }
 
+.products-container .nav-item {
+    margin: 0;
+    /* text-transform: uppercase; Capitalize letters as seen in the screenshot */
+    font-weight: bold; /* Make the font bold */
+}
 
-.product-nav-link {
-    background-color: #c6ec5d; /* Light green background */
-    color: #2d2e6a; /* Text color */
-    text-decoration: none;
-    margin: 8px; /*Spacing between tabs */
-    padding: 10px 30px;
-    font-size: 16px;
-    border-radius:5px;
-    border-color:#2d2e6a;
+.products-container .nav-link {
+    border: 2px solid transparent; /* Prepares a border for active/hover states */
+    border-radius: 10px; /* Rounded corners for tabs */
+    padding: 10px 20px; /* Padding inside each tab */
+    transition: all 0.3s ease; /* Smooth transition for background and border changes */
+    background-color: #A5CD36 !important;/* Active and hover background */
+    color: #2d2e6a !important; /* White text for active and hover states */
+    border-color: #2d2e6a !important; /* Border color to match background */
 }
-.product-nav-link:hover {
-    background-color: #2d2e6a; /* Slightly darker green on hover */
-    color: white;
+
+.products-container .nav-link.active, .products-container .nav-link:hover {
+    background-color: #2d2e6a !important;/* Active and hover background */
+    color: #ffff !important; /* White text for active and hover states */
+    border-color: #2d2e6a !important; /* Border color to match background */
 }
+
 
 /* Footer */
 .site-footer {

@@ -125,19 +125,7 @@
 <!-- Include Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Your custom script -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const categoryItems = document.querySelectorAll('.list-group-item');
-    categoryItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const target = this.getAttribute('data-target');
-            const tabToShow = document.querySelector(`a[href="${target}"]`);
-            new bootstrap.Tab(tabToShow).show();  // This makes the tab active
-        });
-    });
-});
-</script>
+
 
 
 </body>
