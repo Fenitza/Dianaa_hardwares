@@ -350,7 +350,7 @@ header {
 }
 /* Services Section */
 .product-service-item i {
-    color: #0056b3; /* Example color; adjust as needed */
+    color: #2d2e6a; /* Example color; adjust as needed */
     margin-bottom: 10px; /* Space between the icon and text */
 }
 
@@ -409,6 +409,102 @@ header {
     color: #ffff !important; /* White text for active and hover states */
     border-color: #2d2e6a !important; /* Border color to match background */
 }
+
+/* Subcategory Product detailed views */
+/* Style for the card */
+.product-detailed .card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.product-detailed .card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Image styling */
+.product-detailed .card-img {
+    width: 100%; /* Full width of the column */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover the space without distorting the image */
+}
+
+/* Card body styling */
+.product-detailed .card-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.product-detailed .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-detailed .card-text {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+/* Footer styling */
+.product-detailed .card-footer {
+    padding: 10px 15px;
+    background-color: #fff;
+    border-top: none;
+}
+
+/* Quantity controls styling */
+.product-detailed .quantity-controls {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Adjusted margin to reduce space */
+}
+
+.product-detailed .quantity-controls button,
+.product-detailed .quantity-controls input {
+    margin: 0 5px;
+}
+
+.product-detailed .quantity-controls input {
+    width: 50px; /* Fixed width for the input */
+    text-align: center; /* Center text in input */
+}
+
+.product-detailed .btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.product-detailed .btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.product-detailed .btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.product-detailed .btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+/* Text-muted for stock availability */
+.product-detailed .text-muted {
+    color: #6c757d;
+}
+
+/* Ensures footer content is spaced out */
+.product-detailed .card-footer > div {
+    justify-content: space-between;
+    width: 100%;
+}
+
 
 
 /* Footer */

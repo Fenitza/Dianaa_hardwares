@@ -10,6 +10,7 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\CareersController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
 
 
 
@@ -41,3 +42,5 @@ Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 Route::get('/', [CategoryController::class, 'index']);
 Route::get('/products/{category}', [ProductController::class, 'showByCategory'])->name('products.category');
+
+Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');

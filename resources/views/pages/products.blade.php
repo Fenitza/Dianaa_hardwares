@@ -25,6 +25,7 @@
                 <div class="row">
                     @foreach($category->subcategories as $subcategory)
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
                         <div class="card-category">
                             <!-- <img src="{{ asset('storage/'.$subcategory->image) }}" class="card-img-top" alt="{{ $subcategory->Name }}"> -->
                             <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
@@ -32,6 +33,7 @@
                                 <p class="card-text-category">{{ $subcategory->Name }}</p>
                             </div>
                         </div>
+                    </a>
                     </div>
                     @endforeach
                 </div>
