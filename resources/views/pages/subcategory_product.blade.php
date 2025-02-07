@@ -1,19 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="product-detailed">
+<div class="container my-4">
     <div class="row align-items-center">
         <div class="col-md-6">
-            <p><strong>{{ $subcategory->Name }}</strong><br>
-            {{ $subcategory->Description }}</p>
+            <strong>{{ $subcategory->Name }}</strong><br>
+            {{ $subcategory->Description }}
         </div>
         <div class="col-md-6 text-md-right">
-            <span>Sort by:</span>
-            <select class="custom-select d-inline w-auto">
-                <option value="best_match">Best Match</option>
-                <option value="price_low_high">Price: Low to High</option>
-                <option value="price_high_low">Price: High to Low</option>
+            Sort by:
+            <select class="custom-select d-inline w-auto" onchange="location = this.value;">
+                <option value="?sort=best_match" {{ request()->query('sort') == 'best_match' ? 'selected' : '' }}>Best Match</option>
+                <option value="?sort=price_low_high" {{ request()->query('sort') == 'price_low_high' ? 'selected' : '' }}>Price: Low to High</option>
+                <option value="?sort=price_high_low" {{ request()->query('sort') == 'price_high_low' ? 'selected' : '' }}>Price: High to Low</option>
             </select>
             <button class="btn btn-outline-secondary ml-2">View Catalog</button>
             <button class="btn btn-outline-secondary ml-1">View List</button>
@@ -21,54 +20,44 @@
         </div>
     </div>
 
-    <!-- view -->
-    <div class="row mt-4">
-    @foreach ($products as $product)
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            <div class="row no-gutters">
-                <div class="col-md-6">
+ <!-- Product Grid -->
+ <div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        @foreach ($products as $product)
+        <div class="product">
+        <div class ="row">
+        <div class="col-md-4">
                     <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img" alt="{{ $product->Name }}">
-                </div>
-                <div class="col-md-6 d-flex flex-column">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $product->Name }}</h5>
-                        <p class="card-text">{{ $product->Description }}</p>
-                        <p class="card-text">${{ $product->SalePrice }}</p>
-                    </div>
-                </div>
-                    <div class="card-footer bg-white border-top-0 mt-auto">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">{{ $product->Availability ? 'In Stock' : 'Out of Stock' }}</small>
-                            <div class="quantity-controls d-flex align-items-center mr-2">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity('dec', '{{ $product->id }}')">-</button>
-                                <input type="text" id="quantity-{{ $product->id }}" value="1" class="form-control text-center" style="width: 50px;">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity('inc', '{{ $product->id }}')">+</button>
-                        </div>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
-                    </div>
-                
-            </div>
         </div>
-    </div>
-    @endforeach
+
+        <div class="col-md-8 d-flex flex-column product-info">
+        <p><b>Dianaa Hardwares Part No.(SKU): </b><span style="color: blue;">{{ $product->SKU }}</span></p>
+            <h4>{{ $product->Name }}</h4>
+            <p>{{ $product->Description }}</p>
+            <p><b>Manufacturer: </b>{{ $product->Manufacturer }}</p>
+            <p><b>Online Price:</b> ₹{{ number_format($product->SalePrice, 2) }}</p>
+        </div>
 </div>
+            <div class="product-actions" style="margin-top: 10px;">
+            <div class="availability">
+            <span class="{{ $product->Quantity > 0 ? 'in-stock' : 'out-of-stock' }}">
+                {{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+            </span>
+        </div>
+        <div class="actions-right">
+            <input type="number" value="1" min="1" name="quantity{{ $product->id }}" class="quantity-input">
+            <button class="cart-btn">
+                <i class="fas fa-shopping-cart"></i>
+            </button>
+        </div>
+        </div>
 
-
+        </div>
+        @endforeach
+    </div>
 </div>
 <script>
-    function changeQuantity(action, productId) {
-    var input = document.getElementById('quantity-' + productId);
-    var currentValue = parseInt(input.value, 10);
-
-    if (action === 'inc') {
-        currentValue++;
-    } else if (action === 'dec' && currentValue > 1) {
-        currentValue--;
-    }
-
-    input.value = currentValue;
-}
+document.getElementById('sortProducts').addEventListener('change', function() {
+    window.location.href = `{{ request()->url() }}?sort=${this.value}`;
+});
 </script>
 @endsection

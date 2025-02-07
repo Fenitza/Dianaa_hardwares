@@ -411,100 +411,94 @@ header {
 }
 
 /* Subcategory Product detailed views */
-/* Style for the card */
-.product-detailed .card {
-    border: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: all 0.2s ease-in-out;
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid #070707;
 }
 
-.product-detailed .card:hover {
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-/* Image styling */
-.product-detailed .card-img {
-    width: 100%; /* Full width of the column */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: cover; /* Cover the space without distorting the image */
-}
-
-/* Card body styling */
-.product-detailed .card-body {
-    padding: 15px;
+.product {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between; /* Ensures space distribution that pushes actions to the bottom */
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    height: 100%; /* Optional, depending on your design */
 }
 
-.product-detailed .card-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+.product img {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
 }
 
-.product-detailed .card-text {
-    font-size: 0.875rem;
-    color: #666;
+.product-info {
+    flex: 1; /* This ensures that it takes up any available space */
 }
 
-/* Footer styling */
-.product-detailed .card-footer {
-    padding: 10px 15px;
-    background-color: #fff;
-    border-top: none;
+.product-info p, .product-info h4 {
+    font-size: smaller; /* Adjusts the font size to be smaller than the inherited size */
+    line-height: 1.2; /* Reduces the line spacing to make it tighter */
 }
 
-/* Quantity controls styling */
-.product-detailed .quantity-controls {
+.product-info h4 {
+    font-size: 1em; /* Ensures the heading isn't too large compared to the text */
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between; /* Space between availability and actions */
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.availability {
+    flex-grow: 1; /* Allows the availability to take necessary space */
+    text-align: left; /* Aligns text to the left */
+
+}
+
+.actions-right {
+    display: flex;
+    gap: 10px; /* Space between input and button */
+
+}
+
+.quantity-input {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+}
+
+.cart-btn {
+    background-color: #2d2e6a;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
     display: flex;
     align-items: center;
-    margin-right: 10px; /* Adjusted margin to reduce space */
+    justify-content: center;
 }
 
-.product-detailed .quantity-controls button,
-.product-detailed .quantity-controls input {
-    margin: 0 5px;
+.in-stock {
+    background-color: rgb(110, 255, 110); /* Green color for in-stock items */
+    padding:5px 20px;
+    border-radius :2px;
 }
 
-.product-detailed .quantity-controls input {
-    width: 50px; /* Fixed width for the input */
-    text-align: center; /* Center text in input */
+.out-of-stock {
+    background-color: rgb(255, 132, 132); /* Red color for out-of-stock items */
+    padding:5px 20px;
+    border-radius :2px;
 }
-
-.product-detailed .btn-outline-secondary {
-    color: #6c757d;
-    border-color: #6c757d;
-}
-
-.product-detailed .btn-outline-secondary:hover {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-.product-detailed .btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.product-detailed .btn-primary:hover {
-    color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
-}
-
-/* Text-muted for stock availability */
-.product-detailed .text-muted {
-    color: #6c757d;
-}
-
-/* Ensures footer content is spaced out */
-.product-detailed .card-footer > div {
-    justify-content: space-between;
-    width: 100%;
-}
-
 
 
 /* Footer */
@@ -513,6 +507,7 @@ header {
     color: white;
     padding: 20px 40px; /* Adjust padding for the entire footer */
     font-family: Arial, sans-serif; /* Ensures consistency in typography */
+    
 }
 
 .footer-container {
