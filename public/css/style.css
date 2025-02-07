@@ -500,6 +500,56 @@ header {
     border-radius :2px;
 }
 
+/* SubCategory Views */
+.product-list-info{
+    font-size: medium; /* Adjusts the font size to be smaller than the inherited size */
+    line-height: 1.6; /* Reduces the line spacing to make it tighter */
+}
+
+.product-list .row {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.product-list .img-fluid {
+    max-width: 40px; /* Set a fixed size for images */
+}
+
+.text-success {
+    color: green;
+}
+
+.text-danger {
+    color: red;
+}
+
+.view-link {
+    color: #007bff; /* Bootstrap's default link color for consistency */
+    text-decoration: none; /* Removes underline by default */
+    margin-left: 10px; /* Adds spacing between links */
+    /* margin-right: 5px; Adjust spacing between links if necessary */
+}
+
+.view-link:hover {
+    color: black;
+    text-decoration: underline; /* Adds underline on hover for better user interaction feedback */
+}
+
+.text-smaller {
+    font-size: 0.9rem; /* Smaller text size */
+}
+.text-smaller select, .text-smaller a {
+    font-size: 0.9rem; /* Ensures the select and links are also smaller */
+}
+
+
+.view-links {
+    display: flex; /* Ensures the links are laid out inline */
+    justify-content :flex-end;
+    align-items: center; /* Aligns the links vertically in the center */
+}
+
 
 /* Footer */
 .site-footer {

@@ -44,3 +44,4 @@ Route::get('/', [CategoryController::class, 'index']);
 Route::get('/products/{category}', [ProductController::class, 'showByCategory'])->name('products.category');
 
 Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');
+Route::post('/subcategories/{subCategoryId}/filter', [SubCategoryController::class,'filter'])->name('subcategory.filter');
