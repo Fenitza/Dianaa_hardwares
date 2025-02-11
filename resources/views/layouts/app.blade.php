@@ -14,7 +14,7 @@
         <div class="header-container">
             <!-- Left Section: Logo -->
             <div class="left-section">
-                <a href="{{ url('/') }}"><img src="{{ asset('images/logo/logo.png') }}" alt="Logo"></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('images/logo/Diana_logo.png') }}" alt="Logo"></a>
             </div>
 
             <!-- Right Section -->
@@ -36,7 +36,7 @@
                         </form>
                     </div>
                     <div class="bottom-links">
-                        <a href="{{ route('products') }}"><i class="fa fa-box"></i> All Products</a> |
+                        <a href="{{ route('products_main') }}"><i class="fa fa-box"></i> All Products</a> |
                         <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> |
                         <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a>
                     </div>

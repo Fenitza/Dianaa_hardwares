@@ -9,7 +9,7 @@
         <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img" alt="{{ $product->Name }}">
         </div>
         <div class="col-md-4 product-list-info">
-            <strong>Dianaa Hardwares Part No. (SKU):</strong> {{ $product->SKU }}<br>
+            <strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}<br>
             <strong>Description:</strong> {{ $product->Description }}<br>
             <strong>Manufacturer:</strong> {{ $product->Manufacturer }}
         </div>

@@ -8,7 +8,7 @@
         </div>
 
         <div class="col-md-8 d-flex flex-column product-info">
-        <p><b>Dianaa Hardwares Part No.(SKU): </b><span style="color: blue;">{{ $product->SKU }}</span></p>
+        <p><b>Dianaa Fasteners Part No.(SKU): </b><span style="color: blue;">{{ $product->SKU }}</span></p>
             <h4>{{ $product->Name }}</h4>
             <p>{{ $product->Description }}</p>
             <p><b>Manufacturer: </b>{{ $product->Manufacturer }}</p>

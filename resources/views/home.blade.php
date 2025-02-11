@@ -60,77 +60,6 @@
 </div>
 
 
-    <!-- Category and Product Section tabs -->
-    <!-- <div class="container">
-    <div class="row mt-3"> -->
-        <!-- Category List Sidebar -->
-        <!-- <div class="col-md-3">
-            <div class="list-group" id="categoryList">
-                @foreach ($categories as $category)
-                    <a href="#" class="list-group-item list-group-item-action {{ $loop->first ? 'active' : '' }}"
-                       data-category="{{ $category->name }}">
-                        {{ $category->Name }}
-                    </a>
-                @endforeach
-            </div>
-        </div> -->
-
-        <!-- Product Display Area -->
-        <!-- <div class="col-md-9">
-             Nav Tabs for Product Types -->
-            <!-- <ul class="nav nav-tabs" id="productTabs">
-                @foreach (['Featured', 'New Arrival', 'Best Sellers'] as $type)
-                    <li class="nav-item">
-                        <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ strtolower($type) }}-tab" data-toggle="tab" href="#{{ strtolower($type) }}" role="tab">
-                            {{ $type }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul> --> 
-
-            <!-- Tab Content for Products -->
-            <!-- <div class="tab-content" id="productTabsContent">
-                @foreach (['Featured', 'New Arrival', 'Best Sellers'] as $type)
-                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ strtolower($type) }}" role="tabpanel">
-                        <div class="row">
-                            @foreach ($products as $product)
-                                @if (strtolower($product->type) === strtolower($type))
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <img src="{{ asset('images/Products/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $product->Name }}</h5>
-                                                <p class="card-text">£{{ number_format($product->SalePrice, 2) }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-</div> -->
-
-   
-
- <!-- <script>
-    document.querySelectorAll('.list-group-item').forEach(item => {
-    item.addEventListener('click', function() {
-        let category = this.getAttribute('data-category');
-        // Fetch and update product list based on category
-    });
-});
-
-$('#productTabs a').on('click', function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-});
-</script> -->
-
-
 
 <!-- Spacer Block -->
 <div class="custom-spacer"></div>
@@ -154,7 +83,7 @@ $('#productTabs a').on('click', function (e) {
 
         <!-- Explore All Products Button -->
         <div class="col-12 text-center mt-4">
-            <a href="{{ route('products') }}" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
+            <a href="{{ route('products_main') }}" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
         </div>
     </div>
 </div>

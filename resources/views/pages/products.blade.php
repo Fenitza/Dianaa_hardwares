@@ -42,4 +42,20 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let urlParams = new URLSearchParams(window.location.search);
+    let activeCategory = urlParams.get('category');
+    if (activeCategory) {
+        let tabElement = document.querySelector(`#category-tab-${activeCategory}`);
+        if (tabElement) {
+            new bootstrap.Tab(tabElement).show(); // Bootstrap 5
+            // For Bootstrap 4 or if using jQuery you might need:
+            // $(`#category-tab-${activeCategory}`).tab('show');
+        }
+    }
+});
+</script>
+
 @endsection
