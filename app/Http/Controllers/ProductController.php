@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Category;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -33,5 +34,11 @@ class ProductController extends Controller
         $categories = Category::with('subcategories')->get();
         return view('pages.products', compact('categories', 'category'));
     }
+
+    public function showByProducts($Name)
+{
+    $product = Product::findOrFail($Name);
+    return view('pages.product_details', compact('product'));
+}
 
 }
