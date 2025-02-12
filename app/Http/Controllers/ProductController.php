@@ -35,10 +35,24 @@ class ProductController extends Controller
         return view('pages.products', compact('categories', 'category'));
     }
 
-    public function showByProducts($Name)
+    public function showByProducts($ProductID)
 {
-    $product = Product::findOrFail($Name);
+    $product = Product::findOrFail($ProductID);
     return view('pages.product_details', compact('product'));
 }
+
+public function showByManufacturer($manufacturerId)
+{
+    $categories = Category::whereHas('products', function ($query) use ($manufacturerId) {
+        $query->where('manufacturer_id', $manufacturerId);
+    })->with(['subcategories' => function ($query) use ($manufacturerId) {
+        $query->whereHas('products', function ($subQuery) use ($manufacturerId) {
+            $subQuery->where('manufacturer_id', $manufacturerId);
+        });
+    }])->get();
+
+    return view('categories.show', compact('categories'));
+}
+
 
 }

@@ -1,7 +1,8 @@
 <!-- Product Grid -->
 <div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
     @foreach ($products as $product)
-    <div class="product" onclick="window.location.href='{{ route('product.details', ['Name' => $product->Name]) }}'">
+    <div class="product" onclick="window.location.href='{{ route('product.details', ['ProductID' => $product->ProductID]) }}'">
+    <!-- <div class="product" data-product-id="{{ $product->ProductID }}"> -->
         <div class="row">
             <div class="col-md-4">
             <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
@@ -28,3 +29,11 @@
     </div>
     @endforeach
 </div>
+
+<!-- <script>
+    document.querySelectorAll('.product').forEach(item => {
+    item.addEventListener('click', function() {
+        window.location.href = "{{ url('subcategories/products') }}/" + this.getAttribute('data-product-id');
+    });
+});
+</script> -->

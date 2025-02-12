@@ -59,6 +59,23 @@
     </a>
 </div>
 
+<!-- Brand Category -->
+<div class="container my-4">
+    <h3 class="text-center mb-3" style="color: #2d2e6a">FEATURED BRANDS</h3>
+    <div class="row">
+    @foreach($manufacturers as $manufacturer)
+        <div class="col-md-4 col-sm-6 text-center mb-4">
+            <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}">
+                <div class="brand-image-container">
+                    <img src="{{ asset('images/logo/logo_brand.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
+                    <p class="card-text-category">{{ $manufacturer->Manufacturer }}</p>
+                </div>
+            </a>
+        </div>
+        @endforeach
+    </div>
+</div>
+
 
 
 <!-- Spacer Block -->

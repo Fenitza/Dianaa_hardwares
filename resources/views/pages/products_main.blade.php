@@ -9,7 +9,7 @@
     <div class="row">
     @foreach ($categories as $category)
         <div class="col-sm-4 col-md-4 col-lg-3 mb-4">
-        <a href="{{ route('products', ['category' => $category->CategoryID]) }}" class="card-category">
+        <a href="{{ route('products', ['category' => $category->CategoryID, 'manufacturer' => request()->manufacturer]) }}" class="card-category">
             <div class="card-category">
                 <!-- <img src="{{ asset('storage/' . $category->image) }}" class="card-img-top" alt="{{ $category->name }}"> -->
                 <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
@@ -26,7 +26,7 @@
 
         <!-- Explore All Products Button -->
         <div class="col-12 text-center mt-4">
-            <a href="{{ route('products') }}" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
+        <a href="{{ route('products', ['manufacturer' => request()->manufacturer]) }}" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
         </div>
     </div>
 </div>

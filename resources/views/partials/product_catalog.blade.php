@@ -33,9 +33,11 @@
                         <td>${{ number_format($product->SalePrice, 2) }}</td>
                         
                     </tr>
+                    
                     <!-- <button class="btn btn-primary" onclick="showProductDetails({{ $product->id }})">View Details</button> -->
                 @endforeach
             </tbody>
         </table>
+
     @endforeach
 </div>

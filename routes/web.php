@@ -43,7 +43,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/products/category', [ProductController::class, 'category'])->name('products_main');//All Products
 Route::get('/products/{category?}', [ProductController::class, 'show'])->name('products.show');//2nd categories
-Route::get('/subcategories/product/{Name}', [ProductController::class, 'showByProducts'])->name('product.details');
+Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'showByProducts'])->name('product.details');
 
 
 Route::get('/', [HomeController::class , 'index'])->name('home');
@@ -51,3 +51,5 @@ Route::get('/products/{category}', [ProductController::class, 'showByCategory'])
 
 Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');//grid page
 Route::post('/subcategories/{subCategoryId}/filter', [SubCategoryController::class,'filter'])->name('subcategory.filter');
+
+Route::get('/categories/manufacturer/{manufacturer}', [ProductController::class,'showByManufacturer'])->name('categories.show');

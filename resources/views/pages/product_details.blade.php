@@ -2,24 +2,48 @@
 
 @section('content')
 <div class="container">
-    <div class="product-detail-page">
-        <h2>{{ $product->Name }}</h2>
-        <div class="row">
-            <div class="col-md-6">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+    <div class="row product-detail-page">
+        <!-- First Column: Product Image -->
+        <div class="col-md-4" style="margin-top: 50px;">
+        <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img" alt="{{ $product->Name }}">
+        </div>
+
+        <!-- Second Column: Product Details and Attributes -->
+<div class="col-md-4 product-details">
+    <h2>{{ $product->Name }}</h2>
+    <ul class="list-unstyled">
+        <li><strong>Fastenal Part No. (SKU):</strong> {{ $product->SKU }}</li>
+        <li><strong>UNSPSC:</strong> {{ $product->UNSPSC }}</li>
+        <li><strong>Manufacturer:</strong> {{ $product->Manufacturer }}</li>
+        <li><div class="catalog-item">This is a Catalog Item</div></li>
+        <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
+        <li><strong>Ring Number:</strong> {{ $product->RingNumber }}</li>
+        <li><strong>Shaft Diameter:</strong> {{ $product->ShaftDiameter }}</li>
+        <li><strong>Material:</strong> {{ $product->Material }}</li>
+        <li><strong>Type:</strong> {{ $product->Type }}</li>
+        <li><strong>Style:</strong> {{ $product->Style }}</li>
+        <li><strong>Finish:</strong> {{ $product->Finish }}</li>
+    </ul>
+</div>
+
+
+        <!-- Third Column: Pricing and Supply Chain -->
+        <div class="col-md-4" style="margin-top: 50px;">
+            <h3>Price</h3>
+            <p><strong>Online Price:</strong> ₹{{ number_format($product->SalePrice, 2) }}</p>
+            <div class="quantity mb-3">
+                <label for="quantity"><strong>Quantity:</strong></label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
             </div>
-            <div class="col-md-6">
-                <h3>Details</h3>
-                <p><strong>SKU:</strong> {{ $product->SKU }}</p>
-                <p><strong>Manufacturer:</strong> {{ $product->Manufacturer }}</p>
-                <p><strong>Price:</strong> ₹{{ number_format($product->SalePrice, 2) }}</p>
+            <button class="btn btn-primary mb-3">Add to Cart</button>
+            <ul class="list-unstyled">
+<li class="product-attributes-heading"><strong>Supply Chain</strong></li>
                 <p><strong>Availability:</strong> <span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></p>
-                <div class="mt-4">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
-                    <button class="btn btn-primary mt-3">Add to Cart</button>
-                </div>
-            </div>
+                <p><strong>Supply Chain Info:</strong> {{ $product->SupplyChain }}</p>
+                <p><strong>Direct Ship:</strong> Ships {{ $product->ShipDate }}</p>
+
+</ul>
+            
         </div>
     </div>
 </div>

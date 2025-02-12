@@ -4,6 +4,7 @@
 <!-- Product List -->
 <div class="product-list">
     @foreach ($products as $product)
+    <div class="product" onclick="window.location.href='{{ route('product.details', ['ProductID' => $product->ProductID]) }}'">
     <div class="row mb-3 align-items-center">
         <div class="col-md-1">
         <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img" alt="{{ $product->Name }}">
@@ -29,5 +30,6 @@
             </button>
         </div>
     </div>
+</div>
     @endforeach
 </div>
