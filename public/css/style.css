@@ -603,9 +603,9 @@ header {
 
 /* Home Brands */
 .brand-image-container .brand-img {
-    width: 200px;  /* Adjust size as needed */
-    height: 200px; /* Adjust size as needed */
-    border-radius: 50%; /* Makes the image round */
+    width: 400px;  /* Adjust size as needed */
+    /* height: 200px; Adjust size as needed */
+    /* border-radius: 80%; Makes the image round */
     border-width: 100px;
     border-color: black;
     object-fit: cover; /* Ensures the image covers the area without distorting aspect ratio */

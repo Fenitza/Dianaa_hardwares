@@ -62,13 +62,23 @@
 <!-- Brand Category -->
 <div class="container my-4">
     <h3 class="text-center mb-3" style="color: #2d2e6a">FEATURED BRANDS</h3>
-    <div class="row">
-    @foreach($manufacturers as $manufacturer)
-        <div class="col-md-4 col-sm-6 text-center mb-4">
+    <div class="row" style="background-color: #333c8b">
+    
+    @foreach($manufacturers as $index => $manufacturer)
+        <div class="col-md-6 col-sm-6 text-center mb-4">
             <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}">
                 <div class="brand-image-container">
-                    <img src="{{ asset('images/logo/logo_brand.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
-                    <p class="card-text-category">{{ $manufacturer->Manufacturer }}</p>
+                    @if($index == 0)
+                        <!-- Image for the first manufacturer -->
+                        <img src="{{ asset('images/logo/tvs_logo2.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
+                    @elseif($index == 1)
+                        <!-- Image for the second manufacturer -->
+                        <img src="{{ asset('images/logo/Diana_logo.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 85px; margin-top:45px;">
+                    @else
+                        <!-- Default image for other manufacturers -->
+                        <img src="{{ asset('images/logo/logo_brand.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
+                    @endif
+                    <!-- <p class="card-text-category">{{ $manufacturer->Manufacturer }}</p> -->
                 </div>
             </a>
         </div>
@@ -90,7 +100,7 @@
         <div class="col-sm-4 col-md-4 col-lg-3 mb-4">
             <div class="card-category">
                 <!-- <img src="{{ asset('storage/' . $category->image) }}" class="card-img-top" alt="{{ $category->name }}"> -->
-                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img-top" alt="Product1">
                 <div class="card-body text-center">
                     <p class="card-text-category">{{ $category->Name }}</p>
                 </div>

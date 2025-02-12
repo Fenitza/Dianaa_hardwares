@@ -20,18 +20,19 @@ class SubCategoryController extends Controller
         if (!in_array($viewType, $validViewTypes)) {
             $viewType = 'grid'; // Default if invalid view type provided
         }
-
-        // Prepare to query the subcategory with its products
+    
         $subcategory = SubCategory::with(['products' => function($query) use ($request, $sortOrder) {
-            // Apply filters based on request inputs
+            // Apply manufacturer ID filter if provided
             if ($request->filled('manufacturer')) {
-                $query->whereIn('manufacturer', $request->manufacturer);
+                $manufacturerIds = is_array($request->manufacturer) ? $request->manufacturer : [$request->manufacturer];
+                $query->whereIn('ManufacturerID', $manufacturerIds);
             }
-
+    
+            // Apply other filters based on request inputs, like material, etc.
             if ($request->filled('material')) {
-                $query->whereIn('material', $request->material);
+                $query->whereIn('material', (array) $request->material);
             }
-
+    
             // Apply sorting
             switch ($sortOrder) {
                 case 'price_low_high':
@@ -45,7 +46,7 @@ class SubCategoryController extends Controller
                     break;
             }
         }])->findOrFail($subCategoryId);
-    
+        
         $products = $subcategory->products;
         return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
     }
