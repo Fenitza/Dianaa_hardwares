@@ -37,8 +37,9 @@
                     </div>
                     <div class="bottom-links">
                         <a href="{{ route('products_main') }}"><i class="fa fa-box"></i> All Products</a> |
-                        <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> |
-                        <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a>
+                        <!-- <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> | -->
+                        <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a> |
+                        <a href="{{ route('login') }}"><i class="fa fa-user"></i> Log In</a>
                     </div>
                 </div>
             </div>

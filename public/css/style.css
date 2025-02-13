@@ -620,6 +620,284 @@ header {
     justify-content: center;
 }
 
+/* timeline */
+/* Timeline Base Styles */
+.timeline {
+    position: relative;
+    padding-left: 50px;
+    list-style: none;
+}
+
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #d4d9df;
+    top: 0;
+    bottom: 0;
+    left: 18px;
+    margin-left: -3px;
+}
+
+.timeline-item {
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.timeline-icon {
+    width: 36px;
+    height: 36px;
+    background-color: #A5CD36; /* Gold color */
+    color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.timeline-content {
+    position: relative;
+    margin-left: 60px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: -15px;
+    border-style: solid;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #f8f9fa transparent transparent;
+}
+
+.timeline-content h4 {
+    margin-top: 0;
+    color: #333;
+    font-weight: bold;
+}
+
+.timeline-content p {
+    margin-bottom: 0;
+}
+
+
+/* Hover Effect */
+.timeline-item:hover .timeline-content {
+    background-color: #e9ecef;
+}
+
+.feature-box {
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-left: 5px solid #007bff; /* Consider using a gradient here if suitable */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 20px; /* Ensures consistent spacing between rows */
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.feature-box h3 {
+    color: #007bff; /* Or another color that fits the design */
+    font-size: 20px; /* Larger font size for headers */
+    font-weight: bold;
+}
+
+.feature-box p {
+    font-size: 16px; /* Slightly larger font size for body text */
+    color: #333;
+    line-height: 1.5; /* Improved line spacing for better readability */
+}
+.quality-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-top: 20px;
+}
+
+.quality-icon {
+    font-size: 40px;
+    color: #4A90E2; /* Blue color for icons */
+    margin-bottom: 15px;
+}
+
+.quality-card h3 {
+    color: #333;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.quality-card p {
+    font-size: 16px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.quality-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+    .quality-card {
+        padding: 15px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .feature-box {
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+
+    .feature-box:hover {
+        transform: none; /* Disables hover effect on mobile devices */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+    .timeline {
+        padding-left: 25px;
+    }
+
+    .timeline::after {
+        left: 12px;
+    }
+
+    .timeline-icon {
+        left: -6px;
+    }
+
+    .timeline-content {
+        margin-left: 40px;
+    }
+}
+
+
+/* careers */
+.job-listings .job {
+    background: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.job h3 {
+    color: #007BFF; /* Bootstrap primary color */
+    margin-bottom: 10px;
+}
+
+.job p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.job a.btn {
+    margin-top: 10px;
+}
+
+.job a.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+/* Why Work With Us section */
+#work-with-us {
+    background-color: #f8f9fa; /* Light background for the whole row */
+    padding: 20px 0; /* Adds padding around the content */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+.work-with-us-text h2 {
+    color: #007bff; /* Theme primary color for heading */
+    font-weight: 700; /* Makes the font bolder */
+    margin-bottom: 15px; /* Spacing below the heading */
+}
+
+.work-with-us-text p {
+    font-size: 18px; /* Larger font size for the introductory text */
+    color: #555; /* Darker grey for better readability */
+    margin-bottom: 20px; /* Space before the list starts */
+}
+
+.work-with-us-text ul {
+    list-style: inside disc; /* Bullets inside to save horizontal space */
+    padding-left: 0; /* Removes default padding */
+}
+
+.work-with-us-text ul li {
+    font-size: 16px; /* Slightly larger font for list items */
+    line-height: 1.6; /* More line height for readability */
+    padding: 5px 0; /* Adds vertical padding for each list item */
+}
+
+.work-with-us-image img {
+    border-radius: 8px; /* Rounded corners for the image */
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.15); /* Adds shadow to the image */
+    transition: transform 0.3s ease-in-out; /* Smooth transition for hover effect */
+}
+
+.work-with-us-image img:hover {
+    transform: scale(1.05); /* Scales up the image on hover */
+}
+
+@media (max-width: 768px) {
+    .work-with-us-text, .work-with-us-image {
+        text-align: center; /* Centers text and image on smaller screens */
+    }
+
+    .work-with-us-image img {
+        margin-top: 20px; /* Adds space between the text and image on small screens */
+    }
+}
+
+
+/* Apply Section */
+.btn-success {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Darker shade for hover effect */
+    border-color: #1e7e34;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    
+    .job {
+        padding: 15px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
 /* Footer */
 .site-footer {
     background-color: #2d2e6a; /* Set the footer background color */

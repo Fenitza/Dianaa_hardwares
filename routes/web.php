@@ -12,7 +12,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LoginController;
+
+
 
 
 
@@ -58,3 +60,6 @@ Route::get('/categories/manufacturer/{manufacturer}', [ProductController::class,
 // Login Routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
+
+///careers
+// Route::get('/careers', CareersController::class,'showCareersPage');
