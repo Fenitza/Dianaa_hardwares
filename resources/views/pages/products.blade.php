@@ -24,7 +24,7 @@
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                         <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'manufacturer' => request()->manufacturer]) }}">
                             <div class="card-category">
-                                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                                <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img-top" alt="Product1">
                                 <div class="card-body text-center">
                                     <p class="card-text-category">{{ $subcategory->Name }}</p>
                                 </div>

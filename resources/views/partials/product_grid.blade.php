@@ -5,7 +5,7 @@
     <!-- <div class="product" data-product-id="{{ $product->ProductID }}"> -->
         <div class="row">
             <div class="col-md-4">
-            <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+            <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img-top" alt="Product1">
             </div>
             <div class="col-md-8 d-flex flex-column product-info">
                 <p><b>Dianaa Fasteners Part No.(SKU): </b><span style="color: blue;">{{ $product->SKU }}</span></p>

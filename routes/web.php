@@ -29,32 +29,29 @@ use App\Http\Controllers\LoginController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('home');
- 
-});
+//Main pages
+Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/account', [UserController::class, 'account'])->name('account');
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
-
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/careers', [CareersController::class, 'index'])->name('careers');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+
+//All Products
 Route::get('/products/category', [ProductController::class, 'category'])->name('products_main');//All Products
 Route::get('/products/{category?}', [ProductController::class, 'show'])->name('products.show');//2nd categories
 Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'showByProducts'])->name('product.details');
-
-
-Route::get('/', [HomeController::class , 'index'])->name('home');
-Route::get('/products/{category}', [ProductController::class, 'showByCategory'])->name('products.category');
-
 Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');//grid page
 Route::post('/subcategories/{subCategoryId}/filter', [SubCategoryController::class,'filter'])->name('subcategory.filter');
 
+//Home Products
+Route::get('/', [HomeController::class , 'index'])->name('home');
+Route::get('/products/{category}', [ProductController::class, 'showByCategory'])->name('products.category');
+
+//Home brands
 Route::get('/categories/manufacturer/{manufacturer}', [ProductController::class,'showByManufacturer'])->name('categories.show');
 
 // Login Routes
@@ -63,3 +60,24 @@ Route::post('login', [LoginController::class, 'login']);
 
 ///careers
 // Route::get('/careers', CareersController::class,'showCareersPage');
+
+//admin Dashboard
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('layouts/admin');
+    })->name('dashboard');
+});
+
+
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/products', [ProductController::class, 'adminProducts'])->name('admin.products');
+});
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders');
+});

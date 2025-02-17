@@ -54,5 +54,8 @@ public function showByManufacturer($manufacturerId)
     return view('categories.show', compact('categories'));
 }
 
-
+public function adminProducts()
+    {
+        return view('includes.admin.products');  // Points to resources/views/includes/admin/products.blade.php
+    }
 }

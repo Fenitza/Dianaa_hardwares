@@ -12,7 +12,7 @@
         <a href="{{ route('products', ['category' => $category->CategoryID, 'manufacturer' => request()->manufacturer]) }}" class="card-category">
             <div class="card-category">
                 <!-- <img src="{{ asset('storage/' . $category->image) }}" class="card-img-top" alt="{{ $category->name }}"> -->
-                <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img-top" alt="Product1">
+                <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img-top" alt="Product1">
                 <div class="card-body text-center">
                     <p class="card-text-category">{{ $category->Name }}</p>
                 </div>

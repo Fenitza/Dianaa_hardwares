@@ -5,24 +5,25 @@
     <div class="row product-detail-page">
         <!-- First Column: Product Image -->
         <div class="col-md-4" style="margin-top: 50px;">
-        <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img" alt="{{ $product->Name }}">
+        <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img" alt="{{ $product->Name }}">
         </div>
 
         <!-- Second Column: Product Details and Attributes -->
 <div class="col-md-4 product-details">
     <h2>{{ $product->Name }}</h2>
     <ul class="list-unstyled">
-        <li><strong>Fastenal Part No. (SKU):</strong> {{ $product->SKU }}</li>
-        <li><strong>UNSPSC:</strong> {{ $product->UNSPSC }}</li>
+        <li><strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}</li>
+        <li><strong>Description:</strong> {{ $product->Description }}</li>
+        <li><strong>Standard:</strong> {{ $product->Standard }}</li>
         <li><strong>Manufacturer:</strong> {{ $product->Manufacturer }}</li>
         <li><div class="catalog-item">This is a Catalog Item</div></li>
         <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
-        <li><strong>Ring Number:</strong> {{ $product->RingNumber }}</li>
-        <li><strong>Shaft Diameter:</strong> {{ $product->ShaftDiameter }}</li>
+        <li><strong>Size:</strong> {{ $product->Size }}</li>
+        <li><strong>Length:</strong> {{ $product->Length }}</li>
         <li><strong>Material:</strong> {{ $product->Material }}</li>
         <li><strong>Type:</strong> {{ $product->Type }}</li>
-        <li><strong>Style:</strong> {{ $product->Style }}</li>
-        <li><strong>Finish:</strong> {{ $product->Finish }}</li>
+        <li><strong>Color:</strong> {{ $product->Color }}</li>
+        <li><strong>Property Class:</strong> {{ $product->Property_Class }}</li>
     </ul>
 </div>
 

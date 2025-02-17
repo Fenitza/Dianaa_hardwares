@@ -4,12 +4,12 @@
 @section('content')
 <!-- Hero Section -->
 
-    <div class="hero-section" style="background-image: url('{{ asset('images/banners/hand_tools2.jpg') }}');">
+<div class="hero-section" style="background-image: url('images/banners/slder1.webp'); height:400px">
     <div class="container h-100 d-flex align-items-center" style="padding-top: 0; margin-top: -50px;">
         <div class="text-white">
-            <p class="lead mb-1">30% Discount</p>
-            <h1 class="display-4">Best Hand Tools<br>Collection</h1>
-            <a href="#" class="btn btn-danger btn-lg text-white mt-4">Shop Now</a>
+            <!-- <p class="lead mb-1">30% Discount</p>
+            <h1 class="display-4">Best Hand Tools<br>Collection</h1> -->
+            <!-- <a href="#" class="btn btn-danger btn-lg text-white mt-4">Shop Now</a> -->
         </div>
     </div>
 </div>
@@ -19,8 +19,9 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-6">
-            <h2>We are Construction - <span class="intro">Leading provider of industrial and mechanical solutions.</span></h2>
-            <p>Founded in 1970, our company has grown by leaps and bounds and had been setting new standards.<br> Starting out with only ability, enthusiasm and a clear vision of destination, our team has earned every single reputation and award.</p>
+            <h2>Dianaa Fasteners </h2>
+            <p>Dianaa Fasteners is established as a key player in the fastener industry, aiming to provide quality products and services.
+            <br> Starting out with only ability, enthusiasm and a clear vision of destination, our team has earned every single reputation and award.</p>
         </div>
         <div class="col-md-6">
             <div class="d-flex justify-content-around align-items-center h-100">
@@ -43,37 +44,21 @@
 
 
 
-<!-- Product Carousel Section -->
-<div class="product-carousel">
-    <a href="#" class="product-box">
-        <img src="{{ asset('images/banners/Honeywell_banner.png') }}" alt="Honeywell Ultimate Protection and Comfort">
-    </a>
-    <a href="#" class="product-box">
-        <img src="{{ asset('images/banners/Slice_banner.png') }}" alt="Slice Durable, Safe, Easy Access">
-    </a>
-    <a href="#" class="product-box">
-        <img src="{{ asset('images/banners/Streamlight_banner.png') }}" alt="Streamlight Compact, Durable, Convenient">
-    </a>
-    <a href="#" class="product-box">
-        <img src="{{ asset('images/banners/ergodyne_banner.png') }}" alt="Justrite Ultimate Flammable Liquid Safety">
-    </a>
-</div>
-
 <!-- Brand Category -->
 <div class="container my-4">
     <h3 class="text-center mb-3" style="color: #2d2e6a">FEATURED BRANDS</h3>
-    <div class="row" style="background-color: #333c8b">
+    <div class="row">
     
     @foreach($manufacturers as $index => $manufacturer)
         <div class="col-md-6 col-sm-6 text-center mb-4">
             <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}">
                 <div class="brand-image-container">
-                    @if($index == 0)
+                    @if($index == 1)
                         <!-- Image for the first manufacturer -->
-                        <img src="{{ asset('images/logo/tvs_logo2.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
-                    @elseif($index == 1)
+                        <img src="{{ asset('images/logo/tvs_logo3.jpg') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
+                    @elseif($index == 0)
                         <!-- Image for the second manufacturer -->
-                        <img src="{{ asset('images/logo/Diana_logo.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 85px; margin-top:45px;">
+                        <img src="{{ asset('images/logo/Diana_logo2.jpg') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 100px; margin-top:45px;">
                     @else
                         <!-- Default image for other manufacturers -->
                         <img src="{{ asset('images/logo/logo_brand.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">

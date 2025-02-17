@@ -7,9 +7,10 @@ body, html {
 }
 
 header {
-    background-color: #2d2e6a; /* Dark blue header */
+    background-color: #333c8b; /* Dark blue header */
     color: white;
     padding: 10px 10px;
+    position: center;
 }
 
 /* Header Container */
@@ -31,7 +32,8 @@ header {
 }
 
 .left-section img {
-    height: 50px;
+    height: 100px;
+    width: auto;
 }
 
 /* Right Section */

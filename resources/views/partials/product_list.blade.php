@@ -7,7 +7,7 @@
     <div class="product" onclick="window.location.href='{{ route('product.details', ['ProductID' => $product->ProductID]) }}'">
     <div class="row mb-3 align-items-center">
         <div class="col-md-1">
-        <img src="{{ asset('images/Products/product_1.jpg') }}" class="card-img" alt="{{ $product->Name }}">
+        <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img" alt="{{ $product->Name }}">
         </div>
         <div class="col-md-4 product-list-info">
             <strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}<br>

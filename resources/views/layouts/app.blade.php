@@ -14,7 +14,7 @@
         <div class="header-container">
             <!-- Left Section: Logo -->
             <div class="left-section">
-                <a href="{{ url('/') }}"><img src="{{ asset('images/logo/Diana_logo.png') }}" alt="Logo"></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('images/logo/Diana_logo2.png') }}" alt="Logo"></a>
             </div>
 
             <!-- Right Section -->
