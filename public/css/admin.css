@@ -1,4 +1,92 @@
-/* Basic styling for header, sidebar, and main content */
-header, aside, main {
-    /* Styling code here */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2d2e6a;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 300px;
+    border: 1px solid #ccc;
+    margin: 0 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.notification{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    color: #fff;
+    padding-right: 10px;
+    
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-info i.fas {
+    font-size: 24px;  /* Increase the font size as needed */
+    color: #fff;      /* Ensure the icon color is visible against the background */
+    margin-right: 10px; /* Adds space between the icon and the text */
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px; /* Space between icon and text */
+}
+
+
+
+.user-email {
+    color: #bbb9b9; /* Adjust the color as needed */
+}
+
+.user-name {
+    font-weight: bold; /* Emphasize the username more than the email */
+    font-size: larger;
+    color: #fff; 
+}
+
+.user-details-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* Dropdown starts right below the user-profile */
+    right: 0;
+    background-color: #2d2e6a;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    width: 200px;
+}
+
+.user-profile:hover .user-details-dropdown {
+    display: block;
+}
+
+.dropdown-item {
+    color: #fff;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-item:hover {
+    background-color: #2e4d6b;
 }
