@@ -56,6 +56,33 @@ public function showByManufacturer($manufacturerId)
 
 public function adminProducts()
     {
-        return view('includes.admin.products');  // Points to resources/views/includes/admin/products.blade.php
+        $products = Product::with('subCategory')->get(); // Eager load the subcategory relationship
+        return view('includes.admin.products', compact('products'));  // Points to resources/views/includes/admin/products.blade.php
     }
+
+    public function create()
+    {
+        // Prepare any data you need for the view, if necessary
+        return view('admin.products.create');
+    }
+    
+    public function showProducts($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.products.show', compact('product'));
+    }
+
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.products.edit', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+        return redirect()->route('admin.products')->with('success', 'Product updated successfully');
+    }
+
 }
