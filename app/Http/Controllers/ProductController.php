@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Manufacturer;
+use App\Models\SubCategory;
+\DB::enableQueryLog();
 
 class ProductController extends Controller
 {
@@ -36,36 +39,37 @@ class ProductController extends Controller
     }
 
     public function showByProducts($ProductID)
-{
-    $product = Product::findOrFail($ProductID);
-    return view('pages.product_details', compact('product'));
-}
-
-public function showByManufacturer($manufacturerId)
-{
-    $categories = Category::whereHas('products', function ($query) use ($manufacturerId) {
-        $query->where('manufacturer_id', $manufacturerId);
-    })->with(['subcategories' => function ($query) use ($manufacturerId) {
-        $query->whereHas('products', function ($subQuery) use ($manufacturerId) {
-            $subQuery->where('manufacturer_id', $manufacturerId);
-        });
-    }])->get();
-
-    return view('categories.show', compact('categories'));
-}
-
-public function adminProducts()
     {
-        $products = Product::with('subCategory')->get(); // Eager load the subcategory relationship
-        return view('includes.admin.products', compact('products'));  // Points to resources/views/includes/admin/products.blade.php
+        $product = Product::findOrFail($ProductID);
+        return view('pages.product_details', compact('product'));
     }
+
+    public function showByManufacturer($manufacturerId)
+    {
+        $categories = Category::whereHas('products', function ($query) use ($manufacturerId) {
+            $query->where('manufacturer_id', $manufacturerId);
+        })->with(['subcategories' => function ($query) use ($manufacturerId) {
+            $query->whereHas('products', function ($subQuery) use ($manufacturerId) {
+                $subQuery->where('manufacturer_id', $manufacturerId);
+            });
+        }])->get();
+
+        return view('categories.show', compact('categories'));
+    }
+
+    public function adminProducts()
+        {
+            $products = Product::with('subCategory')->get(); // Eager load the subcategory relationship
+            return view('includes.admin.products', compact('products'));  // Points to resources/views/includes/admin/products.blade.php
+        }
 
     public function create()
     {
-        // Prepare any data you need for the view, if necessary
-        return view('admin.products.create');
+        $manufacturers = Manufacturer::all(); // Assuming you have a Manufacturer model
+        $subcategories = SubCategory::all(); // Assuming you have a Category model
+        return view('includes.admin.products.create', compact( 'manufacturers', 'subcategories'));
     }
-    
+
     public function showProducts($id)
     {
         $product = Product::findOrFail($id);
@@ -83,6 +87,37 @@ public function adminProducts()
         $product = Product::findOrFail($id);
         $product->update($request->all());
         return redirect()->route('admin.products')->with('success', 'Product updated successfully');
+    }
+
+    public function store(Request $request)
+    {
+        // dd($request->all());
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'sku' => 'required|string|max:50',
+        'salePrice' => 'required|numeric',
+        'quantity' => 'required|integer',
+        'product_image' => 'nullable|image|max:2048', // 2MB Max
+        'size' => 'nullable|string',
+        'length' => 'nullable|string',
+        'property_class' => 'nullable|string',
+        'standard' => 'nullable|string',
+        'material' => 'nullable|string',
+        'ManufacturerID' => 'nullable|integer',
+        'SubCategoryID' => 'nullable|integer',
+    ]);
+    dd($data);  // Dump and die to see what data is being prepared for save
+
+    $product = new Product($data);
+    if ($request->hasFile('product_image')) {
+        $product->product_image = $request->file('product_image')->store('products', 'public');
+    }
+    $product->save();
+
+    \Log::info('Database Query:', \DB::getQueryLog()); // Log the query log after the product is saved
+
+    return redirect()->route('admin.products')->with('success', 'Product added successfully!');
     }
 
 }
