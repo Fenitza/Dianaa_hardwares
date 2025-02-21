@@ -21,7 +21,15 @@
             </div>
             <div class="user-details-dropdown">
                 <a href="/profile" class="dropdown-item">Profile</a> <!-- Profile link -->
-                <a href="/logout" class="dropdown-item">Logout</a> <!-- Logout link -->
+                <a href="{{ route('logout') }}"
+            onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                Logout
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
             </div>
         </div>
     </div>

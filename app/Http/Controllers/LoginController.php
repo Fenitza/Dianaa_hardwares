@@ -35,7 +35,11 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard');
+            if (Auth::user()->isAdmin()) {
+                return redirect()->intended('/admin/dashboard');
+            } else {
+                return redirect()->intended('/user/dashboard');
+            }
         }
 
         return back()->withErrors([
@@ -48,6 +52,16 @@ class LoginController extends Controller
     if (auth()->user()->isAdmin) {
         return '/admin/dashboard';
     }
-    return '/dashboard';
+    return '/user/dashboard';
 }
+
+public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();  // Invalidate the session.
+        $request->session()->regenerateToken();  // Regenerate the CSRF token.
+
+        return redirect('/login');  // Redirect to homepage or login page.
+    }
 }
