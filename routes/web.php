@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
@@ -18,7 +17,6 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +27,7 @@ use App\Http\Controllers\ResetPasswordController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 //Main pages
 Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -74,11 +73,8 @@ Route::post('password/reset', [ResetPasswordController::class,'reset'])->name('p
 ///careers
 // Route::get('/careers', CareersController::class,'showCareersPage');
 
-//admin Dashboard
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
 
+//Login Dashboard
 Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard', function () {
         return view('layouts/admin');
@@ -91,6 +87,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+//admin Dashboard
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/products', [ProductController::class, 'adminProducts'])->name('admin.products');
@@ -107,4 +107,5 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 });
 
 
-
+//Cart routes
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');

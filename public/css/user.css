@@ -1,0 +1,446 @@
+
+header {
+    background-color: #333c8b; /* Dark blue header */
+    color: white;
+    padding: 10px 10px;
+    position: center;
+}
+
+/* Header Container */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Left Section: Logo */
+.left-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.left-section img {
+    height: 100px;
+    width: auto;
+}
+
+/* Right Section */
+.right-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Top Right Links */
+.top-right-links {
+    text-align: right;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+.top-right-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.top-right-links a:hover {
+    text-decoration: underline;
+}
+
+/* Bottom Right Section */
+.bottom-right-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Changed from flex-end to space-between for better distribution */
+    width: 100%; /* Full width for proper alignment */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    padding-right: 20px; /* Ensure some space on the right */
+}
+
+.search-bar input[type="text"] {
+    margin-right: 2px; /* Space between input box and button */
+    width: 250px;
+    padding: 8px;
+    border: none;
+    border-radius: 6px 6px 6px 6px;
+    font-size: 16px;
+}
+
+.search-bar button {
+    padding: 8px 15px;
+    margin: 0; /* Remove any default margin */
+    line-height: 1; /* Align the button height with the input */
+    background-color: #ffc107; /* Yellow button */
+    border: none;
+    border-radius: 0 4px 4px 0;
+    color: #002244;
+}
+
+.search-bar button:hover {
+    background-color: #e0a800;
+}
+
+.bottom-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align links to the right */
+}
+
+.bottom-links a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px; /* Adjust padding as needed */
+    font-size: 16px;
+    display: inline-flex; /* Aligns icon and text nicely */
+    align-items: center; 
+}
+
+.bottom-links a:hover {
+    text-decoration: underline;
+}
+
+.bottom-links a i {
+    margin-right: 5px; /* Space between icon and text */
+    color: #ffc107;
+}
+
+.user-profile {
+    /* display: flex; */
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    padding: 5px 10px; /* Adjust padding as needed */
+    font-size: 16px;
+    display: inline-flex; /* Aligns icon and text nicely */
+    
+}
+.user-profile i{
+    margin-right: 5px; /* Space between icon and text */
+    color: #ffc107;
+}
+
+.user-name, .user-email {
+    /* margin-left: 10px; */
+    color: #fff;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #d7d7d7;
+}
+
+.user-details-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #2d2e6a;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    border-radius: 5px;
+    width: 200px;
+    z-index: 100;
+}
+
+.user-profile:hover .user-details-dropdown {
+    display: block;
+}
+
+.dropdown-item {
+    color: #fff;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-item:hover {
+    background-color: #444c9b;
+}
+
+
+/* Body */
+/* admin.css */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+.admin-container {
+    display: flex;
+    flex: 1;
+}
+
+aside {
+    width: 170px;
+    background-color: #34495E;
+    color: #ffffff;
+    height: 100vh;
+    padding: 20px;
+}
+
+aside ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+aside ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+aside ul li a:hover {
+    background-color: #2C3E50;
+}
+
+main {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+main h1 {
+    color: #333;
+}
+
+/* Improving layout for smaller screens */
+@media (max-width: 768px) {
+    .admin-container {
+        flex-direction: column;
+    }
+
+    aside {
+        width: 100%;
+        height: auto;
+    }
+
+    main {
+        padding: 10px;
+    }
+}
+
+
+.page-title {
+    color: #e7e7e7;
+}
+
+.product-management-header .tools {
+    display: flex;
+    align-items: center; /* Centers the items vertically */
+    justify-content: flex-end; /* Aligns the items to the right */
+    gap: 10px; /* Provides space between the items */
+}
+
+.product-management-header .btn {
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-management-header .btn-secondary {
+    background-color: #6c757d;
+}
+
+.product-management-header .sort {
+    display: flex;
+    align-items: center; /* Aligns the label and select vertically */
+}
+
+.product-management-header .sort-label {
+    margin-right: 5px; /* Space between label and dropdown */
+}
+
+.product-management-header select {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.products-table th:first-child, .products-table td:first-child {
+    text-align: center;
+}
+
+#select-all {
+    cursor: pointer;
+}
+
+.products-table input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Additional spacing improvements */
+.products-table th, .products-table td {
+    padding: 15px; /* Increased padding for better spacing */
+    border-bottom: 2px solid #ddd; /* Thicker bottom border for clearer separation */
+}
+/* Aligning the price column to the right */
+.products-table th.price, .products-table td.price {
+    text-align: center; /* Aligns the text to the right */
+    padding-right: 30px; /* Adds padding for better spacing from the border */
+}
+
+/* Adjusting the actions column for vertical alignment of icons */
+.products-table td.actions {
+    display: flex;
+    flex-direction: column; /* Makes the icons stack vertically */
+    align-items: center; /* Centers the icons in the cell */
+    justify-content: flex-start; /* Aligns items to the start of the flex container */
+    gap: 5px; /* Adds space between each icon */
+}
+
+.products-table th {
+    background-color: #4E5B6E; /* Darker shade for header */
+    color: #FFFFFF; /* White text for better contrast */
+    text-align: center;
+}
+
+.products-table th:hover {
+    background-color: #2d2e6a; /* Even darker on hover */
+}
+
+/* Adjustments for action icons to improve visibility */
+.action-icon .fas {
+    font-size: 1.2rem; /* Larger icons */
+    transition: color 0.3s; /* Smooth transition for hover effects */
+}
+
+.action-icon.view .fas { color: #17a2b8; }
+.action-icon.edit .fas { color: #ffc107; }
+.action-icon.delete .fas { color: #dc3545; }
+
+.action-icon .fas:hover {
+    transform: scale(1.1); /* Slight scale up on hover */
+}
+
+/* Stock status styling */
+.stock-status {
+    font-weight: bold; /* Makes the text bold */
+    text-align: center;
+}
+
+.stock-status.in-stock {
+    color: #28a745; /* Green for in-stock items */
+    align-items: center;
+}
+
+.stock-status.out-of-stock {
+    color: #dc3545; /* Red for out-of-stock items */
+    align-items: center;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .tools {
+        margin-top: 10px;
+    }
+}
+
+.add-product-container {
+    display: flex; /* Enables flexbox layout */
+    justify-content: space-between; /* Spaces the columns nicely */
+    align-items: start; /* Aligns items at the start of the flex container */
+    padding: 20px;
+    gap: 20px; /* Adds space between the columns */
+}
+.add-product-container .product-form-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-product-container .product-details,
+.add-product-container .product-meta {
+    flex: 1; /* Each column takes equal space */
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.add-product-container .product-meta {
+    margin-left: 10px;
+}
+
+.add-product-container .sticky-toolbar {
+    background-color: #f4f4f8;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid #ccc;
+}
+
+.add-product-container .btn-save {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-product-container .btn-save:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for form controls */
+.add-product-container input[type="text"],
+.add-product-container input[type="number"],
+.add-product-container select,
+.add-product-container textarea,
+.add-product-container input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#image_preview_container {
+    width: 100%; /* Adjust width as needed */
+    height: 300px; /* Fixed height for consistency */
+    overflow: hidden; /* Ensures no overflow of the container */
+    display: flex; /* Utilizes Flexbox for centering */
+    align-items: center; /* Centers image vertically */
+    justify-content: center; /* Centers image horizontally */
+    border: 1px solid #ccc; /* Adds a subtle border around the image container */
+}
+
+#image_preview {
+    max-width: 100%; /* Maximum width of the image is the container width */
+    max-height: 100%; /* Maximum height of the image is the container height */
+    object-fit: contain; /* Ensures the image is scaled properly within the container */
+}

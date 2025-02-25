@@ -36,7 +36,10 @@
                 <label for="quantity"><strong>Quantity:</strong></label>
                 <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
             </div>
-            <button class="btn btn-primary mb-3">Add to Cart</button>
+
+
+            <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}">Add to Cart</button>
+            
             <ul class="list-unstyled">
 <li class="product-attributes-heading"><strong>Supply Chain</strong></li>
                 <p><strong>Availability:</strong> <span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></p>
@@ -49,3 +52,4 @@
     </div>
 </div>
 @endsection
+

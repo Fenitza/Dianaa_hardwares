@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dianaa Hardwares</title>
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -38,7 +39,7 @@
                     <div class="bottom-links">
                         <a href="{{ route('products_main') }}"><i class="fa fa-box"></i> All Products</a> |
                         <!-- <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> | -->
-                        <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a> |
+                        <a href="{{ route('cart') }} " id="cart-count"><i class="fa fa-shopping-cart"></i> Cart(0)</a> |
                         <a href="{{ route('login') }}"><i class="fa fa-user"></i> Log In</a>
                     </div>
                 </div>
