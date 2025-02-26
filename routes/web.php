@@ -103,6 +103,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     });
     Route::any('/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.products.delete');
     Route::post('/products/store', [ProductController::class, 'store'])->name('admin.products.store');
+    
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {

@@ -1,18 +1,19 @@
 <!-- Spacer Block -->
-<div class="custom-spacer" style="height: 20px;"></div>
+<div class="custom-spacer" style="height: 30px;"></div>
 
 <!-- Product List -->
 <div class="product-list">
     @foreach ($products as $product)
-    <div class="product" onclick="window.location.href='{{ route('product.details', ['ProductID' => $product->ProductID]) }}'">
+    <div class="product">
     <div class="row mb-3 align-items-center">
         <div class="col-md-1">
-        <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img" alt="{{ $product->Name }}">
+        <img src="{{ asset('storage/' . $product->product_image) }}" class="card-img" alt="{{ $product->Name }}"
+        onclick="window.location.href='{{ route('product.details', ['ProductID' => $product->ProductID]) }}'">
         </div>
         <div class="col-md-4 product-list-info">
             <strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}<br>
             <strong>Description:</strong> {{ $product->Description }}<br>
-            <strong>Manufacturer:</strong> {{ $product->Manufacturer }}
+            <strong>Manufacturer:</strong> {{ $product->manufacturer->Name }}
         </div>
         <div class="col-md-2">
             <strong>Online Price:</strong><br>
@@ -33,3 +34,6 @@
 </div>
     @endforeach
 </div>
+
+<!-- Spacer Block -->
+<div class="custom-spacer" style="height: 50px;"></div>

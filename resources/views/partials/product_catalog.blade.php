@@ -1,5 +1,5 @@
 <!-- Spacer Block -->
-<div class="custom-spacer" style="height: 20px;"></div>
+<div class="custom-spacer" style="height: 30px;"></div>
 
 <!-- Catalog View -->
 <div class="container-fluid catalog-view">
@@ -41,3 +41,6 @@
 
     @endforeach
 </div>
+
+<!-- Spacer Block -->
+<div class="custom-spacer" style="height: 50px;"></div>

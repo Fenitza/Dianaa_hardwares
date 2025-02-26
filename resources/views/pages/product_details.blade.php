@@ -5,7 +5,7 @@
     <div class="row product-detail-page">
         <!-- First Column: Product Image -->
         <div class="col-md-4" style="margin-top: 50px;">
-        <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img" alt="{{ $product->Name }}">
+        <img src="{{ asset('storage/' . $product->product_image) }}" alt="Product Image" class="product-img">
         </div>
 
         <!-- Second Column: Product Details and Attributes -->
@@ -15,7 +15,7 @@
         <li><strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}</li>
         <li><strong>Description:</strong> {{ $product->Description }}</li>
         <li><strong>Standard:</strong> {{ $product->Standard }}</li>
-        <li><strong>Manufacturer:</strong> {{ $product->Manufacturer }}</li>
+        <li><strong>Manufacturer:</strong> {{ $product->manufacturer->Name ?? 'No Manufacturer' }}</li>
         <li><div class="catalog-item">This is a Catalog Item</div></li>
         <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
         <li><strong>Size:</strong> {{ $product->Size }}</li>

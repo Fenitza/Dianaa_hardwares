@@ -49,25 +49,16 @@
     <h3 class="text-center mb-3" style="color: #2d2e6a">FEATURED BRANDS</h3>
     <div class="row">
     
-    @foreach($manufacturers as $index => $manufacturer)
-        <div class="col-md-6 col-sm-6 text-center mb-4">
-            <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}">
-                <div class="brand-image-container">
-                    @if($index == 1)
-                        <!-- Image for the first manufacturer -->
-                        <img src="{{ asset('images/logo/tvs_logo3.jpg') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
-                    @elseif($index == 0)
-                        <!-- Image for the second manufacturer -->
-                        <img src="{{ asset('images/logo/Diana_logo2.jpg') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 100px; margin-top:45px;">
-                    @else
-                        <!-- Default image for other manufacturers -->
-                        <img src="{{ asset('images/logo/logo_brand.png') }}" alt="{{ $manufacturer->Manufacturer }}" class="brand-img" style="height: 200px;">
-                    @endif
-                    <!-- <p class="card-text-category">{{ $manufacturer->Manufacturer }}</p> -->
-                </div>
-            </a>
-        </div>
-        @endforeach
+    @foreach($manufacturers as $manufacturer)
+    <div class="col-md-6 col-sm-6 text-center mb-4">
+        <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}">
+            <div class="brand-image-container">
+                <!-- Use the image field directly from the manufacturer record -->
+                <img src="{{ asset('storage/' . $manufacturer->image) }}" alt="{{ $manufacturer->Name }}" class="brand-img" style="height: 200px;">
+            </div>
+        </a>
+    </div>
+@endforeach
     </div>
 </div>
 

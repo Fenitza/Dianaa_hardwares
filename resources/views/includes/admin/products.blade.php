@@ -7,13 +7,13 @@
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
-@endif
+    @endif
 
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
         <h1 class="page-title">Manage Products</h1>
         <div class="product-management-header">
@@ -52,7 +52,7 @@
             <tr>
                 <td><input type="checkbox" name="selected_products[]" value="{{ $product->ProductID }}"></td> <!-- Individual row selection -->
                 <td>{{ $product->ProductID }}</td>
-                <td><img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" class="product-img"></td>
+                <td><img src="{{ asset('storage/' . $product->product_image) }}" alt="Product Image" class="product-img" style="width: 100px; height: 75px; object-fit: contain;"></td>
                 <td>{{ $product->Name }}</td>
                 <td>{{ $product->SKU }}</td>
                 <td class="price">₹{{ $product->SalePrice }}</td>

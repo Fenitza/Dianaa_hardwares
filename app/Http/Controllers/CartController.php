@@ -51,7 +51,7 @@ class CartController extends Controller
             'quantity' => $request->quantity,
             'price' => $product->SalePrice,
                 'attributes' => [
-                'image' => $product->Image, // Ensure attribute names are correctly cased
+                'image' => $product->product_image, // Ensure attribute names are correctly cased
                 'manufacturer' => $product->Manufacturer,
                 'sku' => $product->SKU,
             ]

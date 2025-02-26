@@ -7,7 +7,7 @@
     </div>
     <div class="row" id="edit-product-container">
         <div class="col-md-8">
-            <form id="product-form" method="POST" action="{{ route('admin.products.update', $product->ProductID) }}">
+            <form id="product-form" method="POST" action="{{ route('admin.products.update', $product->ProductID) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT') {{-- Method Spoofing to handle PUT request --}}
                 <div class="form-group">
@@ -50,29 +50,35 @@
                     <label for="material">Material</label>
                     <input type="text" class="form-control" id="material" name="material" value="{{ $product->Material }}">
                 </div>
-            </form>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="product_image">Product Image</label>
-                <input type="file" class="form-control-file" id="product_image" name="product_image">
-                <div id="image_preview_container" style="width: 100%; height: 300px; overflow: hidden;">
-                    <img id="image_preview" src="{{ $product->image_url }}" alt="Image Preview" style="width: 100%; display: block;"/>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="product_image">Product Image</label>
+                    <input type="file" class="form-control-file" id="product_image" name="product_image" onchange="previewImage(event)">
+                    <div id="image_preview_container" style="width: 100%; height: 300px; overflow: hidden;">
+                        <img id="image_preview" src="{{ asset('storage/' . $product->product_image) }}" alt="Product Image" style="width: 100%; display: block;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ManufacturerID">Manufacturer</label>
+                    <select class="form-control" id="ManufacturerID" name="ManufacturerID">
+                        @foreach ($manufacturers as $manufacturer)
+                            <option value="{{ $manufacturer->ManufacturerID }}" {{ $product->ManufacturerID == $manufacturer->ManufacturerID ? 'selected' : '' }}>{{ $manufacturer->Name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="SubCategoryID">Category</label>
+                    <select class="form-control" id="SubCategoryID" name="SubCategoryID">
+                        @foreach ($subcategories as $subcategory)
+                            <option value="{{ $subcategory->SubCategoryID }}" {{ $product->SubCategoryID == $subcategory->SubCategoryID ? 'selected' : '' }}>{{ $subcategory->Name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="ManufacturerID">Manufacturer</label>
-                <input type="text" class="form-control" id="ManufacturerID" name="ManufacturerID" value="{{ $product->Manufacturer }}" required>
-            </div>
-            <div class="form-group">
-                <label for="SubCategoryID">Category</label>
-                <select class="form-control" id="SubCategoryID" name="SubCategoryID">
-                @foreach ($subcategories as $subcategory)
-                    <option value="{{ $subcategory->SubCategoryID }}" {{ $product->SubCategoryID == $subcategory->SubCategoryID ? 'selected' : '' }}>{{ $subcategory->Name }}</option>
-                @endforeach
-                </select>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 @endsection
+
+

@@ -19,7 +19,7 @@
         <tbody>
             @foreach ($cartItems as $item)
             <tr>
-            <td><img src="{{ $item->attributes->image }}" alt="{{ $item->name }}" style="width:50px; height:50px;"></td>
+            <td><img src="{{ asset('storage/' . $item->attributes->product_image) }}" alt="{{ $item->name }}" style="width:50px; height:50px;"></td>
                 <td>
                 <a href="{{ route('product.details', ['ProductID' => $item->id]) }}">{{ $item->name }}</a><br>
                 <small>Manufacturer: {{ $item->attributes['manufacturer'] ?? 'Not available' }}</small><br>

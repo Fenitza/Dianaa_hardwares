@@ -4,7 +4,7 @@ function previewImage(event) {
     reader.onload = function() {
         var output = document.getElementById('image_preview');
         output.src = reader.result;
-        output.style.display = 'block';
+        output.style.display = 'block'; // Make the image visible
     };
     reader.readAsDataURL(event.target.files[0]);
 }

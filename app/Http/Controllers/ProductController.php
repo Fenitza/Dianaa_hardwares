@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 use App\Models\Category;
 use App\Models\Product;
@@ -82,7 +84,37 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        $product->update($request->all());
+        // Validate request data, you might want to extract this as it's used in `store` as well
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'sku' => 'required|string|max:50',
+        'salePrice' => 'required|numeric',
+        'quantity' => 'required|integer',
+        'product_image' => 'nullable|image|max:2048', // 2MB Max
+        'size' => 'nullable|string',
+        'length' => 'nullable|string',
+        'property_class' => 'nullable|string',
+        'standard' => 'nullable|string',
+        'material' => 'nullable|string',
+        'ManufacturerID' => 'nullable|integer',
+        'SubCategoryID' => 'nullable|integer',
+    ]);
+
+    if ($request->hasFile('product_image')) {
+        // Check if there's an existing image and delete it if it exists
+        if ($product->product_image && Storage::exists($product->product_image)) {
+            Storage::delete($product->product_image);
+        }
+
+        // Store the new image and update the image path in the database
+        $data['product_image'] = $request->file('product_image')->store('products', 'public');
+    } else {
+        // retain the old image
+        $data['product_image'] = $product->product_image;
+    }
+
+    $product->update($data);
         return redirect()->route('admin.products')->with('success', 'Product updated successfully');
     }
 
@@ -106,10 +138,11 @@ class ProductController extends Controller
     ]);
     
 
-    $product = new Product($data);
-    if ($request->hasFile('product_image')) {
-        $product->product_image = $request->file('product_image')->store('products', 'public');
-    }
+   // Create a new product instance and save it
+   $product = new Product($data);
+   if ($request->hasFile('product_image')) {
+       $product->product_image = $request->file('product_image')->store('products', 'public');
+   }
     $product->save();
 
     \Log::info('Database Query:', \DB::getQueryLog()); // Log the query log after the product is saved
