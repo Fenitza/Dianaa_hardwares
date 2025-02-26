@@ -70,16 +70,13 @@ class ProductController extends Controller
         return view('includes.admin.products.create', compact( 'manufacturers', 'subcategories'));
     }
 
-    public function showProducts($id)
-    {
-        $product = Product::findOrFail($id);
-        return view('admin.products.show', compact('product'));
-    }
 
     public function edit($id)
     {
+        $manufacturers = Manufacturer::all(); // Assuming you have a Manufacturer model
+        $subcategories = SubCategory::all(); // Assuming you have a Category model
         $product = Product::findOrFail($id);
-        return view('admin.products.edit', compact('product'));
+        return view('includes.admin.products.edit', compact('product','manufacturers', 'subcategories'));
     }
 
     public function update(Request $request, $id)
@@ -107,7 +104,7 @@ class ProductController extends Controller
         'ManufacturerID' => 'nullable|integer',
         'SubCategoryID' => 'nullable|integer',
     ]);
-    dd($data);  // Dump and die to see what data is being prepared for save
+    
 
     $product = new Product($data);
     if ($request->hasFile('product_image')) {
@@ -120,4 +117,14 @@ class ProductController extends Controller
     return redirect()->route('admin.products')->with('success', 'Product added successfully!');
     }
 
+    public function destroy($id)
+    {
+       
+            $product = Product::findOrFail($id);  // Find the product by ID
+            $product->delete();  // Delete the product
+
+            // Redirect with success message
+            return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
+        
+    }
 }

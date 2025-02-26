@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
+            console.log('Server response:', data); // Check what the server actually returns
             if (data.status === 'success') {
                 alert('Item added to cart!');
                 updateCartCount(data.cartCount);
@@ -34,11 +35,80 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Example function to update cart count in the UI
+//  function to update cart count in the UI
 function updateCartCount(count) {
-    const cartCountElement = document.getElementById('cart-count'); // Ensure this ID exists in your HTML
+    const cartCountElement = document.getElementById('cart-count');
+    console.log('Updating cart count:', count); // Log the count to see if this function runs
     if (cartCountElement) {
-        cartCountElement.textContent = `Cart(${count})`; // Update the text content of the cart count element
+        cartCountElement.textContent =  `${count}`; // Update the text content of the cart count element
+    } else {
+        console.error('Cart count element not found');
     }
 }
+
+//Update Cart Quantity in Cart
+function updateQuantity(itemId, newQuantity) {
+    fetch(`/cart/update/${itemId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Update response', data);
+        if (data.success) {
+            alert('Quantity updated');
+            location.reload(); // Reload the page to reflect the changes
+        }
+    })
+    .catch(error => console.error('Error updating quantity:', error));
+}
+
+
+//Remove Item from Cart
+function removeItem(itemId) {
+    if (confirm('Are you sure you want to remove this item?')) {
+        fetch(`/cart/remove/${itemId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Remove response', data);
+            if (data.success) {
+                alert('Item removed');
+                location.reload(); // Reload the page to reflect the changes
+            }
+        })
+        .catch(error => console.error('Error removing item:', error));
+    }
+}
+
+//Empty Cart
+document.getElementById('empty-cart').addEventListener('click', function() {
+    fetch('/cart/empty', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Empty cart response', data);
+        if (data.success) {
+            alert('Cart emptied');
+            location.reload(); // Reload the page to reflect the changes
+        }
+    })
+    .catch(error => console.error('Error emptying cart:', error));
+});
+
+document.getElementById('checkout').addEventListener('click', function() {
+    window.location.href = '/checkout'; // Redirect to the checkout page
+});
 

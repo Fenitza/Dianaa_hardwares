@@ -3,6 +3,18 @@
 @section('content')
 <div class="container">
     <div class="header">
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
         <h1 class="page-title">Manage Products</h1>
         <div class="product-management-header">
             <div class="tools">
@@ -52,7 +64,14 @@
                 <td class="actions">
                     <a href="{{ route('admin.products.view', $product->ProductID) }}" class="action-icon view"><i class="fas fa-eye"></i></a>
                     <a href="{{ route('admin.products.edit', $product->ProductID) }}" class="action-icon edit"><i class="fas fa-edit"></i></a>
-                    <a href="{{ route('admin.products.delete', $product->ProductID) }}" class="action-icon delete" onclick="return confirm('This product will be deleted permenantly. Are you sure you want to delete this product?')"><i class="fas fa-trash-alt"></i></a>
+                    <form action="{{ route('admin.products.delete', $product->ProductID) }}" method="POST" onsubmit="return confirm('This product will be deleted permanently. Are you sure you want to delete this product?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="action-icon delete" style="border: none; background: none;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    
                 </td>
             </tr>
             @endforeach

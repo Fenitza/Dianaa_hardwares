@@ -19,31 +19,102 @@ class CartController extends Controller
 
     // Add a product to the cart
     public function addToCart(Request $request)
-    {
-        $product = Product::find($request->product_id);
-        if (!$product) {
-            return response()->json(['status' => 'error', 'message' => 'Product not found'], 404);
-        }
+{
+    $product = Product::find($request->product_id);
+    if (!$product) {
+        \Log::error('Product not found', ['product_id' => $request->product_id]);
+        return response()->json(['status' => 'error', 'message' => 'Product not found'], 404);
+    }
 
-        if ($product->Quantity < $request->quantity) {
-            return response()->json(['status' => 'error', 'message' => 'Not enough stock available'], 400);
-        }
+    \Log::info('Product found', ['quantity' => $product->Quantity, 'requested' => $request->quantity]);
 
-        // Add the product to the cart
+    if ($product->Quantity > 0 && $product->Quantity < $request->quantity) {
+        \Log::error('Not enough stock', ['stock' => $product->Quantity, 'requested' => $request->quantity]);
+        $message = sprintf("We're sorry, but the requested quantity of %s is currently unavailable. We currently have only %d units in stock. Please adjust your order to %d units or fewer to proceed with adding it to your cart.",
+            $product->Name,
+            $product->Quantity,
+            $product->Quantity
+        );
+        return response()->json(['status' => 'error', 'message' => $message]);
+    }
+    if ($product->Quantity == 0) {
+        \Log::info('Product out of stock', ['product_id' => $product->ProductID]);
+        return response()->json(['status' => 'error', 'message' => 'This product is currently out of stock.']);
+    }
+
+    // Your add to cart logic here
+    
+    
         Cart::add([
             'id' => $product->ProductID,
             'name' => $product->Name,
-            'quantity' => $request->Quantity,
+            'quantity' => $request->quantity,
             'price' => $product->SalePrice,
+                'attributes' => [
+                'image' => $product->Image, // Ensure attribute names are correctly cased
+                'manufacturer' => $product->Manufacturer,
+                'sku' => $product->SKU,
+            ]
         ]);
-
-        // Optional: Update the product stock
-        $product->decrement('quantity', $request->quantity);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Product added to cart',
-            'cartCount' => Cart::getTotalQuantity()  // Get total items quantity in the cart
+        \Log::debug('Adding to cart', [
+            'id' => $product->ProductID,
+            'name' => $product->Name,
+            'quantity' => $request->quantity,
+            'price' => $product->SalePrice,
+            'attributes' => [
+                'image' => $product->Image,
+                'manufacturer' => $product->Manufacturer,
+                'sku' => $product->SKU,
+            ]
         ]);
+        
+        // Now calculate unique product IDs in the cart
+        $uniqueProductIds = Cart::getContent()->unique('id')->count();
+    
+        return response()->json(['status' => 'success', 'message' => 'Product added to cart', 'cartCount' => $uniqueProductIds]);
+}
+
+public function updateItem(Request $request, $itemId)
+{
+    $cartItem = Cart::get($itemId); // Assuming Cart::get() fetches the item by ID
+    if (!$cartItem) {
+        return response()->json(['success' => false, 'message' => 'Item not found']);
     }
+
+    $quantity = $request->input('quantity', 1); // Default to 1 if no quantity provided
+    Cart::update($itemId, [
+        'quantity' => [
+            'relative' => false,
+            'value' => $quantity
+        ]
+    ]);
+
+    return response()->json(['success' => true, 'message' => 'Quantity updated']);
+}
+
+public function removeItem($itemId)
+{
+    Cart::remove($itemId); // Removes the item from the cart
+
+    return response()->json(['success' => true, 'message' => 'Item removed']);
+}
+
+
+public function emptyCart()
+{
+    Cart::clear(); // Clears all items from the cart
+
+    return response()->json(['success' => true, 'message' => 'Cart emptied']);
+}
+
+public function checkout()
+{
+    // Here you would handle payment logic
+    // After payment confirmation:
+    Cart::clear(); // Optionally clear the cart after successful payment
+
+    // Assuming 'checkout.page' is a route that shows a confirmation page
+    return redirect()->route('checkout.page');
+}
+
 }

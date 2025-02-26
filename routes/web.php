@@ -14,7 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\ForgetPasswordController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 
 /*
@@ -89,16 +89,19 @@ Route::middleware(['auth'])->group(function () {
 
 //admin Dashboard
 Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
+    return view('layouts/admin');
 })->name('admin.dashboard');
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/products', [ProductController::class, 'adminProducts'])->name('admin.products');
     Route::get('products/create', [ProductController::class, 'create'])->name('admin.products.create');
-    Route::get('/products/{id}', [ProductController::class, 'showProducts'])->name('admin.products.view');
+    Route::get('/products/{id}', [ProductController::class, 'showByProducts'])->name('admin.products.view');
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::post('/products/{id}/update', [ProductController::class, 'update'])->name('admin.products.update');
-    Route::post('/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.products.delete');
+    Route::any('/products/{id}/update', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::put('/admin/products/{id}/update', function () {
+        dd(request()->method());
+    });
+    Route::any('/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.products.delete');
     Route::post('/products/store', [ProductController::class, 'store'])->name('admin.products.store');
 });
 
@@ -109,3 +112,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 //Cart routes
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::patch('/cart/update/{itemId}', [CartController::class, 'updateItem'])->name('cart.update');
+Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
+Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');

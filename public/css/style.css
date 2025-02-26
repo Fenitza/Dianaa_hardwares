@@ -900,6 +900,67 @@ header {
     }
 }
 
+#cart-container {
+    width: 95%;
+    margin: auto;
+    padding-top: 20px;
+}
+
+#cart-header h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#cart-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+#cart-table th, #cart-table td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+#cart-table thead {
+    background-color: #f8f8f8;
+}
+
+#cart-table tfoot {
+    font-weight: bold;
+    background-color: #e0e0e0;
+}
+
+#cart-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#update-cart {
+    background-color: #007bff;
+    color: white;
+}
+
+#empty-cart {
+    background-color: #6c757d;
+    color: white;
+}
+
+#checkout {
+    background-color: #28a745;
+    color: white;
+}
+
+
 /* Footer */
 .site-footer {
     background-color: #2d2e6a; /* Set the footer background color */
