@@ -54,7 +54,7 @@
         <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}">
             <div class="brand-image-container">
                 <!-- Use the image field directly from the manufacturer record -->
-                <img src="{{ asset('storage/' . $manufacturer->image) }}" alt="{{ $manufacturer->Name }}" class="brand-img" style="height: 200px;">
+                <img src="{{ asset('storage/' . $manufacturer->Image) }}" alt="{{ $manufacturer->Name }}" class="brand-img" style="height: 200px;">
             </div>
         </a>
     </div>

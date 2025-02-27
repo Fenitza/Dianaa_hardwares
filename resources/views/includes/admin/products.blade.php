@@ -16,7 +16,7 @@
     @endif
 
         <h1 class="page-title">Manage Products</h1>
-        <div class="product-management-header">
+        <div class="admin-template">
             <div class="tools">
                 <div class="sort">
                     <label for="sort">Sort by:</label>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <table class="products-table">
+    <table class="admin-table">
         <thead>
             <tr>
                 <th><input type="checkbox" id="select-all"></th> <!-- Checkbox for bulk selection -->

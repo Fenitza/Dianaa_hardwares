@@ -16,6 +16,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\ManufacturerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,17 +94,39 @@ Route::get('/admin/dashboard', function () {
 })->name('admin.dashboard');
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
+    //products
     Route::get('/products', [ProductController::class, 'adminProducts'])->name('admin.products');
     Route::get('products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::get('/products/{id}', [ProductController::class, 'showByProducts'])->name('admin.products.view');
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
     Route::any('/products/{id}/update', [ProductController::class, 'update'])->name('admin.products.update');
-    Route::put('/admin/products/{id}/update', function () {
-        dd(request()->method());
-    });
     Route::any('/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.products.delete');
     Route::post('/products/store', [ProductController::class, 'store'])->name('admin.products.store');
     
+    //categories
+    Route::get('/categories', [CategoryController::class, 'admin_index'])->name('admin.categories');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::get('/products/{category}', [ProductController::class, 'show'])->name('admin.categories.show');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::any('/categories/{category}/update', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::any('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.delete');
+
+    //manufacturers
+    Route::get('/manufacturers', [ManufacturerController::class, 'index'])->name('admin.manufacturers');
+    Route::get('/manufacturers/create', [ManufacturerController::class, 'create'])->name('admin.manufacturers.create');
+    Route::post('/manufacturers', [ManufacturerController::class, 'store'])->name('admin.manufacturers.store');
+    Route::get('/manufacturers/{manufacturer}/edit', [ManufacturerController::class, 'edit'])->name('admin.manufacturers.edit');
+    Route::any('/manufacturers/{manufacturer}/update', [ManufacturerController::class, 'update'])->name('admin.manufacturers.update');
+    Route::delete('/manufacturers/{manufacturer}', [ManufacturerController::class, 'destroy'])->name('admin.manufacturers.delete');
+
+    // Subcategory Routes
+    Route::get('/subcategories', [SubcategoryController::class, 'index'])->name('admin.subcategories');
+    Route::get('/subcategories/create', [SubcategoryController::class, 'create'])->name('admin.subcategories.create');
+    Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('admin.subcategories.store');
+    Route::get('/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin.subcategories.edit');
+    Route::put('/subcategories/{subcategory}', [SubcategoryController::class, 'update'])->name('admin.subcategories.update');
+    Route::delete('/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.delete');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {

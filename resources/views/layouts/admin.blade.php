@@ -17,9 +17,12 @@
     <div class="admin-container">
         <aside>
         <ul>
-            <li><a href="{{ route('admin.products') }}"><i class="fas fa-box-open"></i> Products</a></li>
-            <li><a href="{{ route('admin.orders') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
-            <!-- More sidebar items with icons -->
+        <li><a href="{{ route('admin.categories') }}"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="{{ route('admin.manufacturers') }}"><i class="fas fa-industry"></i> Manufacturers</a></li>
+        <li><a href="{{ route('admin.orders') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="{{ route('admin.products') }}"><i class="fas fa-box-open"></i> Products</a></li>
+        <li><a href="{{ route('admin.subcategories') }}"><i class="fas fa-layer-group"></i> SubCategories</a></li>
+        <!-- More sidebar items with icons -->
         </ul>
 
         </aside>
