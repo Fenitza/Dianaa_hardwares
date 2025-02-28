@@ -1,8 +1,13 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-    const addToCartButton = document.querySelector('.btn-add-to-cart');
-    const cartAddUrl = addToCartButton.dataset.cartAddUrl;
+    updateCartCountFromStorage();
 
+    const addToCartButton = document.querySelector('.btn-add-to-cart');
+    if (!addToCartButton) {
+        console.error("Add to Cart button not found");
+        return;
+    }
+    const cartAddUrl = addToCartButton.dataset.cartAddUrl;
 
     addToCartButton.addEventListener('click', function() {
         const productId = this.getAttribute('data-product-id');
@@ -23,10 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            console.log('Server response:', data); // Check what the server actually returns
             if (data.status === 'success') {
                 alert('Item added to cart!');
-                updateCartCount(data.cartCount);
+                updateCartCount(data.cartCount); // Update cart count from server response
             } else {
                 alert('Failed to add item: ' + data.message);
             }
@@ -35,12 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-//  function to update cart count in the UI
+function updateCartCountFromStorage() {
+    const count = localStorage.getItem('cartCount') || 0;
+    updateCartCount(count);
+}
+
 function updateCartCount(count) {
     const cartCountElement = document.getElementById('cart-count');
-    console.log('Updating cart count:', count); // Log the count to see if this function runs
     if (cartCountElement) {
-        cartCountElement.textContent =  `${count}`; // Update the text content of the cart count element
+        cartCountElement.textContent = count;
+        localStorage.setItem('cartCount', count); // Persist cart count in local storage
     } else {
         console.error('Cart count element not found');
     }

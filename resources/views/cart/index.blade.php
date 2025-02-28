@@ -5,7 +5,7 @@
     <div class="cart-header" id="cart-header">
         <h2>Your Shopping Cart</h2>
     </div>
-    <table class="cart-table" id="cart-table">
+    <table class="cart-table" id="cart-table" >
         <thead>
             <tr>
                 <th>Image</th>
@@ -19,7 +19,7 @@
         <tbody>
             @foreach ($cartItems as $item)
             <tr>
-            <td><img src="{{ asset('storage/' . $item->attributes->product_image) }}" alt="{{ $item->name }}" style="width:50px; height:50px;"></td>
+            <td><img src="{{ asset('storage/' . $item->attributes->image) }}" alt="{{ $item->name }}" style="width:50px; height:50px;"></td>
                 <td>
                 <a href="{{ route('product.details', ['ProductID' => $item->id]) }}">{{ $item->name }}</a><br>
                 <small>Manufacturer: {{ $item->attributes['manufacturer'] ?? 'Not available' }}</small><br>
@@ -47,7 +47,7 @@
         </tfoot>
     </table>
     <div class="cart-actions" id="cart-actions">
-        <button class="btn btn-primary" id="update-cart">Update Cart</button>
+        <!-- <button class="btn btn-primary" id="update-cart">Update Cart</button> -->
         <button class="btn btn-secondary" id="empty-cart">Empty Cart</button>
         <button class="btn btn-success" id="checkout">Check Out</button>
     </div>

@@ -33,7 +33,11 @@ use App\Http\Controllers\ManufacturerController;
 Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/account', [UserController::class, 'account'])->name('account');
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::patch('/cart/update/{itemId}', [CartController::class, 'updateQuantity'])->name('cart.update');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/careers', [CareersController::class, 'index'])->name('careers');

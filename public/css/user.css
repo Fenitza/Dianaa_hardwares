@@ -1,19 +1,27 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
 
 header {
     background-color: #333c8b; /* Dark blue header */
     color: white;
     padding: 10px 10px;
     position: center;
+    height:110px;
 }
 
 /* Header Container */
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Align items in the center vertically */
     max-width: 1200px;
     margin: 0 auto;
-    width: 100%;
+    width: 90%;
 }
 
 /* Left Section: Logo */
@@ -21,10 +29,11 @@ header {
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
 }
 
 .left-section img {
-    height: 100px;
+    height: 80px;
     width: auto;
 }
 
@@ -64,12 +73,12 @@ header {
 .search-bar {
     display: flex;
     align-items: center;
-    padding-right: 20px; /* Ensure some space on the right */
+    margin-right: 20px;
 }
 
 .search-bar input[type="text"] {
-    margin-right: 2px; /* Space between input box and button */
-    width: 250px;
+    margin-right: 0px; /* Space between input box and button */
+    width: 280px;
     padding: 8px;
     border: none;
     border-radius: 6px 6px 6px 6px;
@@ -77,14 +86,15 @@ header {
 }
 
 .search-bar button {
-    padding: 8px 15px;
+    padding: 10px 15px;
     margin: 0; /* Remove any default margin */
     line-height: 1; /* Align the button height with the input */
     background-color: #ffc107; /* Yellow button */
     border: none;
-    border-radius: 0 4px 4px 0;
+    border-radius: 6px 6px 6px 6px;
     color: #002244;
 }
+
 
 .search-bar button:hover {
     background-color: #e0a800;
@@ -113,6 +123,11 @@ header {
     margin-right: 5px; /* Space between icon and text */
     color: #ffc107;
 }
+
+.bottom-links .all-products{
+    width:fit-content;
+}   
+
 
 .user-profile {
     /* display: flex; */
@@ -171,9 +186,8 @@ header {
     background-color: #444c9b;
 }
 
-
 /* Body */
-/* admin.css */
+
 
 body {
     display: flex;

@@ -11,9 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        @include('includes.admin.header')
-    </header>
+    @include('layouts.header')
     <div class="admin-container">
         <aside>
         <ul>

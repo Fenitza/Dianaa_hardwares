@@ -74,6 +74,19 @@ class CartController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Product added to cart', 'cartCount' => $uniqueProductIds]);
 }
 
+public function updateQuantity($itemId, Request $request)
+    {
+        // Assume $cart is an instance of some Cart model or service that handles cart operations
+        $newQuantity = $request->input('quantity');
+
+        try {
+            $cart->updateItem($itemId, $newQuantity);
+            return response()->json(['success' => true, 'message' => 'Cart updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+ 
 public function updateItem(Request $request, $itemId)
 {
     $cartItem = Cart::get($itemId); // Assuming Cart::get() fetches the item by ID

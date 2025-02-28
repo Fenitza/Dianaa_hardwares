@@ -6,46 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dianaa Hardwares</title>
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <!-- Left Section: Logo -->
-            <div class="left-section">
-                <a href="{{ url('/') }}"><img src="{{ asset('images/logo/Diana_logo2.png') }}" alt="Logo"></a>
-            </div>
-
-            <!-- Right Section -->
-            <div class="right-section">
-                <!-- Top Links -->
-                <div class="top-right-links">
-                    <a href="{{ route('about_us') }}">About Us</a> |
-                    <a href="{{ route('services') }}">Services & Solutions</a> |
-                    <a href="{{ route('careers') }}">Careers</a> |
-                    <a href="{{ route('contact') }}">Contact</a>
-                </div>
-
-                <!-- Bottom Section: Search Bar and Links -->
-                <div class="bottom-right-section">
-                    <div class="search-bar">
-                        <form action="{{ route('search') }}" method="GET">
-                            <input type="text" name="q" placeholder="Search a Product" required>
-                            <button type="submit">Search</button>
-                        </form>
-                    </div>
-                    <div class="bottom-links">
-                        <a href="{{ route('products_main') }}"><i class="fa fa-box"></i> All Products</a> |
-                        <!-- <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> | -->
-                        <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart(<span id="cart-count">0</span>)</a> |
-                        <a href="{{ route('login') }}"><i class="fa fa-user"></i> Log In</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    @include('layouts.header')
 
 
     @yield('content')
@@ -120,6 +85,8 @@
         </div>
     </div>
 </footer>
+
+<script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
