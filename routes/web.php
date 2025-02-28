@@ -123,7 +123,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Subcategory Routes
     Route::get('/subcategories', [SubcategoryController::class, 'index'])->name('admin.subcategories');
     Route::get('/subcategories/create', [SubcategoryController::class, 'create'])->name('admin.subcategories.create');
-    Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('admin.subcategories.store');
+    Route::any('/subcategories/store', [SubcategoryController::class, 'store'])->name('admin.subcategories.store');
     Route::get('/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin.subcategories.edit');
     Route::put('/subcategories/{subcategory}', [SubcategoryController::class, 'update'])->name('admin.subcategories.update');
     Route::delete('/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.delete');

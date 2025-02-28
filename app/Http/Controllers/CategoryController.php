@@ -90,7 +90,7 @@ class CategoryController extends Controller
     $category->save();
 
     // Redirect with a success message
-    return redirect()->route('includes.admin.categories')->with('success', 'Category created successfully.');
+    return redirect()->route('admin.categories')->with('success', 'Category created successfully.');
 }
 
 

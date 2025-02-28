@@ -12,10 +12,14 @@
                     <input type="text" class="form-control" id="name" name="name" required>
                 </div>
                 <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                </div>
+                <div class="form-group mb-3">
                     <label for="category_id">Category</label>
                     <select class="form-control" id="category_id" name="category_id">
                         @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="{{ $category->CategoryID }}">{{ $category->Name }}</option>
                         @endforeach
                     </select>
                 </div>

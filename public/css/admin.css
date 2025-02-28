@@ -337,7 +337,7 @@ main h1 {
     border-bottom: 1px solid #ccc; /* Optional: ensures row separation is clear */
     font-size: 0.9rem; /* Optional: reduce font size to compact the display */
     text-align: center;
-    line-height: 1.2;
+    line-height: 1;
 }
 
 .admin-table {
@@ -354,11 +354,6 @@ main h1 {
     cursor: pointer;
 }
 
-/* Additional spacing improvements */
-.admin-table th, .admin-table td {
-    padding: 15px; /* Increased padding for better spacing */
-    border-bottom: 2px solid #ddd; /* Thicker bottom border for clearer separation */
-}
 /* Aligning the price column to the right */
 .admin-table th.price, .admin-table td.price {
     text-align: center; /* Aligns the text to the right */
@@ -373,7 +368,7 @@ main h1 {
     justify-content: center; /* Aligns items to the start of the flex container */
     gap: 5px; /* Adds space between each icon */
     text-align: center;
-    height: 100px;
+    height: 80px;
 }
 
 .admin-table th {
@@ -414,6 +409,56 @@ main h1 {
 .stock-status.out-of-stock {
     color: #dc3545; /* Red for out-of-stock items */
     align-items: center;
+}
+/* Pagination Container Styling */
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Center pagination horizontally */
+    align-items: center; /* Align the navigation arrows with the numbers */
+    margin-top: 20px; /* Space above the pagination links */
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    padding-left: 0; /* Removes padding inside the list */
+    list-style: none; /* Removes default list styling */
+    align-items: center; /* Aligns the items on the cross-axis */
+    font-size: 14px; /* Smaller font size for all pagination items */
+}
+
+.pagination li {
+    margin: 0 5px; /* Reduced horizontal spacing between pagination items */
+}
+
+.pagination a, .pagination span {
+    color: #007bff; /* Color of the pagination links */
+    text-decoration: none; /* Removes underline from links */
+    background-color: #fff; /* Background color for pagination items */
+    border: 1px solid #ddd; /* Border around pagination items */
+    padding: 6px 10px; /* Reduced padding inside pagination items */
+    border-radius: 5px; /* Rounded corners for pagination items */
+    display: flex; /* Ensures the content is properly aligned */
+    align-items: center; /* Centers the content vertically */
+    justify-content: center; /* Centers the content horizontally */
+}
+
+.pagination a:hover, .pagination .active a {
+    background-color: #007bff; /* Background color when hovered or active */
+    color: #fff; /* Text color when hovered or active */
+    border-color: #007bff; /* Border color when hovered or active */
+}
+
+/* Specific styling for icons within the pagination */
+.pagination a {
+    min-width: 10px; /* Ensures all links have a uniform small width */
+    height: 10px; /* Sets a specific small height for all links */
+}
+
+/* Adjust the size of the icons if they are too large */
+.pagination svg {
+    width: 16px; /* Smaller width for SVG icons */
+    height: 10px; /* Auto height for SVG icons, maintaining aspect ratio */
 }
 
 

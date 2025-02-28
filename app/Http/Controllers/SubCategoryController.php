@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
+use App\Models\Category;
 
 class SubCategoryController extends Controller
 {
@@ -84,24 +85,33 @@ class SubCategoryController extends Controller
 
     public function create()
     {
-        return view('admin.subcategories.create');
+        $categories = Category::all(); // Fetch all categories
+        return view('includes.admin.subcategories.create',compact('categories'));
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,CategoryID',
             'subcategory_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
         ]);
+        // dd($request->all(), $validatedData);
 
-        $subcategory = new Subcategory($validatedData);
+        $subcategory = new Subcategory();
+        $subcategory->fill($validatedData);
+        $subcategory->Name = $validatedData['name'];
+        $subcategory->Description = $validatedData['description'];
+        $subcategory->CategoryID = $validatedData['category_id'];
         if ($request->hasFile('subcategory_image')) {
             $imagePath = $request->file('subcategory_image')->store('subcategories', 'public');
             $subcategory->Image = $imagePath; // Ensure your database column is named `image`
         }
 
         $subcategory->save();
+        // Log::info('Received data:', $request->all());
         return redirect()->route('admin.subcategories')->with('success', 'Subcategory created successfully.');
     }
 
@@ -113,29 +123,31 @@ class SubCategoryController extends Controller
 
     public function update(Request $request, Subcategory $subcategory)
 {
-    $data = $request->validate([
+    $validatedData = $request->validate([
         'name' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id',
-        'subcategory_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Allowing for common image formats
+        'description' => 'nullable|string',
+        'category_id' => 'required|exists:categories,CategoryID', // Ensure it references CategoryID correctly
+        'subcategory_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
     ]);
 
-    // Check if a new image file was uploaded
+    // Fill the subcategory with validated data
+    $subcategory->fill($validatedData);
+    $subcategory->Name = $validatedData['name'];
+    $subcategory->Description = $validatedData['description'];
+
+    // Handle image upload if there's one
     if ($request->hasFile('subcategory_image')) {
         // Check if there's an existing image and delete it from storage if it exists
-        if ($subcategory->image && Storage::disk('public')->exists($subcategory->Image)) {
+        if ($subcategory->Image && Storage::disk('public')->exists($subcategory->Image)) {
             Storage::disk('public')->delete($subcategory->Image);
         }
-
         // Store the new image in the 'subcategories' directory within public storage
         $imagePath = $request->file('subcategory_image')->store('subcategories', 'public');
-        // Update the image path in the subcategory instance
-        $subcategory->Image = $imagePath;
+        $subcategory->Image = $imagePath; // Ensure the database column is named `Image`
     }
 
-    // Update other data fields
-    $subcategory->Name = $data['name'];
-    $subcategory->CategoryID = $data['category_id'];
-    $subcategory->save(); // Save the changes explicitly
+    // Save the changes to the database
+    $subcategory->save();
 
     // Redirect back to the subcategories list with a success message
     return redirect()->route('admin.subcategories')->with('success', 'Subcategory updated successfully.');
