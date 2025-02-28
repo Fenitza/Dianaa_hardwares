@@ -98,23 +98,30 @@ function removeItem(itemId) {
 }
 
 //Empty Cart
-document.getElementById('empty-cart').addEventListener('click', function() {
-    fetch('/cart/empty', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Empty cart response', data);
-        if (data.success) {
-            alert('Cart emptied');
-            location.reload(); // Reload the page to reflect the changes
-        }
-    })
-    .catch(error => console.error('Error emptying cart:', error));
-});
+const emptyCartButton = document.getElementById('empty-cart');
+    if (emptyCartButton) {
+        emptyCartButton.addEventListener('click', function() {
+            const emptyCartUrl = this.dataset.emptyCartUrl;
+            fetch(emptyCartUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    updateCartCount(0); // Update cart count to 0 in the UI
+                    localStorage.setItem('cartCount', 0); // Optionally update local storage
+                } else {
+                    alert('Failed to empty cart: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error emptying cart:', error));
+        });
+    }
 
 document.getElementById('checkout').addEventListener('click', function() {
     window.location.href = '/checkout'; // Redirect to the checkout page

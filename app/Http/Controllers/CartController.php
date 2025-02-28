@@ -113,11 +113,11 @@ public function removeItem($itemId)
 }
 
 
-public function emptyCart()
+public function emptyCart(Request $request)
 {
-    Cart::clear(); // Clears all items from the cart
-
-    return response()->json(['success' => true, 'message' => 'Cart emptied']);
+    // Assuming cart is stored in the session
+    session()->forget('cart');
+    return response()->json(['success' => true, 'message' => 'Cart emptied successfully.']);
 }
 
 public function checkout()

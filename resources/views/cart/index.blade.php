@@ -48,7 +48,9 @@
     </table>
     <div class="cart-actions" id="cart-actions">
         <!-- <button class="btn btn-primary" id="update-cart">Update Cart</button> -->
-        <button class="btn btn-secondary" id="empty-cart">Empty Cart</button>
+        <button class="btn btn-secondary" id="empty-cart" data-empty-cart-url="{{ route('cart.empty') }}">
+    Empty Cart
+</button>
         <button class="btn btn-success" id="checkout">Check Out</button>
     </div>
 </div>
