@@ -17,6 +17,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ManufacturerController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,27 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/dashboard', function () {
         return view('layouts/user');  // Ensure 'user_dashboard.blade.php' exists in resources/views
     })->name('user.dashboard');
+
+    // Checkout Routes
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    // Route::post('/checkout/submit', [CheckoutController::class, 'submit'])->name('checkout.submit');
+    // Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    // Route::get('/checkout/success', function () {
+    //     return view('checkout.success', ['order' => session('order')]);
+    // })->name('checkout.success');
+
+    //order
+    Route::any('/place-order', [OrderController::class, 'placeOrder'])->name('place.order');
+    Route::post('/create-razorpay-order', [OrderController::class, 'createOrder'])->name('create.order');
+
+
+
+    //Cart routes
+    Route::any('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+    Route::patch('/cart/update/{itemId}', [CartController::class, 'updateItem'])->name('cart.update');
+    Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
 });
 
 
@@ -139,9 +161,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 });
 
 
-//Cart routes
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::patch('/cart/update/{itemId}', [CartController::class, 'updateItem'])->name('cart.update');
-Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
-Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
-Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+
+
+Route::post('/submit-payment', [PaymentController::class, 'submit']);
