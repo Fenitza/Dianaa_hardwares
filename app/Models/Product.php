@@ -25,9 +25,8 @@ class Product extends Model
     return $this->belongsTo(Manufacturer::class, 'ManufacturerID');
 }
 
-public function items()
-{
-    return $this->hasMany(OrderItem::class);
+public function items() {
+    return $this->hasMany(OrderItem::class, 'product_id', 'ProductID');
 }
 
 }

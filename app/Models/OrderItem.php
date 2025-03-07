@@ -15,9 +15,9 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class, 'order_id', 'order_id');  // Ensure relationship uses custom order_id
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'ProductID', 'order_id');
+    public function product() {
+        // The keys should correctly reference 'product_id' and 'id' respectively
+        return $this->belongsTo(Product::class, 'product_id', 'ProductID');
     }
 }
 

@@ -29,17 +29,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @if($order->items->isNotEmpty())
-                            @foreach ($order->items as $item)
-                                <tr>
-                                    <td>{{ optional($item->product)->Name }}</td>
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>${{ number_format($item->price, 2) }}</td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr><td colspan="3">No items found in this order.</td></tr>
-                        @endif
+                            @if ($order && $order->items)
+                                @foreach ($order->items as $item)
+                                    <tr>
+                                        <td>{{ optional($item->product)->Name }}</td>
+                                        <td>{{ $item->quantity }}</td>
+                                        <td>${{ number_format($item->price, 2) }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr><td colspan="3">No items found in this order.</td></tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -107,7 +107,7 @@
                             <tbody>
                                 @foreach ($order->items as $item)
                                     <tr>
-                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->Name }}</td>
                                         <td>{{ $item->quantity }}</td>
                                         <td>${{ number_format($item->price, 2) }}</td>
                                     </tr>
