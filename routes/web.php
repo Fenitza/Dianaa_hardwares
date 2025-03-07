@@ -95,8 +95,11 @@ Route::middleware(['auth'])->group(function () {
     // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     // Route::post('/checkout/submit', [CheckoutController::class, 'submit'])->name('checkout.submit');
-    // Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
     // Route::get('/checkout/success', function () {
+    //     if (!session()->has('order')) {
+    //         abort(404, 'Order not found.');
+    //     }
     //     return view('checkout.success', ['order' => session('order')]);
     // })->name('checkout.success');
 

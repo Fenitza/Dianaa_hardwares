@@ -60,77 +60,89 @@ class OrderController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
-
+/**
+     * Handle checkout form submission.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function placeOrder(Request $request)
-    {
-        \Log::info('Received order data:', $request->all());
-        try {
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email',
-                'phone' => 'required|string|max:15',
-                'address' => 'required|string|max:255',
-                'city' => 'required|string|max:255',
-                'state' => 'required|string|max:255',
-                'postal_code' => 'required|string|max:10',
-                'country' => 'required|string|max:255',
-            ]);
-            \Log::info('Validation passed', $validatedData);
-        
-            // Assuming user authentication is handled
-            $user = Auth::user();
-            
-            // Fetch user's cart items
-            $cartItems = CartItem::where('user_id', $user->id)->get();
-    
-            if ($cartItems->isEmpty()) {
-                return response()->json(['status' => 'error', 'message' => 'Your cart is empty'], 400);
-            }
-    
-            // Calculate the total amount
-            $totalAmount = $cartItems->sum(function($cartItem) {
-                return $cartItem->quantity * $cartItem->product->SalePrice;  // Ensure that `product` relation is loaded if not eager loaded
-            });
-   
-//           // Generate order_id explicitly
-//         $orderId = time()  . $user->id;
-//          // Ensure the order_id is being generated and logged before saving the order.
-// \Log::info("Generated Order ID: " . $orderId);
+{
+    \Log::info('Received order data:', $request->all());
+    try {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'postal_code' => 'required|string|max:10',
+            'country' => 'required|string|max:255',
+        ]);
+        \Log::info('Validation passed', $validatedData);
 
-        // Process and save the order
+        // Assuming user authentication is handled
+        $user = Auth::user();
+
+        // Fetch user's cart items
+        $cartItems = CartItem::where('user_id', $user->id)->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['status' => 'error', 'message' => 'Your cart is empty'], 400);
+        }
+
+        // Calculate the total amount
+        $totalAmount = $cartItems->sum(function($cartItem) {
+            return $cartItem->quantity * $cartItem->product->SalePrice;
+        });
+
+        // Generate a unique order ID
+        $uniqueOrderId = strtoupper('ORD-' . dechex(time()) . '-' . dechex($user->id));
+
+        // Create the order
         $order = new Order([
-            
+            'order_id' => $uniqueOrderId, // Use the custom order ID here
             'user_id' => $user->id,
             'total_amount' => $totalAmount,
             'billing_details' => json_encode($validatedData),
-          
-            
         ]);
-        $order->save();
-        // Check if order ID is saved and log it
-\Log::info("Saved Order with ID: " . $order->id);
-    
-            // Optionally, store each cart item as an order item
-            foreach ($cartItems as $cartItem) {
-                $order->items()->create([
-                    'OrderID' => $order->id,
-                    'product_id' => $cartItem->product_id,
-                    'quantity' => $cartItem->quantity,
-                    'price' => $cartItem->product->SalePrice,  // Assuming price is stored in the product
-                ]);
-            }
-    
-            // //Clear the cart if needed
-            // $cartItems->each->delete();
-    
-             // Redirect to the checkout success view with order data
-        return redirect()->route('checkout.success')->with('order', $order);
-        } catch (\Exception $e) {
-            \Log::error("Error processing order: " . $e->getMessage());
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        $order->save();  // Save the order to generate an ID
+        \Log::info('Order created with custom ID: ' . $uniqueOrderId);
+
+        // Attach items to the order
+        foreach ($cartItems as $cartItem) {
+            $order->items()->create([
+                'order_id' => $order->order_id,  // Make sure this matches the column name in your table
+                'product_id' => $cartItem->product_id,
+                'quantity' => $cartItem->quantity,
+                'price' => $cartItem->product->SalePrice,
+            ]);
         }
-        
+
+        // Optionally, clear the cart after order placement
+        // $cartItems->each->delete();
+
+        // Store order in session and redirect to success page
+        $order = Order::with(['items.product'])->find($order->id);
+        if($order) {
+            session(['order' => $order]);
+        } else {
+            \Log::error('Order not found after creation, ID: ' . $order->id);
+            return response()->json(['status' => 'error', 'message' => 'Order not found after creation'], 404);
+        }
+
+        return redirect()->route('checkout.success');
+
+    } catch (\Exception $e) {
+        \Log::error("Error processing order: " . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
+}
+
+    
+    
     
 
 

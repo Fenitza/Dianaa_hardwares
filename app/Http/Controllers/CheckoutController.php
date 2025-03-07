@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -95,7 +97,28 @@ class CheckoutController extends Controller
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
     public function success()
-    {
-        return view('checkout.success',compact('order'));
+{
+    $order = session('order');
+    if ($order) {
+        // $order = Order::with('items.product')->find($order->order_id);
+        \Log::info('Full Order details:', $order->toArray()); // Safely log order details
+        \Log::info('Detailed Order Info:', [
+            'id' => $order->order_id,
+            // 'user_name' => $order->user->name,  // Ensure user is loaded or exists
+            'items' => $order->items->map(function ($item) {
+                return [
+                    'product_id' => $item->product_id,
+        'product_name' => optional($item->product)->Name,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                ];
+            })->toArray(),
+        ]);
+    } else {
+        \Log::error("Order session is null, could not retrieve order details.");
     }
+    $order = Order::with(['items.product'])->find($order->order_id);
+    return view('checkout.success', compact('order'));
+}
+
 }

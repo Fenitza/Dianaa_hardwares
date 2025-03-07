@@ -133,38 +133,46 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-document.getElementById('place-order-btn').addEventListener('click', function() {
-    fetch('/place-order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            address: document.getElementById('address').value,
-            city: document.getElementById('city').value,
-            state: document.getElementById('state').value,
-            postal_code: document.getElementById('postal_code').value,
-            country: document.getElementById('country').value
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert("Order placed successfully! Order ID: " + data.order_id);
-            window.location.href = "/checkout/success";
-        } else {
-            alert("Failed to place order: " + data.message);
-        }
-    })
-    .catch(error => {
-    console.error('Order Error:', error.message || error);
-    // Optionally, you can log the full error to see all details if it's an object
-    console.error('Detailed Error:', JSON.stringify(error, null, 2));
+document.addEventListener('DOMContentLoaded', function () {
+    const placeOrderButton = document.getElementById('place-order-btn');
+    if (placeOrderButton) {
+        placeOrderButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Fetch all necessary input values
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                postal_code: document.getElementById('postal_code').value,
+                country: document.getElementById('country').value,
+            };
+
+            // Use the Fetch API to send the form data
+            fetch('/place-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Laravel CSRF token
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+    if (response.ok) {
+        window.location.href = "/checkout/success";  // Directly redirect on the client side
+    } else {
+        throw new Error('Failed to place order');
+    }
+})
+.catch(error => {
+    console.error('Order Error:', error);
+    alert('Order processing failed. Please try again.');
 });
+        });
+    }
 });
 
 document.getElementById('pay-btn').addEventListener('click', function() {

@@ -25,4 +25,9 @@ class Product extends Model
     return $this->belongsTo(Manufacturer::class, 'ManufacturerID');
 }
 
+public function items()
+{
+    return $this->hasMany(OrderItem::class);
+}
+
 }
