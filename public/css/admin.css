@@ -201,7 +201,7 @@ body {
 
 
 .admin-container {
-    display: flex;
+    display:flex;
     flex: 1;
 }
 
@@ -209,9 +209,12 @@ aside {
     width: 200px;
     background-color: #34495E;
     color: #ffffff;
-    height: 100vh;
+    height: 100vh; /* Full viewport height */
     padding: 20px;
+    position: sticky; /* Make sidebar sticky */
+    top: 0; /* Align to the top */
 }
+
 
 aside ul {
     list-style-type: none;
@@ -392,8 +395,9 @@ main h1 {
     text-align: center;
 }
 
-.admin-table th:hover {
-    background-color: #2d2e6a; /* Even darker on hover */
+.admin-table tr:hover {
+    background-color: #94dee0 !important; /* Even darker on hover */
+    
 }
 
 /* Adjustments for action icons to improve visibility */
@@ -426,54 +430,37 @@ main h1 {
     align-items: center;
 }
 /* Pagination Container Styling */
-.pagination-container {
-    display: flex;
-    justify-content: center; /* Center pagination horizontally */
-    align-items: center; /* Align the navigation arrows with the numbers */
-    margin-top: 20px; /* Space above the pagination links */
-}
-
-/* Pagination Styling */
 .pagination {
     display: flex;
-    padding-left: 0; /* Removes padding inside the list */
-    list-style: none; /* Removes default list styling */
-    align-items: center; /* Aligns the items on the cross-axis */
-    font-size: 14px; /* Smaller font size for all pagination items */
+    justify-content: center;
+    padding: 10px;
 }
 
 .pagination li {
-    margin: 0 5px; /* Reduced horizontal spacing between pagination items */
+    margin: 0 5px;
 }
 
 .pagination a, .pagination span {
-    color: #007bff; /* Color of the pagination links */
-    text-decoration: none; /* Removes underline from links */
-    background-color: #fff; /* Background color for pagination items */
-    border: 1px solid #ddd; /* Border around pagination items */
-    padding: 6px 10px; /* Reduced padding inside pagination items */
-    border-radius: 5px; /* Rounded corners for pagination items */
-    display: flex; /* Ensures the content is properly aligned */
-    align-items: center; /* Centers the content vertically */
-    justify-content: center; /* Centers the content horizontally */
+    color: #007bff;  
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;  
 }
 
-.pagination a:hover, .pagination .active a {
-    background-color: #007bff; /* Background color when hovered or active */
-    color: #fff; /* Text color when hovered or active */
-    border-color: #007bff; /* Border color when hovered or active */
+.pagination .active a {
+    background-color: #007bff;
+    color: #ffffff;
 }
 
-/* Specific styling for icons within the pagination */
-.pagination a {
-    min-width: 10px; /* Ensures all links have a uniform small width */
-    height: 10px; /* Sets a specific small height for all links */
+.pagination .disabled a, .pagination .disabled a:hover {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
 }
 
-/* Adjust the size of the icons if they are too large */
-.pagination svg {
-    width: 16px; /* Smaller width for SVG icons */
-    height: 10px; /* Auto height for SVG icons, maintaining aspect ratio */
+.pagination a:hover {
+    background-color: #e9ecef;
 }
 
 

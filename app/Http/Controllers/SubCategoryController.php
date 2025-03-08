@@ -79,7 +79,7 @@ class SubCategoryController extends Controller
 
         $subcategories = Subcategory::where('name', 'like', '%' . $search . '%')
                                     ->orderBy('name') // Alphabetical order
-                                    ->paginate($perPage);
+                                    ->simplePaginate($perPage);
         return view('includes.admin.subcategories', compact('subcategories'));
     }
 

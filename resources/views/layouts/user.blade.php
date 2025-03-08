@@ -15,8 +15,9 @@
     <div class="admin-container">
         <aside>
         <ul>
-            <li><a href="{{ route('admin.products') }}"><i class="fas fa-box-open"></i> Products</a></li>
-            <li><a href="{{ route('admin.orders') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            
+            <li><a href="{{ route('user.orders') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="{{ route('user.profile') }}"><i class="fas fa-shopping-cart"></i> Profile</a></li>
             <!-- More sidebar items with icons -->
         </ul>
 

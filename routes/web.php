@@ -157,11 +157,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin.subcategories.edit');
     Route::put('/subcategories/{subcategory}', [SubcategoryController::class, 'update'])->name('admin.subcategories.update');
     Route::delete('/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.delete');
+
+    //orders
+    Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders');
 });
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
-    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders');
-});
+
 
 
 

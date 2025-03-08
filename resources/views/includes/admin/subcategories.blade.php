@@ -78,7 +78,7 @@
     </table>
 
   <!-- Pagination Links -->
-<div class="mt-4 pagination-container">
+<div class="mt-4 pagination">
     {{ $subcategories->appends(['search' => request('search'), 'perPage' => request('perPage')])->links() }}
 </div>
 </div>

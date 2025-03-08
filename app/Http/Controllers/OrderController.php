@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 use App\Models\Order;
 use App\Models\CartItem;
 use App\Models\User;
+
+use Mail;
+use App\Mail\OrderConfirmation;
 
 class OrderController extends Controller
 {
@@ -132,6 +137,7 @@ class OrderController extends Controller
             \Log::error('Order not found after creation, ID: ' . $order->id);
             return response()->json(['status' => 'error', 'message' => 'Order not found after creation'], 404);
         }
+        // Mail::to($user->email)->send(new OrderConfirmation($order));
 
         return redirect()->route('checkout.success');
 
@@ -162,4 +168,35 @@ class OrderController extends Controller
         }
         return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
     }
+
+    public function showOrders(Request $request)
+{
+    $search = $request->input('search', '');
+    $perPage = $request->input('perPage', 10);
+
+    $orders = Order::join('users', 'orders.user_id', '=', 'users.id')
+                   ->leftJoin('order_items', 'orders.order_id', '=', 'order_items.order_id')
+                   ->leftJoin('products', 'order_items.product_id', '=', 'products.ProductID')
+                   ->select(
+                       'orders.order_id',
+                       'users.name as user_name',
+                       'users.email',
+                       DB::raw('GROUP_CONCAT(DISTINCT CONCAT(order_items.quantity, "x", products.name, "<br>", " (SKU: ", products.sku, ")") SEPARATOR "<br><br>" ) as product_details'),
+                       DB::raw('CONCAT(
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.address")), "<br>",
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.city")), "<br>",
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.state")), " ",
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.postal_code"))
+                       ) AS shipping_address'),
+                       'orders.total_amount',
+                       'orders.payment_status'
+                   )
+                   ->where('orders.order_id', 'like', '%' . $search . '%') // Search functionality
+                   ->groupBy('orders.order_id', 'users.name', 'users.email', 'orders.total_amount', 'orders.payment_status', 'orders.billing_details')
+                   ->simplePaginate($perPage);
+
+    return view('includes.admin.orders', compact('orders'));
+}
+
+
 }

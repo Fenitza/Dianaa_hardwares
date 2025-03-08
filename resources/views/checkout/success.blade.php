@@ -3,156 +3,129 @@
 
 @section('content')
 <div class="container mt-5">
-    <div class="card border-success">
-        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center" style="width: 100%;">
-            <span>Order Confirmation</span>
-            <span></span> <!-- Empty span for right alignment -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <i class="fa fa-check-circle"></i> Thank you for your order!
         </div>
-        <div class="card-body text-dark text-center">
-            @if (session('order') && session('order')->items && session('order')->products)
-                @php
-                    $order = session('order');
-                    $billing_details = json_decode($order->billing_details);
-                @endphp
-                <h5 class="card-title">Thank You, {{ $billing_details->name }}!</h5>
+        <div class="card-body bg-light">
+            <div class="text-center mb-3">
                 <p>Your order has been successfully placed and is now being processed.</p>
+                @if (session('order'))
+                    @php
+                        $order = session('order');
+                        $billing_details = json_decode($order->billing_details);
+                    @endphp
+                    <p><strong>Order ID: {{ $order->order_id ?? 'N/A' }} - Success</strong></p>
+                    <p><strong>Order Date: {{ $order->created_at->format('d M Y') }}</strong></p>
+                @endif
+            </div>
 
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <h6 class="text-secondary">Order Summary</h6>
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @if ($order && $order->items)
-                                @foreach ($order->items as $item)
-                                    <tr>
-                                        <td>{{ optional($item->product)->Name }}</td>
-                                        <td>{{ $item->quantity }}</td>
-                                        <td>${{ number_format($item->price, 2) }}</td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr><td colspan="3">No items found in this order.</td></tr>
-                            @endif
-                            </tbody>
-                        </table>
+            <!-- Layout for address and summary -->
+            <div class="row">
+                <!-- Shipping and Billing Address -->
+                <div class="col-md-6">
+                    <div class="mb-3 p-3 border rounded bg-white">
+                        <h6><i class="fa fa-truck"></i> Shipping Address</h6>
+                        <p>{{ $billing_details->name }}<br>{{ $billing_details->address }}<br>{{ $billing_details->city }}, {{ $billing_details->state }} {{ $billing_details->postal_code }}<br>{{ $billing_details->country }}<br>Ph: {{ $billing_details->phone }}</p>
                     </div>
-                    <div class="col-md-6">
-                        <h6 class="text-secondary">Billing Information</h6>
-                        <div class="info-box">
-                            <p>{{ $billing_details->name }}</p>
-                            <p>{{ $billing_details->email }}</p>
-                            <p>{{ $billing_details->address }}</p>
-                            <p>{{ $billing_details->city }}, {{ $billing_details->state }}, {{ $billing_details->postal_code }}</p>
-                            <p>{{ $billing_details->country }}</p>
-                        </div>
+                    <div class="p-3 border rounded bg-white">
+                        <h6><i class="fa fa-home"></i> Billing Address</h6>
+                        <p>{{ $billing_details->name }}<br>{{ $billing_details->address }}<br>{{ $billing_details->city }}, {{ $billing_details->state }} {{ $billing_details->postal_code }}<br>{{ $billing_details->country }}<br>Ph: {{ $billing_details->phone }}</p>
                     </div>
                 </div>
 
-                <a href="{{ url('/') }}" class="btn btn-success mt-4">Return Home</a>
-            @else
-                <p class="text-warning">Order information is not available.</p>
-            @endif
-        </div>
-    </div>
-</div>
-
-<style>
-    .info-box p {
-        margin-bottom: 0.5rem; /* Space between lines */
-        line-height: 1.5; /* Line height for readability */
-        color: #333; /* Dark grey text for better readability */
-    }
-
-    .card-header {
-        font-size: 1.25rem; /* Slightly larger text in header for emphasis */
-    }
-{{-- resources/views/checkout/success.blade.php --}}
-@extends('layouts.app')
-
-@section('content')
-<div class="container mt-5">
-    <div class="card border-0 shadow">
-        <div class="card-header bg-success text-white text-center">
-            Order Confirmation
-        </div>
-        <div class="card-body text-dark">
-            @if (session('order'))
-                @php
-                    $order = session('order');
-                    $billing_details = json_decode($order->billing_details);
-                @endphp
-                <div class="text-center mb-4">
-                    <h5 class="card-title">Thank You, {{ $billing_details->name }}!</h5>
-                    <p>Your order has been successfully placed and is now being processed.</p>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-8 offset-md-2">
-                        <h6 class="text-secondary text-center">Order Summary</h6>
-                        <table class="table table-bordered">
-                            <thead class="table-light">
+                <!-- Payment Method and Order Summary -->
+                <div class="col-md-6">
+                    <div class="mb-3 p-3 border rounded bg-white">
+                        <h6><i class="fa fa-credit-card"></i> Payment Method</h6>
+                        <p>Pay On Delivery</p>
+                    </div>
+                    <div class="p-3 border rounded bg-white">
+                        <h6><i class="fa fa-list-alt"></i> Order Summary</h6>
+                        <table class="table table-sm">
+                            <thead>
                                 <tr>
                                     <th>Product</th>
-                                    <th>Quantity</th>
+                                    <th>Qty</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($order->items as $item)
-                                    <tr>
-                                        <td>{{ $item->product->Name }}</td>
-                                        <td>{{ $item->quantity }}</td>
-                                        <td>${{ number_format($item->price, 2) }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $item->product->Name }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>₹ {{ number_format($item->price, 2) }}</td>
+                                </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Subtotal</td>
+                                    <td colspan="2" class="text-right">₹ {{ number_format($order->total_amount, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Shipping & Handling</td>
+                                    <td colspan="2" class="text-right">₹ {{ number_format($order->shipping_cost, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax</td>
+                                    <td colspan="2" class="text-right">₹ {{ number_format($order->tax, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Grand Total</strong></td>
+                                    <td colspan="2" class="text-right"><strong>₹ {{ number_format($order->total_amount, 2) }}</strong></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
+            </div>
 
-                <div class="text-center mt-4 mb-4">
-                    <h6 class="text-secondary">Billing Information</h6>
-                    <p>{{ $billing_details->name }}<br>
-                        {{ $billing_details->email }}<br>
-                        {{ $billing_details->address }}<br>
-                        {{ $billing_details->city }}, {{ $billing_details->state }}, {{ $billing_details->postal_code }}<br>
-                        {{ $billing_details->country }}
-                    </p>
+            <!-- Buttons -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> Print Order</button>
                 </div>
-
-                <div class="text-center">
-                    <a href="{{ url('/') }}" class="btn btn-success">Return Home</a>
+                <div class="col-md-4">
+                    <button class="btn btn-secondary btn-block"><i class="fa fa-shopping-cart"></i> Continue Shopping</button>
                 </div>
-            @else
-                <p class="text-warning text-center">Order information is not available.</p>
-            @endif
+                <div class="col-md-4">
+                    <button class="btn btn-success btn-block"><i class="fa fa-redo"></i> Re-Order</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
 
 <style>
-    .card-header {
-        font-size: 1.5rem;
-    }
-    .card-body {
-        font-size: 1.1rem;
-        background: #f8f9fa;
-    }
-    .table {
-        margin-bottom: 0;
-    }
+.card-header {
+    font-size: 1.5rem;
+    background-color: #007bff;
+    color: white;
+}
+.card-body {
+    background: #f8f9fa;
+    font-size: 0.9rem;
+}
+.border {
+    border-color: #dee2e6;
+}
+.rounded {
+    border-radius: 0.25rem;
+}
+.table th, .table td {
+    border-top: none;
+}
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+}
+.table tfoot td {
+    font-weight: bold;
+}
+.btn {
+    padding: 0.75rem 1.25rem;
+    width: 100%;
+}
 </style>
-
-    .card-body {
-        padding: 2rem; /* More padding for better spacing */
-    }
-</style>
-@endsection
