@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 use App\Models\Order;
 use App\Models\CartItem;
 use App\Models\User;
 
-use Mail;
+use App\Models\Product;
 use App\Mail\OrderConfirmation;
+use App\Mail\BulkOrderMail;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -147,10 +150,6 @@ class OrderController extends Controller
     }
 }
 
-    
-    
-    
-
 
     public function updatePaymentStatus(Request $request)
     {
@@ -196,6 +195,26 @@ class OrderController extends Controller
                    ->simplePaginate($perPage);
 
     return view('includes.admin.orders', compact('orders'));
+}
+
+// place bulk order
+public function handleBulkOrder(Request $request)
+{
+    
+    Log::info('Received AJAX data:', $request->all());
+
+    if (!$request->has(['productId', 'quantity', 'message'])) {
+        return response()->json(['error' => 'Missing necessary data'], 400);
+    }
+
+    try {
+        $emailData = $request->all();
+        Mail::to('fms.cool16@gmail.com')->send(new BulkOrderMail($emailData));
+        return response()->json(['message' => 'Your bulk order request has been sent.']);
+    } catch (\Exception $e) {
+        Log::error('Mail sending error: ' . $e->getMessage());
+        return response()->json(['error' => 'Failed to send email, please try again.'], 500);
+    }
 }
 
 

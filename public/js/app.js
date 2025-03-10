@@ -157,6 +157,48 @@ function emptyCart() {
 }
 
 // Checkout Button Redirect
-document.getElementById('checkout').addEventListener('click', function() {
-    window.location.href = '/checkout'; // Redirect to the checkout page
+// document.getElementById('checkout').addEventListener('click', function() {
+//     window.location.href = '/checkout'; // Redirect to the checkout page
+// });
+
+//bulkOrderForm
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('bulkOrderForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const productId = this.getAttribute('data-product-id');
+        const userName = this.getAttribute('data-user-name');
+        const userEmail = this.getAttribute('data-user-email');
+        const userPhone = this.getAttribute('data-user-phone');
+        const quantity = document.getElementById('bulkQuantity').value;
+        const message = document.getElementById('message').value;
+
+        console.log({ productId, quantity, message, userName, userEmail, userPhone }); // Debug output
+
+        fetch('/bulk-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ quantity, message, productId, userName, userEmail, userPhone })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok.');
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Further debug output
+            alert(data.message); // Success message
+            $('#bulkOrderModal').modal('hide');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        });
+    });
 });
+
+
+
+

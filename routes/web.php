@@ -19,6 +19,9 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\CheckoutController;
 
+use App\Mail\BulkOrderMail;
+use Illuminate\Support\Facades\Mail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -94,17 +97,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    // Route::post('/checkout/submit', [CheckoutController::class, 'submit'])->name('checkout.submit');
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-    // Route::get('/checkout/success', function () {
-    //     if (!session()->has('order')) {
-    //         abort(404, 'Order not found.');
-    //     }
-    //     return view('checkout.success', ['order' => session('order')]);
-    // })->name('checkout.success');
 
     //order
     Route::any('/place-order', [OrderController::class, 'placeOrder'])->name('place.order');
+    Route::post('/bulk-order', [OrderController::class, 'handleBulkOrder'])->name('bulk.order');
     Route::post('/create-razorpay-order', [OrderController::class, 'createOrder'])->name('create.order');
 
 
@@ -160,11 +157,19 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     //orders
     Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders');
+    
 });
 
 
 
 
 
+Route::get('/test-mail-view', function () {
+    return new BulkOrderMail([
+        'quantity' => 10,
+        'message' => 'Test message',
+        'ProductID' => 1 // Ensure this ID exists in your database
+    ]);
+});
 
 Route::post('/submit-payment', [PaymentController::class, 'submit']);
