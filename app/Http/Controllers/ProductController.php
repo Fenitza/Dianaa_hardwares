@@ -90,6 +90,8 @@ class ProductController extends Controller
         'description' => 'nullable|string',
         'sku' => 'required|string|max:50',
         'salePrice' => 'required|numeric',
+        'basePrice' => 'required|numeric',
+        'vendorPrice' => 'required|numeric',
         'quantity' => 'required|integer',
         'product_image' => 'nullable|image|max:2048', // 2MB Max
         'size' => 'nullable|string',
@@ -126,6 +128,8 @@ class ProductController extends Controller
         'description' => 'nullable|string',
         'sku' => 'required|string|max:50',
         'salePrice' => 'required|numeric',
+        'basePrice' => 'required|numeric',
+        'vendorPrice' => 'required|numeric',
         'quantity' => 'required|integer',
         'product_image' => 'nullable|image|max:2048', // 2MB Max
         'size' => 'nullable|string',

@@ -40,7 +40,8 @@
                 <th>Image</th>
                 <th>Name</th>
                 <th>SKU</th>
-                <th class="price">Price</th>
+                <th class="price">Sale Price</th>
+                <th class="price">Vendor Price</th>
                 <th>Stock Status</th>
                 <th>Quantity</th>
                 <th>Category</th>
@@ -56,6 +57,7 @@
                 <td>{{ $product->Name }}</td>
                 <td>{{ $product->SKU }}</td>
                 <td class="price">₹{{ $product->SalePrice }}</td>
+                <td class="price">₹{{ $product->VendorPrice }}</td>
                 <td class="stock-status {{ $product->Quantity > 0 ? 'in-stock' : 'out-of-stock' }}">
                     {{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                 </td>

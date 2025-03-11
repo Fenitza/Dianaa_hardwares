@@ -197,6 +197,38 @@ class OrderController extends Controller
     return view('includes.admin.orders', compact('orders'));
 }
 
+public function orderUser(Request $request)
+{
+    $search = $request->input('search', '');
+    $perPage = $request->input('perPage', 10);
+
+    $userId = Auth::id(); // Get the authenticated user's ID
+
+    $orders = Order::join('users', 'orders.user_id', '=', 'users.id')
+                   ->leftJoin('order_items', 'orders.order_id', '=', 'order_items.order_id')
+                   ->leftJoin('products', 'order_items.product_id', '=', 'products.ProductID')
+                   ->select(
+                       'orders.order_id',
+                       'users.name as user_name',
+                       'users.email',
+                       DB::raw('GROUP_CONCAT(DISTINCT CONCAT(order_items.quantity, "x", products.name, "<br>", " (SKU: ", products.sku, ")") SEPARATOR "<br><br>" ) as product_details'),
+                       DB::raw('CONCAT(
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.address")), "<br>",
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.city")), "<br>",
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.state")), " ",
+                           JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.postal_code"))
+                       ) AS shipping_address'),
+                       'orders.total_amount',
+                       'orders.payment_status'
+                   )
+                   ->where('orders.user_id', '=', $userId) // Filter orders by user ID
+                   ->where('orders.order_id', 'like', '%' . $search . '%') // Search functionality
+                   ->groupBy('orders.order_id', 'users.name', 'users.email', 'orders.total_amount', 'orders.payment_status', 'orders.billing_details')
+                   ->simplePaginate($perPage);
+
+    return view('includes.user.orders', compact('orders'));
+}
+
 // place bulk order
 public function handleBulkOrder(Request $request)
 {

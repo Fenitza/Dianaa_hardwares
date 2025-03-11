@@ -239,6 +239,45 @@ main h1 {
     color: #333;
 }
 
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #495057;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+
 /* Improving layout for smaller screens */
 @media (max-width: 768px) {
     .admin-container {

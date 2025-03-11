@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     /**
      * Show the login form.
-     *
-     * @return \Illuminate\View\View
      */
     public function showLoginForm()
     {
+        // Store the URL the user is coming from
+        session(['url.intended' => url()->previous()]);
         return view('user.login');
     }
 
     /**
      * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function login(Request $request)
     {
@@ -35,11 +30,8 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            if (Auth::user()->isAdmin()) {
-                return redirect()->intended('/admin/dashboard');
-            } else {
-                return redirect()->intended('/user/dashboard');
-            }
+            // Redirect to the previously intended URL or the previous page
+            return redirect()->intended(session('url.intended'));
         }
 
         return back()->withErrors([
@@ -47,21 +39,16 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    protected function redirectTo()
-{
-    if (auth()->user()->admin) {
-        return '/admin/dashboard';
-    }
-    return '/user/dashboard';
-}
-
-public function logout(Request $request)
+    /**
+     * Log the user out of the application.
+     */
+    public function logout(Request $request)
     {
         Auth::logout();
 
-        $request->session()->invalidate();  // Invalidate the session.
-        $request->session()->regenerateToken();  // Regenerate the CSRF token.
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect('/login');  // Redirect to homepage or login page.
+        return redirect('/login');
     }
 }

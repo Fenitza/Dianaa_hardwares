@@ -41,20 +41,25 @@ class CartController extends Controller
             ]);
         }
 
+        // Fetch the user's role
+        $userRole = Auth::user()->role; // Assuming 'role' is the correct column name for user roles
+        // Determine the price based on the user's role
+        $price = $userRole === 'vendor' ? $product->VendorPrice : $product->SalePrice;
+
         $cartItem = CartItem::where('user_id', Auth::id())
                             ->where('product_id', $product->ProductID)
                             ->first();
 
         if ($cartItem) {
             $cartItem->quantity += $request->quantity;
-            $cartItem->price = $product->SalePrice;
+            $cartItem->price = $price;  // Update price depending on user role
             $cartItem->save();
         } else {
             CartItem::create([
                 'user_id' => Auth::id(),
                 'product_id' => $product->ProductID,
                 'quantity' => $request->quantity,
-                'price' => $product->SalePrice,
+                'price' => $price,  // Set price depending on user role
                 'attributes' => json_encode([
                     'image' => $product->product_image,
                     'manufacturer' => $product->Manufacturer,
@@ -96,23 +101,21 @@ class CartController extends Controller
     }
 
     public function count()
-{
-    try {
-        // Assuming CartItem has a user_id and quantity
-        $userId = Auth::id(); // Get the currently authenticated user's ID
-
-        if (!$userId) {
-            return response()->json(['cartCount' => 0, 'status' => 'error', 'message' => 'User not authenticated'], 401);
+    {
+        try {
+            $userId = Auth::id();
+            if (!$userId) {
+                session(['cartCount' => 0]); // Update session if not authenticated
+                return; // Optionally return or redirect if needed
+            }
+    
+            $count = CartItem::where('user_id', $userId)->sum('quantity');
+            session(['cartCount' => $count]); // Update the session with the new count
+        } catch (\Exception $e) {
+            \Log::error('Failed to count cart items: ' . $e->getMessage());
+            session(['cartCount' => 0]); // Update session in case of error
         }
-
-        // Sum the quantities of all cart items for the current user
-        $count = CartItem::where('user_id', $userId)->sum('quantity');
-
-        return response()->json(['cartCount' => $count, 'status' => 'success']);
-    } catch (\Exception $e) {
-        // Log the exception message
-        \Log::error('Failed to count cart items: ' . $e->getMessage());
-        return response()->json(['status' => 'error', 'message' => 'Server error'], 500);
+    
+        // Optionally redirect or return view if this method is called from a route
     }
-}
 }

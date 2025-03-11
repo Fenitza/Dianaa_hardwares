@@ -36,6 +36,8 @@
                 <label for="quantity"><strong>Quantity:</strong></label>
                 <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
             </div>
+
+            <div class="catalog-item">Special discount for vendors! Checkout to explore!</div>
             
 
             @if (auth()->check())
@@ -78,9 +80,10 @@
         </div>
     @else
         <!-- Link to the login page if the user is not authenticated -->
-        <a href="{{ route('login') }}" class="btn btn-primary mb-3 btn-add-to-cart">Sign in to add to cart</a>
-        <a href="{{ route('login') }}" class="btn btn-secondary mb-3">Sign in to request bulk order</a>
-    @endif
+        <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3 btn-add-to-cart">Sign in to add to cart</a>
+        <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-secondary mb-3">Sign in to request bulk order</a>
+        @endif
+    
             <ul class="list-unstyled">
 <li class="product-attributes-heading"><strong>Supply Chain</strong></li>
                 <p><strong>Availability:</strong> <span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></p>

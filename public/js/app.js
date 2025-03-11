@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetchCartCount(); // Fetch initial cart count from the server on page load
+    // fetchCartCount(); // Fetch initial cart count from the server on page load
 
     // Add to Cart Functionality
     document.querySelectorAll('.btn-add-to-cart').forEach(button => {
@@ -71,7 +71,7 @@ function fetchCartCount() {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }
     })
-    .then(response => response.json())
+    // .then(response => response.json())
     .then(data => {
         updateCartCount(data.cartCount); // Update count from server response
     })

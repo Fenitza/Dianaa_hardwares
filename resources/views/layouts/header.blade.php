@@ -36,7 +36,11 @@
                                         <span class="user-email">{{ Auth::user()->email }}</span> <!-- Display user's email -->
                                     </div>
                                     <div class="user-details-dropdown">
-                                        <a href="{{ route('admin.products') }}" class="dropdown-item">Profile</a> <!-- Profile link -->
+                                    @if(auth()->user() && auth()->user()->isAdmin())  <!-- Check if the user is an admin -->
+                                        <a href="{{ route('admin.products') }}" class="dropdown-item">Profile</a> <!-- Admin link -->
+                                    @else
+                                        <a href="{{ route('user.profile') }}" class="dropdown-item">Profile</a> <!-- Regular user link -->
+                                    @endif
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();">

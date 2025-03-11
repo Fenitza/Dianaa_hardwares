@@ -1025,6 +1025,74 @@ header {
     color: white;
 }
 
+/* Overall Style Adjustments for the Authentication Form */
+.auth-container {
+    max-width: 300px; /* Reduced width for a more compact form */
+    margin: 2rem auto; /* Centering the form with automatic margins */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    background-color: #f8f9fa; /* Lighter background for contrast */
+}
+
+.auth-card-header {
+    background-color: #004186 !important; /* Changed to a less intense blue */
+    color: #ffffff;
+    font-size: 18px; /* Smaller font size */
+    padding: 10px; /* Optimal padding */
+    border-bottom: 2px solid #004085; /* Adding a border for definition */
+}
+
+.form-control {
+    font-size: 14px; /* Reduced font size */
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    line-height: 1.5; /* Adjusting line height for better readability */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Vibrant primary blue for the button */
+    border: none;
+    padding: 10px;
+    font-size: 14px; /* Match input text size */
+    margin-top: 10px;
+}
+
+.btn-link {
+    color: #0056b3; /* Harmonizing with header color */
+    padding: 5px;
+    font-size: 14px;
+    margin-top: 5px; /* Reduced space between links */
+    display: block;
+}
+
+/* Adjusting the checkbox size and spacing */
+.form-check-input {
+    margin-top: 0.3rem;
+    margin-left: 0;
+}
+
+/* Label styling */
+.label {
+    font-size: 14px;
+    color: #495057;
+}
+
+/* Helper classes for better alignment and spacing */
+.offset-md-4 {
+    margin-left: 25%; /* Adjusting for smaller overall form width */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .auth-container {
+        width: 95%;
+        margin-top: 20px;
+    }
+    .offset-md-4 {
+        margin-left: 0;
+    }
+}
 
 /* Footer */
 .site-footer {

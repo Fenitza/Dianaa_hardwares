@@ -43,6 +43,11 @@ class RegisterController extends Controller
 {
     return view('user.register'); // Replace with your actual view that contains the registration form
 }
+
+public function showRegistrationVendor()
+{
+    return view('user.register_vendor'); // Replace with your actual view that contains the registration form
+}
 public function store(Request $request)
 {
     // Validate the incoming request data
@@ -57,6 +62,7 @@ public function store(Request $request)
         'name' => $validatedData['name'],
         'email' => $validatedData['email'],
         'password' => Hash::make($validatedData['password']),
+        'role' => $request->role,
     ]);
 
     // Log the user in

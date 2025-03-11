@@ -27,6 +27,14 @@
                     <input type="number" class="form-control" id="salePrice" name="salePrice" value="{{ $product->SalePrice }}" required>
                 </div>
                 <div class="form-group">
+                    <label for="vendorPrice">Vendor Price</label>
+                    <input type="number" class="form-control" id="vendorPrice" name="vendorPrice" value="{{ $product->VendorPrice }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Base Price</label>
+                    <input type="number" class="form-control" id="basePrice" name="basePrice" value="{{ $product->basePrice }}" required>
+                </div>
+                <div class="form-group">
                     <label for="quantity">Quantity</label>
                     <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $product->Quantity }}" required>
                 </div>

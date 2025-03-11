@@ -73,6 +73,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class,'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class,'store']);
 
+Route::get('/register/vendor', [RegisterController::class, 'showRegistrationVendor'])->name('vendor.register');
+Route::post('/register/vendor', [RegisterController::class, 'store'])->name('vendor.register');
+
 // Password Reset Routes
 Route::get('password/reset',[ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
 Route::post('password/email',[ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
@@ -158,6 +161,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     //orders
     Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders');
     
+});
+
+Route::prefix('user')->middleware(['auth'])->group(function () {
+    Route::get('/profile', [UserController::class, 'account'])->name('user.profile');
+    Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
+
+    Route::get('/orders', [OrderController::class, 'orderUser'])->name('user.orders');
+    // Route::post('/logout', [LoginController::class, 'logout'])->name('user.logout');
 });
 
 

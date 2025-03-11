@@ -18,10 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',  // Assuming you are using a 'role' column for simple role checks
+        'name', 'email', 'phone_number', 'billing_address', 'billing_city',
+        'billing_state', 'billing_postal_code', 'billing_country',
+        'password', 'role', 'remember_token' // Assuming you are using a 'role' column for simple role checks
     ];
 
     /**

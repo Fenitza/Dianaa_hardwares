@@ -17,7 +17,7 @@ class UserController extends Controller
     public function account()
     {
         $user = Auth::user();  // Get the currently authenticated user
-        return view('user.account', compact('user'));
+        return view('includes.user.profile', compact('user'));
     }
 
     /**
@@ -39,24 +39,35 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
-            'password' => 'sometimes|nullable|string|min:8',
-        ]);
+        // dd($request->all()); // This will dump all request data and stop the script
+        $user = Auth::user(); // Get the currently authenticated user
 
-        $user = Auth::user();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        
-        // Update password if provided
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password);
-        }
+    // Validate the request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        'phone' => 'required|string|max:15', // Adjust validation as necessary
+        'address' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'state' => 'required|string|max:255',
+        'postal_code' => 'required|string|max:15',
+        'country' => 'required|string|max:255'
+    ]);
 
-        $user->save();
+    // Update user information
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone_number' => $request->phone,
+        'billing_address' => $request->address,
+        'billing_city' => $request->city,
+        'billing_state' => $request->state,
+        'billing_postal_code' => $request->postal_code,
+        'billing_country' => $request->country
+    ]);
 
-        return redirect()->route('user.account')->with('success', 'Profile updated successfully!');
+    // Redirect back or to another page with a success message
+    return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
     /**
