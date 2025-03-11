@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // fetchCartCount(); // Fetch initial cart count from the server on page load
-
+    if (document.body.classList.contains('authenticated')) {
+        fetchCartCount();
+    }
     // Add to Cart Functionality
     document.querySelectorAll('.btn-add-to-cart').forEach(button => {
         button.addEventListener('click', function() {
@@ -71,12 +72,18 @@ function fetchCartCount() {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }
     })
-    // .then(response => response.json())
+    .then(response => response.json())
     .then(data => {
-        updateCartCount(data.cartCount); // Update count from server response
+        if(data && data.cartCount !== undefined) {
+            updateCartCount(data.cartCount); // Update count from server response
+        } else {
+            console.error('Invalid response for cart count:', data);
+        }
     })
     .catch(error => console.error('Error fetching cart count:', error));
 }
+
+
 
 // Update Cart Count in UI
 function updateCartCount(count) {
@@ -157,9 +164,9 @@ function emptyCart() {
 }
 
 // Checkout Button Redirect
-// document.getElementById('checkout').addEventListener('click', function() {
-//     window.location.href = '/checkout'; // Redirect to the checkout page
-// });
+document.getElementById('checkout').addEventListener('click', function() {
+    window.location.href = '/checkout'; // Redirect to the checkout page
+});
 
 //bulkOrderForm
 document.addEventListener('DOMContentLoaded', function () {

@@ -101,21 +101,21 @@ class CartController extends Controller
     }
 
     public function count()
-    {
-        try {
-            $userId = Auth::id();
-            if (!$userId) {
-                session(['cartCount' => 0]); // Update session if not authenticated
-                return; // Optionally return or redirect if needed
-            }
-    
-            $count = CartItem::where('user_id', $userId)->sum('quantity');
-            session(['cartCount' => $count]); // Update the session with the new count
-        } catch (\Exception $e) {
-            \Log::error('Failed to count cart items: ' . $e->getMessage());
-            session(['cartCount' => 0]); // Update session in case of error
+{
+    try {
+        $userId = Auth::id();
+        if (!$userId) {
+            session(['cartCount' => 0]);
+            return response()->json(['cartCount' => 0]);
         }
-    
-        // Optionally redirect or return view if this method is called from a route
+
+        $count = CartItem::where('user_id', $userId)->sum('quantity');
+        session(['cartCount' => $count]);
+        return response()->json(['cartCount' => $count]);
+    } catch (\Exception $e) {
+        \Log::error('Failed to count cart items: ' . $e->getMessage());
+        return response()->json(['cartCount' => 0]);
     }
+}
+
 }

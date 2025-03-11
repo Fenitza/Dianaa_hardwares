@@ -24,11 +24,19 @@
                         </form>
                     </div>
                     <div class="bottom-links">
+                    <body class="{{ Auth::check() ? 'authenticated' : '' }}">
                         <a href="{{ route('products_main') }}" class ="all-products"><i class="fa fa-box"></i> Products</a> |
                         <!-- <a href="{{ route('account') }}"><i class="fa fa-user"></i> My Account</a> | -->
-                        <a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Cart(<span id="cart-count">0</span>)</a> |
-                        
-                        <div class="user-profile">
+                        <a href="{{ route('cart') }}">
+                            <i class="fa fa-shopping-cart"></i> Cart(
+                            @if(Auth::check())
+                                <span id="cart-count">{{ session('cartCount', 0) }}</span>
+                            @else
+                                <span id="cart-count">0</span>
+                            @endif
+                            )
+                        </a> |
+                        <div class="user-profile"> 
                                 @if(Auth::check()) <!-- Check if user is authenticated -->
                                     <i class="fa fa-user"></i> <!-- Display the user icon -->
                                     <div class="user-text">
