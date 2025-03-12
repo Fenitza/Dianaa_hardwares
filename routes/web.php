@@ -127,6 +127,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     //products
     Route::get('/products', [ProductController::class, 'adminProducts'])->name('admin.products');
     Route::get('products/create', [ProductController::class, 'create'])->name('admin.products.create');
+    Route::any('/admin/products/import', [ProductController::class, 'importExcel'])->name('admin.products.import');
     Route::get('/products/{id}', [ProductController::class, 'showByProducts'])->name('admin.products.view');
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
     Route::any('/products/{id}/update', [ProductController::class, 'update'])->name('admin.products.update');

@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Manufacturer;
 use App\Models\SubCategory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 \DB::enableQueryLog();
 
 class ProductController extends Controller
@@ -70,6 +71,26 @@ class ProductController extends Controller
         $manufacturers = Manufacturer::all(); // Assuming you have a Manufacturer model
         $subcategories = SubCategory::all(); // Assuming you have a Category model
         return view('includes.admin.products.create', compact( 'manufacturers', 'subcategories'));
+    }
+    public function importExcel(Request $request)
+    {
+    $request->validate([
+        'product_file' => 'required|file|mimes:xlsx,xls',
+    ]);
+
+    $path = $request->file('product_file')->getRealPath();
+    $spreadsheet = IOFactory::load($path);
+    $worksheet = $spreadsheet->getActiveSheet();
+    $rows = $worksheet->toArray();
+
+    foreach ($rows as $row) {
+        $sku = $row[0]; // SKU is assumed to be in the first column
+        $quantity = $row[1]; // Quantity in the second column
+
+        Product::where('SKU', $sku)->update(['Quantity' => $quantity]);
+    }
+
+    return redirect()->route('includes.admin.products')->with('success', 'Product quantities updated successfully.');
     }
 
 

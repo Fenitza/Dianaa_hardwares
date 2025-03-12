@@ -18,6 +18,15 @@
         <h1 class="page-title">Manage Products</h1>
         <div class="admin-template">
             <div class="tools">
+                <!--excel upload-->
+                
+            <!-- Existing sorting and button functionalities -->
+                <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data" style="display: inline-block;">
+                    @csrf
+                    <input type="file" name="product_file" id="product_file" accept=".xlsx, .xls" hidden onchange="this.form.submit()">
+                    <label for="product_file" class="btn btn-info">Upload Excel File</label>
+                </form>
+        
                 <div class="sort">
                     <label for="sort">Sort by:</label>
                     <select id="sort" onchange="sortProducts(this.value)">
