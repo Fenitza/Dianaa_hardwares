@@ -69,14 +69,14 @@
 
 
 <!-- Product Categories -->
-<div class="container my-4">
+<div class="container my-3">
     <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
     <div class="row">
     @foreach ($categories as $category)
         <div class="col-sm-4 col-md-4 col-lg-3 mb-4">
-            <div class="card-category">
+            <div class="card-category center">
                 <!-- <img src="{{ asset('storage/' . $category->image) }}" class="card-img-top" alt="{{ $category->name }}"> -->
-                <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img-top" alt="Product1">
+                <img src="{{ asset('storage/' . $category->category_image) }}" alt="Category Image" class="product-img" style="width: 100px; height: 100px; object-fit: contain;">
                 <div class="card-body text-center">
                     <p class="card-text-category">{{ $category->Name }}</p>
                 </div>
