@@ -15,6 +15,7 @@
 
         <!-- Cart and Login -->
         <div class="header-cart-login">
+            <a href="{{ route('products_main') }}">Products</a>|
             <a href="{{ route('cart') }}">
                 <i class="fa fa-shopping-cart"></i> Cart(
                 @if(Auth::check())
@@ -23,9 +24,9 @@
                     <span id="cart-count">0</span>
                 @endif
                 )
-            </a> |
+            </a>|
             @if(Auth::check())
-                <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a> | 
+                <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a>| 
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
@@ -47,7 +48,7 @@
             <a href="{{ route('services') }}">Services & Solutions</a> |
             <a href="{{ route('careers') }}">Careers</a> |
             <a href="{{ route('contact') }}">Contact</a> |
-            <a href="{{ route('products_main') }}">Products</a>
+            
         </nav>
     </div>
 </header>

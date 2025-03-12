@@ -38,7 +38,7 @@ header {
 }
 
 .header-logo img {
-    height: 50px;
+    height: 60px;
 }
 
 .header-search-bar form {
@@ -110,18 +110,26 @@ nav a:hover {
     }
 }
 
+/* Body */
+/* admin.css */
+
+
+
 .admin-container {
-    display: flex;
+    display:flex;
     flex: 1;
 }
 
 aside {
-    width: 170px;
+    width: 200px;
     background-color: #34495E;
     color: #ffffff;
-    height: 100vh;
+    height: 100vh; /* Full viewport height */
     padding: 20px;
+    position: sticky; /* Make sidebar sticky */
+    top: 0; /* Align to the top */
 }
+
 
 aside ul {
     list-style-type: none;
@@ -151,45 +159,6 @@ main h1 {
     color: #333;
 }
 
-body {
-    font-family: 'Nunito', sans-serif;
-    background-color: #f4f4f4;
-}
-
-.card {
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.card-header {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #007bff;
-    color: white;
-}
-
-.form-control {
-    border-radius: 5px;
-    border: 1px solid #ced4da;
-}
-
-.form-label {
-    font-weight: bold;
-    color: #495057;
-}
-
-.btn-primary {
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #007bff;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-
 /* Improving layout for smaller screens */
 @media (max-width: 768px) {
     .admin-container {
@@ -208,17 +177,62 @@ body {
 
 
 .page-title {
-    color: #e7e7e7;
+    color: #363434;
 }
 
-.product-management-header .tools {
+.tools .form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Aligns the container to the right */
+    gap: 10px; /* Adds space between elements */
+    flex-wrap: wrap; /* Allows items to wrap onto the next line on smaller screens */
+    margin-left: auto; /* Pushes the container to the right */
+    padding-left: 20px; /* Adds spacing from the left side */
+}
+
+.tools .form-group {
+    margin-bottom: 0; /* Removes bottom margin for tighter vertical spacing */
+    display: flex;
+    align-items: center;
+}
+
+.tools .form-group label {
+    margin-right: 10px; /* Adds right margin to label for spacing */
+}
+
+/* Reducing width of the entries per page selector and the update button */
+.tools .form-inline .form-group select,
+.tools .form-inline .btn {
+    width: auto;  /* Adjust width to content or specify a fixed width */
+}
+
+/* Specifically target the 'Entries per page' select box to reduce its width further */
+.tools select#perPage {
+    max-width: 30px; /* Reduces the maximum width of the dropdown */
+}
+
+/* Adjust the button to align with the newly sized inputs */
+.tools .form-inline .btn {
+    padding: 6px 10px; /* Adjust padding to reduce overall size */
+    font-size: 0.9rem; /* Optionally adjust font size for better fit */
+}
+
+.tools .btn {
+    height: 38px; /* Aligns button height with form controls */
+}
+
+.tools select, .tools input[type="text"] {
+    min-width: 160px; /* Ensures a minimum width for inputs and selects */
+}
+
+.admin-template .tools {
     display: flex;
     align-items: center; /* Centers the items vertically */
     justify-content: flex-end; /* Aligns the items to the right */
     gap: 10px; /* Provides space between the items */
 }
 
-.product-management-header .btn {
+.admin-template .btn {
     padding: 10px 20px;
     color: #fff;
     background-color: #007bff;
@@ -227,26 +241,41 @@ body {
     cursor: pointer;
 }
 
-.product-management-header .btn-secondary {
+.admin-template .btn-secondary {
     background-color: #6c757d;
 }
 
-.product-management-header .sort {
+.admin-template .sort {
     display: flex;
     align-items: center; /* Aligns the label and select vertically */
 }
 
-.product-management-header .sort-label {
+.admin-template .sort-label {
     margin-right: 5px; /* Space between label and dropdown */
 }
 
-.product-management-header select {
+.admin-template select {
     padding: 5px 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
-.products-table th:first-child, .products-table td:first-child {
+.admin-table th:first-child, .admin-table td:first-child {
+    text-align: center;
+    height: 30px;
+}
+
+.admin-table th, .admin-table td {
+    padding: 8px 10px; /* Reduce padding to decrease row height */
+    border-bottom: 1px solid #ccc; /* Optional: ensures row separation is clear */
+    font-size: 0.9rem; /* Optional: reduce font size to compact the display */
+    text-align: center;
+    line-height: 1;
+}
+
+.admin-table {
+    border-collapse: collapse; /* Ensures that borders between rows are minimal */
+    width: 100%;
     text-align: center;
 }
 
@@ -254,38 +283,36 @@ body {
     cursor: pointer;
 }
 
-.products-table input[type="checkbox"] {
+.admin-table input[type="checkbox"] {
     cursor: pointer;
 }
 
-/* Additional spacing improvements */
-.products-table th, .products-table td {
-    padding: 15px; /* Increased padding for better spacing */
-    border-bottom: 2px solid #ddd; /* Thicker bottom border for clearer separation */
-}
 /* Aligning the price column to the right */
-.products-table th.price, .products-table td.price {
+.admin-table th.price, .admin-table td.price {
     text-align: center; /* Aligns the text to the right */
     padding-right: 30px; /* Adds padding for better spacing from the border */
 }
 
 /* Adjusting the actions column for vertical alignment of icons */
-.products-table td.actions {
+.admin-table td.actions {
     display: flex;
-    flex-direction: column; /* Makes the icons stack vertically */
+    flex-direction: row; /* Makes the icons stack vertically */
     align-items: center; /* Centers the icons in the cell */
-    justify-content: flex-start; /* Aligns items to the start of the flex container */
+    justify-content: center; /* Aligns items to the start of the flex container */
     gap: 5px; /* Adds space between each icon */
+    text-align: center;
+    height: 80px;
 }
 
-.products-table th {
+.admin-table th {
     background-color: #4E5B6E; /* Darker shade for header */
     color: #FFFFFF; /* White text for better contrast */
     text-align: center;
 }
 
-.products-table th:hover {
-    background-color: #2d2e6a; /* Even darker on hover */
+.admin-table tr:hover {
+    background-color: #94dee0 !important; /* Even darker on hover */
+    
 }
 
 /* Adjustments for action icons to improve visibility */
@@ -316,6 +343,39 @@ body {
 .stock-status.out-of-stock {
     color: #dc3545; /* Red for out-of-stock items */
     align-items: center;
+}
+/* Pagination Container Styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination a, .pagination span {
+    color: #007bff;  
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;  
+}
+
+.pagination .active a {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.pagination .disabled a, .pagination .disabled a:hover {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+}
+
+.pagination a:hover {
+    background-color: #e9ecef;
 }
 
 

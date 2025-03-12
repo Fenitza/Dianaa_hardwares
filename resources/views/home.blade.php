@@ -3,16 +3,45 @@
 
 @section('content')
 <!-- Hero Section -->
+<div id="heroCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#heroCarousel" data-slide-to="1"></li>
+        <li data-target="#heroCarousel" data-slide-to="2"></li>
+    </ol>
 
-<div class="hero-section" style="background-image: url('images/banners/slder1.webp'); height:400px">
-    <div class="container h-100 d-flex align-items-center" style="padding-top: 0; margin-top: -50px;">
-        <div class="text-white">
-            <!-- <p class="lead mb-1">30% Discount</p>
-            <h1 class="display-4">Best Hand Tools<br>Collection</h1> -->
-            <!-- <a href="#" class="btn btn-danger btn-lg text-white mt-4">Shop Now</a> -->
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        <div class="carousel-item active" style="background-image: url('images/banners/slider1.webp'); height: 400px;">
+            <div class="carousel-caption d-none d-md-block">
+                <!-- Optional: Add titles or descriptions here -->
+            </div>
+        </div>
+        <div class="carousel-item" style="background-image: url('images/banners/slider2.webp'); height: 400px;">
+            <div class="carousel-caption d-none d-md-block">
+                <!-- Optional: Add titles or descriptions here -->
+            </div>
+        </div>
+        <div class="carousel-item" style="background-image: url('images/banners/slider3.webp'); height: 400px;">
+            <div class="carousel-caption d-none d-md-block">
+                <!-- Optional: Add titles or descriptions here -->
+            </div>
         </div>
     </div>
+
+    <!-- Controls -->
+    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>
+
+
 
 
 <!-- Company Details Section -->
@@ -44,7 +73,7 @@
 
 
 
-<!-- Brand Category -->
+<!-- Manufacturer Category -->
 <div class="container my-4">
     <h3 class="text-center mb-3" style="color: #2d2e6a">FEATURED BRANDS</h3>
     <div class="row">
@@ -69,22 +98,22 @@
 
 
 <!-- Product Categories -->
-<div class="container my-3">
+<div class="card-container my-3">
     <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
-    <div class="row">
-    @foreach ($categories as $category)
-        <div class="col-sm-4 col-md-4 col-lg-3 mb-4">
-            <div class="card-category center">
-                <!-- <img src="{{ asset('storage/' . $category->image) }}" class="card-img-top" alt="{{ $category->name }}"> -->
-                <img src="{{ asset('storage/' . $category->category_image) }}" alt="Category Image" class="product-img" style="width: 100px; height: 100px; object-fit: contain;">
-                <div class="card-body text-center">
+    <div class="row justify-content-center"> <!-- Ensure center alignment -->
+        @foreach ($categories as $category)
+        <div class="col-9 col-sm-5 col-md-4 col-lg-3 mb-4"> <!-- Adjusted for larger cards -->
+            <div class="card-category text-center">
+                <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid"
+                style="width: auto; height: 150px; margin: 0 auto 20px; object-fit: contain;"> <!-- Increased height -->
+                <div class="card-body">
                     <p class="card-text-category">{{ $category->Name }}</p>
                 </div>
             </div>
         </div>
-    @endforeach
-
-        <!-- Explore All Products Button -->
+        @endforeach
+    </div>
+    <div class="row">
         <div class="col-12 text-center mt-4">
             <a href="{{ route('products_main') }}" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
         </div>
@@ -93,3 +122,13 @@
 
 
 @endsection
+
+<script>
+$(document).ready(function() {
+    var myCarousel = document.querySelector('#heroCarousel')
+    var carousel = new bootstrap.Carousel(myCarousel, {
+        interval: 5000,
+        wrap: true
+    });
+});
+</script>
