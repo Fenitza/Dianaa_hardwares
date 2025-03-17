@@ -19,13 +19,14 @@
         <div class="tab-content" id="categoryContent">
             @foreach($categories as $index => $category)
             <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="category{{ $category->CategoryID }}" role="tabpanel" aria-labelledby="category-tab-{{ $category->CategoryID }}">
-                <div class="row">
+                <div class="row justify-content-center">
                     @foreach($category->subcategories as $subcategory)
-                    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="col-9 col-sm-6 col-md-4 col-lg-3 mb-4">
                         <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'manufacturer' => request()->manufacturer]) }}">
-                            <div class="card-category">
-                                <img src="{{ asset('images/Products/product_2.jpg') }}" class="card-img-top" alt="Product1">
-                                <div class="card-body text-center">
+                            <div class="card-category text-center">
+                                <img src="{{ asset('storage/' . $subcategory->Image) }}" alt="{{ $subcategory->Name }}" class="product-img img-fluid"
+                                style="width: auto; height: 150px; margin: 0 auto 20px; object-fit: contain;">
+                                <div class="card-body">
                                     <p class="card-text-category">{{ $subcategory->Name }}</p>
                                 </div>
                             </div>
@@ -46,9 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (activeCategory) {
         let tabElement = document.querySelector(`#category-tab-${activeCategory}`);
         if (tabElement) {
-            new bootstrap.Tab(tabElement).show(); // Bootstrap 5
-            // For Bootstrap 4 or if using jQuery you might need:
-            // $(`#category-tab-${activeCategory}`).tab('show');
+            new bootstrap.Tab(tabElement).show(); // This ensures that Bootstrap 5 tabs work with dynamic activation
         }
     }
 });

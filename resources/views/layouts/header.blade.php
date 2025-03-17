@@ -26,9 +26,15 @@
                 )
             </a>|
             @if(Auth::check())
-                <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a>| 
+                @if(Auth::user()->role === 'admin')
+                    <!-- Admin specific link -->
+                    <a href="{{ route('admin.products') }}">{{ Auth::user()->name }}</a> | 
+                @else
+                    <!-- Standard user link -->
+                    <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a> | 
+                @endif
                 <a href="{{ route('logout') }}"
-                   onclick="event.preventDefault();
+                onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                     Logout
                 </a>

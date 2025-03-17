@@ -90,7 +90,7 @@ class ProductController extends Controller
         Product::where('SKU', $sku)->update(['Quantity' => $quantity]);
     }
 
-    return redirect()->route('includes.admin.products')->with('success', 'Product quantities updated successfully.');
+    return redirect()->route('admin.products')->with('success', 'Product quantities updated successfully.');
     }
 
 
@@ -184,5 +184,24 @@ class ProductController extends Controller
             // Redirect with success message
             return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
         
+    }
+
+    public function fetchFilters()
+    {
+        $brands = Manufacturer::select('Name')->distinct()->get();
+        $materials = Product::select('Material')->distinct()->get();
+        $sizes = Product::select('Size')->distinct()->get();
+        $lengths = Product::select('Length')->distinct()->get();
+        $standards = Product::select('Standard_Class')->distinct()->get();
+        $colors = Product::select('Color')->distinct()->get();
+
+        return response()->json([
+            'brands' => $brands,
+            'materials' => $materials,
+            'sizes' => $sizes,
+            'lengths' => $lengths,
+            'standards' => $standards,
+            'colors' => $colors,
+        ]);
     }
 }
