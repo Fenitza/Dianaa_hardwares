@@ -504,7 +504,81 @@ h3 {
     padding:5px 20px;
     border-radius :2px;
 }
+/* collapsible filter */
+/* Base styles for the filter sidebar */
+/* Base styles for the filter sidebar */
+.filter-section {
+    background-color: #f8f9fa;
+    /* Light grey background for the filter area */
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    /* Subtle separation from the product display area */
+}
 
+.collapsible {
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    padding: 10px 15px;
+    /* Reduced padding for a more compact appearance */
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 14px;
+    /* Reduced font size for a cleaner look */
+    border-bottom: 1px solid #ccc;
+    /* Adds a line between each collapsible button */
+}
+
+.collapsible:hover {
+    background-color: #f0f0f0;
+}
+
+.collapsible.active {
+    background-color: #e9ecef;
+    color: #0056b3;
+    /* Highlight active section */
+}
+
+.content {
+    padding: 5px 15px;
+    /* Reduced padding inside collapsible content */
+    display: none;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.content div {
+    margin-bottom: 5px;
+    /* Reduced vertical spacing between checkboxes */
+}
+
+/* Styling for checkboxes */
+input[type="checkbox"] {
+    margin-right: 10px;
+    /* Space between checkbox and label */
+}
+
+/* Button styling */
+.filter-section button {
+    width: 100%;
+    background-color: #2d2e6a;
+    /* Bootstrap primary color */
+    color: white;
+    padding: 8px;
+    /* Slightly reduced padding for the button */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    /* Space from the last filter */
+}
+
+.filter-section button:hover {
+    background-color: #A5CD36;
+    /* Darker blue on hover */
+}
 /* SubCategory Views */
 .product-list-info{
     font-size: medium; /* Adjusts the font size to be smaller than the inherited size */

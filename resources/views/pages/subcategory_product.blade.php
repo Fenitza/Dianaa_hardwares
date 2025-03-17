@@ -1,46 +1,61 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-4">
+<div class="container my-2">
     <div class="row">
         <!-- Filter Column -->
         <div class="col-md-3">
             <div class="row">
                 <!-- First column of filters -->
                 <form id="filter-form">
-                <div class="col-md-8">
-                    <p><strong>Filter By:</strong></p>
-                    <h6>My Availability</h6>
-                    <div>
-                        <input type="checkbox" id="availability" name="availability">
-                        <label for="availability">Available Only</label>
+                <div class="filter-section">
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Available Only</button>
+                        <div class="content">
+                            <input type="checkbox" id="availability" name="availability">
+                            <label for="availability">Show Available Only</label>
+                        </div>
                     </div>
-                    <h6>Brand / Manufacturer</h6>
-                        @if($products->pluck('Manufacturer')->unique()->isNotEmpty())
-                            @foreach($products->pluck('Manufacturer')->unique() as $manufacturer)
-                            <div>
-                                <input type="checkbox" id="manufacturer_{{ $manufacturer }}" name="manufacturer[]" value="{{ $manufacturer }}">
-                                <label for="manufacturer_{{ $manufacturer }}">{{ $manufacturer }}</label>
-                            </div>
-                            @endforeach
-                        @else
-                            <p>No manufacturers available</p>
-                        @endif
 
-                        <h6>Material</h6>
-                        @if($products->pluck('Material')->unique()->isNotEmpty())
-                            @foreach($products->pluck('Material')->unique() as $material)
-                            <div>
-                                <input type="checkbox" id="material_{{ $material }}" name="material[]" value="{{ $material }}">
-                                <label for="material_{{ $material }}">{{ $material }}</label>
-                            </div>
-                            @endforeach
-                        @else
-                            <p>No materials available</p>
-                        @endif
-                        <button type="button" onclick="submitFilters()">Apply Filters</button>
-                        </form>
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Brand / Manufacturer</button>
+                        <div class="content" id="brand-container"></div>
+                    </div>
+
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Material</button>
+                        <div class="content" id="material-container"></div>
+                    </div>
+
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Size</button>
+                        <div class="content" id="size-container"></div>
+                    </div>
+
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Length</button>
+                        <div class="content" id="length-container"></div>
+                    </div>
+
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Standard</button>
+                        <div class="content" id="standard-container"></div>
+                    </div>
+
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Color</button>
+                        <div class="content" id="color-container"></div>
+                    </div>
+
+                    <div class="filter-category">
+                        <button type="button" class="collapsible">Property Class</button>
+                        <div class="content" id="propertyClass-container"></div>
+                    </div>
+
+                    <button type="button" onclick="submitFilters()" class="btn btn-primary mt-3">Apply Filters</button>
                 </div>
+            </form>
+              
                 
                 
             </div>
@@ -116,23 +131,81 @@ function showProductDetails(productId) {
 
 <!-- filter -->
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var coll = document.getElementsByClassName("collapsible");
+    for (var i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+
+    fetchFilters();  // Fetch filters on page load
+});
+
+
+function fetchFilters() {
+    fetch('/filters')
+    .then(response => response.json())
+    .then(data => {
+    console.log('Received data:', data);
+        populateFilters(data.brands, 'brand-container');
+        populateFilters(data.materials, 'material-container');
+        populateFilters(data.sizes, 'size-container');
+        populateFilters(data.lengths, 'length-container');
+        populateFilters(data.standards, 'standard-container');
+        populateFilters(data.colors, 'color-container');
+        populateFilters(data.property, 'propertyClass-container');
+    })
+    .catch(error => console.error('Error loading filter data:', error));
+}
+
+function populateFilters(items, containerId) {
+    const container = document.getElementById(containerId);
+    items.forEach(item => {
+        const div = document.createElement('div');
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = item.displayName; // Adjust this field name based on a standard attribute passed from the server
+        checkbox.name = containerId;
+        label.appendChild(checkbox);
+        label.append(item.displayName); // Use displayName for uniformity
+        div.appendChild(label);
+        container.appendChild(div);
+    });
+}
+
 function submitFilters() {
     const formData = new FormData(document.getElementById('filter-form'));
-
-    fetch('{{ route('subcategory.filter', ['subCategoryId' => $subcategory->SubCategoryID]) }}', {
+    for (let entry of formData.entries()) {
+        console.log(entry[0], entry[1]); // Log each key and value
+    }
+    fetch('/api/apply-filters', {
         method: 'POST',
         body: formData,
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'Accept': 'application/json',
-        }
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('product-list').innerHTML = data.html;
+        console.log('Success:', data);
+        // Update the UI with the filtered products
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to apply filters. Please try again!');
+    });
 }
+
 </script>
 
 @endsection

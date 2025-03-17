@@ -187,21 +187,66 @@ class ProductController extends Controller
     }
 
     public function fetchFilters()
-    {
-        $brands = Manufacturer::select('Name')->distinct()->get();
-        $materials = Product::select('Material')->distinct()->get();
-        $sizes = Product::select('Size')->distinct()->get();
-        $lengths = Product::select('Length')->distinct()->get();
-        $standards = Product::select('Standard_Class')->distinct()->get();
-        $colors = Product::select('Color')->distinct()->get();
+{
+    $brands = Manufacturer::select('Name as displayName')->distinct()->get();
+    \Log::info('Brands:', $brands->toArray());
+    $materials = Product::select('Material as displayName')->distinct()->get();
+    $sizes = Product::select('Size as displayName')->distinct()->get();
+    $lengths = Product::select('Length as displayName')->distinct()->get();
+    $standards = Product::select('Standard as displayName')->distinct()->get();
+    $property = Product::select('Property_Class as displayName')->distinct()->get();
+    $colors = Product::select('Color as displayName')->distinct()->get();
 
-        return response()->json([
-            'brands' => $brands,
-            'materials' => $materials,
-            'sizes' => $sizes,
-            'lengths' => $lengths,
-            'standards' => $standards,
-            'colors' => $colors,
-        ]);
-    }
+    return response()->json([
+        'brands' => $brands,
+        'materials' => $materials,
+        'sizes' => $sizes,
+        'lengths' => $lengths,
+        'standards' => $standards,
+        'colors' => $colors,
+        'property'=> $property,
+    ]);
+}
+
+public function applyFilters(Request $request, $subCategoryId)
+{
+    // Begin a query with a constraint to fetch only the specified subcategory with its related products
+    $query = SubCategory::with(['products' => function($q) use ($request) {
+        // Applying filters dynamically based on the request input
+        
+        // Filter by availability
+        if ($request->filled('availability')) {
+            $q->where('available', '=', true);
+        }
+
+        // Filter by manufacturer if provided
+        if ($request->has('manufacturers') && is_array($request->input('manufacturers'))) {
+            $q->whereIn('manufacturer', $request->input('manufacturers'));
+        }
+
+        // Filter by material if provided
+        if ($request->has('materials') && is_array($request->input('materials'))) {
+            $q->whereIn('material', $request->input('materials'));
+        }
+
+        // Additional filters can be added here in the same manner
+        if ($request->has('sizes') && is_array($request->input('sizes'))) {
+            $q->whereIn('size', $request->input('sizes'));
+        }
+        if ($request->has('colors') && is_array($request->input('colors'))) {
+            $q->whereIn('color', $request->input('colors'));
+        }
+
+    }])->findOrFail($subCategoryId);  // Ensuring the subcategory exists
+
+    // Accessing the products loaded with the subcategory
+    $products = $query->products;
+
+    // Return the HTML rendered view for the products grid, injected directly via JSON
+    return response()->json([
+        'html' => view('partials.product_grid', compact('products'))->render()
+    ]);
+}
+
+
 }
