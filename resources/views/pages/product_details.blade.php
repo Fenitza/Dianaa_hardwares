@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row product-detail-page">
+    <div class="row product-detail-page" ">
         <!-- First Column: Product Image -->
         <div class="col-md-4" style="margin-top: 50px; ">
         <img src="{{ asset('storage/' . $product->product_image) }}" alt="Product_Image" class="product-img" 

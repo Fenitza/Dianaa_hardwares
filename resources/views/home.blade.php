@@ -71,10 +71,12 @@
     </div>
 </div>
 
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
 
 
 <!-- Manufacturer Category -->
-<div class="container my-4">
+<div class="card-container my-4">
     <h3 class="text-center mb-3" style="color: #2d2e6a">FEATURED BRANDS</h3>
     <div class="row">
     
@@ -119,7 +121,8 @@
         </div>
     </div>
 </div>
-
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
 
 @endsection
 

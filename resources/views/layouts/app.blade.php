@@ -14,9 +14,14 @@
 
 
     @yield('content')
-
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
      <!-- Services Section -->
-     <div class="product-service-offers">
+     <div class="product-service-offers" >
     <div class="product-service-item">
         <i class="fas fa-grin-beam fa-2x"></i>
         <span>100% Satisfaction<br>If you are unable</span>

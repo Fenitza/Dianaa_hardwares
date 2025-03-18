@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-2">
+<div class="container my-4" style="max-width: 1300px;">
     <div class="row">
         <!-- Filter Column -->
         <div class="col-md-3">
@@ -9,6 +9,7 @@
                 <!-- First column of filters -->
                 <form id="filter-form">
                 <div class="filter-section">
+                    <h5>Filters</h5>
                     <div class="filter-category">
                         <button type="button" class="collapsible">Available Only</button>
                         <div class="content">
@@ -52,13 +53,15 @@
                         <div class="content" id="propertyClass-container"></div>
                     </div>
 
-                    <button type="button" onclick="submitFilters()" class="btn btn-primary mt-3">Apply Filters</button>
+                    <button type="button" id="filter-apply" onclick="submitFilters()" class="btn btn-primary mt-3">Apply Filters</button>
                 </div>
             </form>
               
                 
                 
+           
             </div>
+
         </div>
     
         <!-- Product Grid Column -->
@@ -94,6 +97,8 @@
         </div>
     </div>
 </div>
+</div>
+
 
  
 @include('partials.product_detail_modal') <!-- Include modal as a partial -->

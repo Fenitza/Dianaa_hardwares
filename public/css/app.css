@@ -249,7 +249,7 @@ nav a:hover {
 
 /* spacer */
 .custom-spacer {
-    height: 50px; /* or whatever height you prefer */
+    height: 30px; /* or whatever height you prefer */
 }
 
 /* Categories */
@@ -263,7 +263,7 @@ nav a:hover {
 
 /* Heading Style */
 h3 {
-    margin-bottom: 20px;
+    
     color: #2d2e6a;
     font-size: 24px;
 }
@@ -354,31 +354,55 @@ h3 {
 }
 
 /* Services Section */
-.product-service-item i {
-    color: #2d2e6a; /* Example color; adjust as needed */
-    margin-bottom: 10px; /* Space between the icon and text */
-}
-
 .product-service-offers {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: white; /* Light background color */
+    background-color: #f9f9fa;
+    /* Light background for the section */
     padding: 20px 0;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    /* Optional top border for distinction */
+    border-bottom: 1px solid #ccc;
+    /* Optional bottom border */
 }
 
 .product-service-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    margin-bottom: 20px;
+    flex-basis: 22%;
+    /* Adjust based on the number of items */
+    padding: 10px;
+    margin: 10px;
+    background: white;
+    /* White background for each item */
+    border-radius: 8px;
+    /* Rounded corners for a softer look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for 3D effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Smooth transitions for hover effects */
 }
 
-.service-item span {
-    font-size: 14px;
+.product-service-item i {
+    color: #0056b3;
+    /* Theme color for icons */
+    margin-bottom: 8px;
+}
+
+.product-service-item span {
+    display: block;
     color: #333;
-    text-align: center;
+    /* Dark grey color for text */
+    font-size: 14px;
+    /* Slightly smaller font size for a compact look */
+}
+
+.product-service-item:hover {
+    transform: translateY(-5px);
+    /* Slight raise effect on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    /* Enhanced shadow on hover for depth */
 }
 
 
@@ -579,6 +603,26 @@ input[type="checkbox"] {
     background-color: #A5CD36;
     /* Darker blue on hover */
 }
+
+.filter-section #filter-apply {
+    width: 100%;
+    background-color: #a5cd36;
+    /* Bootstrap primary color */
+    color: black;
+    padding: 8px;
+    /* Slightly reduced padding for the button */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    /* Space from the last filter */
+}
+
+.filter-section #filter-apply:hover {
+    background-color: #4A90E2;
+    /* Darker blue on hover */
+}
+
 /* SubCategory Views */
 .product-list-info{
     font-size: medium; /* Adjusts the font size to be smaller than the inherited size */
