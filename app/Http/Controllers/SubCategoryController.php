@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class SubCategoryController extends Controller
 {
@@ -96,7 +97,7 @@ class SubCategoryController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,CategoryID',
-            'subcategory_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
+            'subcategory_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
         // dd($request->all(), $validatedData);
 
@@ -123,11 +124,12 @@ class SubCategoryController extends Controller
 
     public function update(Request $request, Subcategory $subcategory)
 {
+    
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'category_id' => 'required|exists:categories,CategoryID', // Ensure it references CategoryID correctly
-        'subcategory_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
+        'subcategory_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
     ]);
 
     // Fill the subcategory with validated data

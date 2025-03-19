@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Spacer Block -->
+<div class="custom-spacer"></div>
+
 <div class="container">
-    <div class="row product-detail-page" ">
+    <div class="row product-detail-page" >
         <!-- First Column: Product Image -->
         <div class="col-md-4" style="margin-top: 50px; ">
         <img src="{{ asset('storage/' . $product->product_image) }}" alt="Product_Image" class="product-img" 
@@ -10,25 +13,28 @@
         </div>
 
         <!-- Second Column: Product Details and Attributes -->
-<div class="col-md-4 product-details">
-    <h2>{{ $product->Name }}</h2>
-    <ul class="list-unstyled">
-        <li><strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}</li>
-        <li><strong>Description:</strong> {{ $product->Description }}</li>
-        <li><strong>Standard:</strong> {{ $product->Standard }}</li>
-        <li><strong>Manufacturer:</strong> {{ $product->manufacturer->Name ?? 'No Manufacturer' }}</li>
-        <li><div class="catalog-item">This is a Catalog Item</div></li>
-        <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
-        <li><strong>Size:</strong> {{ $product->Size }}</li>
-        <li><strong>Length:</strong> {{ $product->Length }}</li>
-        <li><strong>Material:</strong> {{ $product->Material }}</li>
-        <li><strong>Type:</strong> {{ $product->Type }}</li>
-        <li><strong>Color:</strong> {{ $product->Color }}</li>
-        <li><strong>Property Class:</strong> {{ $product->Property_Class }}</li>
-    </ul>
-</div>
-
-
+<!-- Product Details -->
+        <div class="col-md-8 my-4">
+            <div class="product-details">
+                <h1>{{ $product->Name }}</h1>
+                <div class="details-block">
+                    <div><strong>Part No. (SKU):</strong> {{ $product->SKU }}</div>
+                    <div><strong>Description:</strong> {{ $product->Description }}</div>
+                    <div><strong>Standard:</strong> {{ $product->Standard }}</div>
+                    <div><strong>Manufacturer:</strong> {{ $product->manufacturer->Name ?? 'No Manufacturer' }}</div>
+                    <div class="catalog-item">This is a Catalog Item</div>
+                </div>
+                <div class="attributes-block">
+                    <h3>Product Attributes</h3>
+                    <div><strong>Size:</strong> {{ $product->Size }}</div>
+                    <div><strong>Length:</strong> {{ $product->Length }}</div>
+                    <div><strong>Material:</strong> {{ $product->Material }}</div>
+                    <div><strong>Type:</strong> {{ $product->Type }}</div>
+                    <div><strong>Color:</strong> {{ $product->Color }}</div>
+                    <div><strong>Property Class:</strong> {{ $product->Property_Class }}</div>
+                </div>
+            </div>
+      
         <!-- Third Column: Pricing and Supply Chain -->
         <div class="col-md-4" style="margin-top: 50px;">
             <h3>Price</h3>
