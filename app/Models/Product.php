@@ -12,9 +12,13 @@ class Product extends Model
 
     protected $fillable = [
         'name', 'description', 'sku', 'salePrice','vendorPrice', 'quantity', 'product_image',
-        'size', 'length', 'property_class', 'standard', 'material', 'ManufacturerID', 'SubCategoryID'
+        'size', 'length', 'property_class', 'standard', 'material', 'ManufacturerID', 'SubCategoryID',
+        'image_paths' 
     ];
-    
+
+    protected $casts = [
+        'image_paths' => 'array'  // Ensure that image_paths is treated as an array
+    ];
 
     public function subcategory()
     {

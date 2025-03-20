@@ -56,10 +56,7 @@
                     <button type="button" id="filter-apply" onclick="submitFilters()" class="btn btn-primary mt-3">Apply Filters</button>
                 </div>
             </form>
-              
-                
-                
-           
+
             </div>
 
         </div>

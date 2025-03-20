@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+\DB::enableQueryLog();
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
  
 
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Manufacturer;
 use App\Models\SubCategory;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-\DB::enableQueryLog();
+
 
 class ProductController extends Controller
 {
@@ -44,6 +48,7 @@ class ProductController extends Controller
     public function showByProducts($ProductID)
     {
         $product = Product::findOrFail($ProductID);
+        $product->image_paths = json_decode($product->image_paths, true) ?? [];
         return view('pages.product_details', compact('product'));
     }
 
@@ -103,10 +108,11 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
-        // Validate request data, you might want to extract this as it's used in `store` as well
-    $data = $request->validate([
+{
+    $product = Product::findOrFail($id); // Retrieve the product or fail if not found
+
+    // Define validation rules
+    $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'sku' => 'required|string|max:50',
@@ -114,7 +120,8 @@ class ProductController extends Controller
         'basePrice' => 'required|numeric',
         'vendorPrice' => 'required|numeric',
         'quantity' => 'required|integer',
-        'product_image' => 'nullable|image|max:2048', // 2MB Max
+        'image_path' => 'nullable|array',
+        'image_path.*' => 'image|max:2048', // Validates each file in the array
         'size' => 'nullable|string',
         'length' => 'nullable|string',
         'property_class' => 'nullable|string',
@@ -122,29 +129,68 @@ class ProductController extends Controller
         'material' => 'nullable|string',
         'ManufacturerID' => 'nullable|integer',
         'SubCategoryID' => 'nullable|integer',
-    ]);
+    ];
 
-    if ($request->hasFile('product_image')) {
-        // Check if there's an existing image and delete it if it exists
-        if ($product->product_image && Storage::exists($product->product_image)) {
-            Storage::delete($product->product_image);
+    // Run validation
+    $validator = Validator::make($request->all(), $rules);
+
+    // Check for validation failure
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
+    // Get validated data
+    $data = $validator->validated();
+
+    // Log received data
+    \Log::debug('Received update data:', $data);
+
+    // Update the product with validated data
+    $product->update($data);
+
+    // Process the uploaded files, update only if new files are provided
+    if ($request->hasFile('image_path')) {
+        $imagePaths = [];
+        foreach ($request->file('image_path') as $index => $file) {
+            // Store the new image and collect their paths
+            $path = $file->store('products', 'public');
+            $imagePaths['image_' . ($index + 1)] = $path;
+
+            \Log::debug('Updated image path:', ['key' => 'image_' . ($index + 1), 'path' => $path]);
         }
 
-        // Store the new image and update the image path in the database
-        $data['product_image'] = $request->file('product_image')->store('products', 'public');
-    } else {
-        // retain the old image
-        $data['product_image'] = $product->product_image;
+        $product->image_paths = json_encode($imagePaths);
+        \Log::debug('Updated Image Paths:', ['paths' => $product->image_paths]);
+
+        // Update main product image if it exists
+        if (isset($imagePaths['image_1'])) {
+            $product->product_image = $imagePaths['image_1'];
+            \Log::debug('Main Product Image Path:', ['product_image' => $product->product_image]);
+        }
     }
 
-    $product->update($data);
-        return redirect()->route('admin.products')->with('success', 'Product updated successfully');
+    // Attempt to save the updates to the database
+    try {
+        $product->save();
+        \Log::info('Product saved successfully', ['id' => $product->ProductID]);
+    } catch (\Exception $e) {
+        \Log::error('Failed to save product', [
+            'error' => $e->getMessage(),
+            'data' => $data
+        ]);
+        return redirect()->back()->withErrors('Failed to save product.');
     }
+
+    // Redirect with a success message
+    return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
+}
+
 
     public function store(Request $request)
     {
         // dd($request->all());
-    $data = $request->validate([
+    // Define validation rules
+    $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'sku' => 'required|string|max:50',
@@ -152,7 +198,8 @@ class ProductController extends Controller
         'basePrice' => 'required|numeric',
         'vendorPrice' => 'required|numeric',
         'quantity' => 'required|integer',
-        'product_image' => 'nullable|image|max:2048', // 2MB Max
+        'image_path' => 'nullable|array',
+        'image_path.*' => 'image|max:2048', // Validates each file in the array
         'size' => 'nullable|string',
         'length' => 'nullable|string',
         'property_class' => 'nullable|string',
@@ -160,20 +207,62 @@ class ProductController extends Controller
         'material' => 'nullable|string',
         'ManufacturerID' => 'nullable|integer',
         'SubCategoryID' => 'nullable|integer',
-    ]);
-    
+    ];
 
-   // Create a new product instance and save it
-   $product = new Product($data);
-   if ($request->hasFile('product_image')) {
-       $product->product_image = $request->file('product_image')->store('products', 'public');
-   }
-    $product->save();
+    // Run validation
+    $validator = Validator::make($request->all(), $rules);
 
-    \Log::info('Database Query:', \DB::getQueryLog()); // Log the query log after the product is saved
-
-    return redirect()->route('admin.products')->with('success', 'Product added successfully!');
+    // Check for validation failure
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
     }
+
+    // Get validated data
+    $data = $validator->validated();
+    
+    \Log::debug('Received data:', $data);
+
+
+    // Create a new product instance and assign validated data
+    $product = new Product($data);
+
+    // Process the uploaded files
+    if ($request->hasFile('image_path')) {
+        $imagePaths = [];
+        foreach ($request->file('image_path') as $index => $file) {
+            // Store the image and collect their paths
+            $path = $file->store('products', 'public');
+            $imagePaths['image_' . ($index + 1)] = $path;
+
+            \Log::debug('Stored image path:', ['key' => 'image_' . ($index + 1), 'path' => $path]);
+        }
+
+        $product->image_paths = json_encode($imagePaths);
+        \Log::debug('Encoded Image Paths:', ['paths' => $product->image_paths]);
+
+        // Store image_1 as the main product image if it exists
+        if (isset($imagePaths['image_1'])) {
+            $product->product_image = $imagePaths['image_1'];  // Directly store the path without replacing characters
+            \Log::debug('Main Product Image Path:', ['product_image' => $product->product_image]);
+        }
+
+        \Log::debug('Encoded Image Paths:', ['paths' => $product->image_paths]);
+    }
+    // Attempt to save the product to the database
+    try {
+        $product->save();
+        \Log::info('Product saved successfully', ['id' => $product->ProductID]);
+    } catch (\Exception $e) {
+        \Log::error('Failed to save product', [
+            'error' => $e->getMessage(),
+            'data' => $data
+        ]);
+        return redirect()->back()->withErrors('Failed to save product.');
+    }
+
+    // Redirect with a success message
+    return redirect()->route('admin.products')->with('success', 'Product added successfully!');
+}
 
     public function destroy($id)
     {

@@ -135,6 +135,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::any('/products/{id}/update', [ProductController::class, 'update'])->name('admin.products.update');
     Route::any('/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.products.delete');
     Route::post('/products/store', [ProductController::class, 'store'])->name('admin.products.store');
+
     
     //categories
     Route::get('/categories', [CategoryController::class, 'admin_index'])->name('admin.categories');

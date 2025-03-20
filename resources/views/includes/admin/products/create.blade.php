@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+@include('partials.alert')
 <div class="container mt-4">
     <div class="sticky-toolbar">
         <button type="submit" form="product-form" class="btn btn-primary">Save</button>
@@ -30,10 +31,12 @@
                     <label for="vendorPrice">Vendor Price</label>
                     <input type="number" class="form-control" id="vendorPrice" name="vendorPrice" required>
                 </div>
+
                 <div class="form-group">
                     <label for="basePrice">Base Price</label>
                     <input type="number" class="form-control" id="basePrice" name="basePrice" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="quantity">Quantity</label>
                     <input type="number" class="form-control" id="quantity" name="quantity" required>
@@ -60,16 +63,16 @@
                 </div>
            
         </div>
-        <div class="col-md-4">
+            <div class="col-md-4">
         
-    <div class="form-group">
-        <label for="product_image">Product Image</label>
-        <input type="file" class="form-control-file" id="product_image" name="product_image" onchange="previewImage(event)" required>
-        <div id="image_preview_container" style="width: 100%; height: 300px; overflow: hidden;">
-            <img id="image_preview" src="#" alt="Image Preview" style="width: 100%; display: none;"/>
-        </div>
-    </div>
-    <button type="submit">Upload Image</button>
+            
+            <div class="form-group">
+                <label for="product_image">Product Images</label>
+                <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple required>
+                <div id="file-name-display" class="mt-2"></div> <!-- Container to display file names -->
+                <div id="image-preview-container" class="mt-2"></div>
+            </div>
+            
 
         
             <div class="form-group">
@@ -96,3 +99,4 @@
     </div>
 </div>
 @endsection
+

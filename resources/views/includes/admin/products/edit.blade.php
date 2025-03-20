@@ -61,12 +61,11 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="product_image">Product Image</label>
-                    <input type="file" class="form-control-file" id="product_image" name="product_image" onchange="previewImage(event)">
-                    <div id="image_preview_container" style="width: 100%; height: 300px; overflow: hidden;">
-                        <img id="image_preview" src="{{ asset('storage/' . $product->product_image) }}" alt="Product Image" style="width: 100%; display: block;">
-                    </div>
-                </div>
+                <label for="product_image">Product Images</label>
+                <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple required>
+                <div id="file-name-display" class="mt-2"></div> <!-- Container to display file names -->
+                <div id="image-preview-container" class="mt-2"></div>
+            </div>
                 <div class="form-group">
                     <label for="ManufacturerID">Manufacturer</label>
                     <select class="form-control" id="ManufacturerID" name="ManufacturerID">

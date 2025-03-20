@@ -7,33 +7,69 @@
 <div class="container">
     <div class="row product-detail-page" >
         <!-- First Column: Product Image -->
-        <div class="col-md-4" style="margin-top: 50px; ">
+        <!-- <div class="col-md-4" style="margin-top: 50px; ">
         <img src="{{ asset('storage/' . $product->product_image) }}" alt="Product_Image" class="product-img" 
             style="width: 100%; height: auto; position:contain;">
-        </div>
+        </div> -->
+
+        <!-- First Column: Product Image Carousel -->
+        <!-- Only show the carousel if there are image paths -->
+         <div class="col-md-4" style="margin-top: 50px; ">
+        @if(!empty($product->image_paths) && is_array($product->image_paths))
+            <div class="col-md-8 offset-md-2">
+                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <!-- Indicators/dots -->
+                    <ol class="carousel-indicators">
+                        @foreach($product->image_paths as $index => $imagePath)
+                            <li data-bs-target="#productCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></li>
+                        @endforeach
+                    </ol>
+
+                    <!-- The slideshow/images -->
+                    <div class="carousel-inner">
+                        @foreach($product->image_paths as $index => $imagePath)
+                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $imagePath) }}" class="d-block w-100" alt="Product Image {{ $index + 1 }}">
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Left and right controls/icons -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        @else
+            <p>No images available for this product.</p>
+        @endif
+</div>
+            
 
         <!-- Second Column: Product Details and Attributes -->
 <!-- Product Details -->
-        <div class="col-md-8 my-4">
-            <div class="product-details">
-                <h1>{{ $product->Name }}</h1>
-                <div class="details-block">
-                    <div><strong>Part No. (SKU):</strong> {{ $product->SKU }}</div>
-                    <div><strong>Description:</strong> {{ $product->Description }}</div>
-                    <div><strong>Standard:</strong> {{ $product->Standard }}</div>
-                    <div><strong>Manufacturer:</strong> {{ $product->manufacturer->Name ?? 'No Manufacturer' }}</div>
-                    <div class="catalog-item">This is a Catalog Item</div>
-                </div>
-                <div class="attributes-block">
-                    <h3>Product Attributes</h3>
-                    <div><strong>Size:</strong> {{ $product->Size }}</div>
-                    <div><strong>Length:</strong> {{ $product->Length }}</div>
-                    <div><strong>Material:</strong> {{ $product->Material }}</div>
-                    <div><strong>Type:</strong> {{ $product->Type }}</div>
-                    <div><strong>Color:</strong> {{ $product->Color }}</div>
-                    <div><strong>Property Class:</strong> {{ $product->Property_Class }}</div>
-                </div>
-            </div>
+        <div class="col-md-4 product-details">
+            <h2>{{ $product->Name }}</h2>
+            <ul class="list-unstyled" style="font-size:12px;">
+                <li><strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}</li>
+                <li><strong>Description:</strong> {{ $product->Description }}</li>
+                <li><strong>Standard:</strong> {{ $product->Standard }}</li>
+                <li><strong>Manufacturer:</strong> {{ $product->manufacturer->Name ?? 'No Manufacturer' }}</li>
+                <li><div class="catalog-item">This is a Catalog Item</div></li>
+                <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
+                <li><strong>Size:</strong> {{ $product->Size }}</li>
+                <li><strong>Length:</strong> {{ $product->Length }}</li>
+                <li><strong>Material:</strong> {{ $product->Material }}</li>
+                <li><strong>Type:</strong> {{ $product->Type }}</li>
+                <li><strong>Color:</strong> {{ $product->Color }}</li>
+                <li><strong>Property Class:</strong> {{ $product->Property_Class }}</li>
+            </ul>
+        </div>
       
         <!-- Third Column: Pricing and Supply Chain -->
         <div class="col-md-4" style="margin-top: 50px;">
