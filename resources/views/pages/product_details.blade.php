@@ -12,42 +12,37 @@
             style="width: 100%; height: auto; position:contain;">
         </div> -->
 
-        <!-- First Column: Product Image Carousel -->
-        <!-- Only show the carousel if there are image paths -->
-         <div class="col-md-4" style="margin-top: 50px; ">
-        @if(!empty($product->image_paths) && is_array($product->image_paths))
-            <div class="col-md-8 offset-md-2">
-                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <!-- Indicators/dots -->
-                    <ol class="carousel-indicators">
-                        @foreach($product->image_paths as $index => $imagePath)
-                            <li data-bs-target="#productCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></li>
-                        @endforeach
-                    </ol>
+        <!-- Product Image Carousel -->
+        <div class="col-md-4" style="margin-top: 50px;">
+            @if(!empty($product->image_paths) && is_array($product->image_paths))
+<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators/dots -->
+    <ol class="carousel-indicators">
+        @foreach($product->image_paths as $key => $imagePath)
+            <li data-bs-target="#productCarousel" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
+        @endforeach
+    </ol>
 
-                    <!-- The slideshow/images -->
-                    <div class="carousel-inner">
-                        @foreach($product->image_paths as $index => $imagePath)
-                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                <img src="{{ asset('storage/' . $imagePath) }}" class="d-block w-100" alt="Product Image {{ $index + 1 }}">
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Left and right controls/icons -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
+    <!-- The slideshow/images -->
+    <div class="carousel-inner">
+        @foreach($product->image_paths as $key => $imagePath)
+            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                <img src="{{ asset('storage/' . $imagePath) }}" class="d-block w-100" alt="Image">
             </div>
-        @else
-            <p>No images available for this product.</p>
-        @endif
+        @endforeach
+    </div>
+
+    <!-- Left and right controls/icons -->
+    <a class="carousel-control-prev" href="#productCarousel" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#productCarousel" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </a>
+</div>
+@endif
 </div>
             
 

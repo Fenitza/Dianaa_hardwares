@@ -31,7 +31,7 @@ class ManufacturerController extends Controller
 {
     $data = $request->validate([
         'name' => 'required|string|max:255',
-        'manufacturer_image' => 'nullable|image|max:2048', // Allow for image uploads up to 2MB
+        'manufacturer_image' => 'required|image|max:2048', // Allow for image uploads up to 2MB
     ]);
 
     $manufacturer = new Manufacturer();
@@ -51,7 +51,7 @@ public function update(Request $request, Manufacturer $manufacturer)
     // Validate the incoming request data
     $data = $request->validate([
         'name' => 'required|string|max:255',
-        'manufacturer_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Allowing for common image formats
+        'manufacturer_image' => 'required|image|max:2048',// Allowing for common image formats
     ]);
 
     // Check if a new image file was uploaded

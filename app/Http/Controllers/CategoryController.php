@@ -70,7 +70,7 @@ class CategoryController extends Controller
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
-        'category_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate image and set size limit
+        'category_image' => 'required|image|max:2048', // Validate image and set size limit
     ]);
 
     // Create a new category instance and assign validated data
@@ -105,7 +105,7 @@ class CategoryController extends Controller
     $data = $request->validate([
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
-        'category_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
+        'category_image' => 'required|image|max:2048', // 2MB Max
     ]);
 
     // Check if a new image file was uploaded

@@ -674,10 +674,39 @@ input[type="checkbox"] {
 }
 
 /* product details page */
-.product-detail-page img {
-    height: 300px;
-    width: fit-content;
+/* Custom Carousel Styling */
+.carousel-inner img {
+    height: 250px;
+    /* Adjust height as needed */
+    object-fit: contain;
+    /* Keeps the aspect ratio */
+    width: 100%;
+    /* Ensures the image is not wider than the carousel */
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #000;
+    /* Add background color for visibility */
+    border-radius: 50%;
+    /* Circle shape */
+    padding: 10px;
+    /* Padding around arrows */
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    background-color: #555;
+    /* Darker on hover for better interaction feedback */
+}
+
+.carousel-indicators li {
+    background-color: #000;
+    /* Makes the carousel indicators more prominent */
+}
+
+/* products details */
+
 
 .product-detail-page .quantity input {
     width: auto;

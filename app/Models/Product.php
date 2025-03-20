@@ -32,5 +32,9 @@ class Product extends Model
 public function items() {
     return $this->hasMany(OrderItem::class, 'product_id', 'ProductID');
 }
+public function getImagePathsAttribute($value)
+{
+    return json_decode($value, true);
+}
 
 }
