@@ -111,7 +111,7 @@
 
     .list-item a:hover, .list-item a:focus {
         background-color: #A5CD36;
-        color: #FFFFFF;
+        color: #2d2e6a;
         text-decoration: none;
     }
 </style>
