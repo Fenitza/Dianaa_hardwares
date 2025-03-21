@@ -1,19 +1,24 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\SubCategory;
+use App\Models\Manufacturer;
 
 class SearchController extends Controller
 {
     public function index(Request $request)
     {
         $query = $request->input('q');
-        
-        // Implement your search logic here
-        // For example, you might search your database for products
-        // $results = Product::where('name', 'like', '%'.$query.'%')->get();
+        $products = Product::with(['subcategory', 'manufacturer'])
+            ->where('name', 'LIKE', "%{$query}%")
+            ->get();
 
-        return view('search.results', ['query' => $query]); // Assume you have a view for results
+        $subcategories = SubCategory::where('name', 'LIKE', "%{$query}%")->get();
+
+        $manufacturers = Manufacturer::where('name', 'LIKE', "%{$query}%")->get();
+
+        return view('search.results', compact('products', 'subcategories', 'manufacturers'));
     }
 }

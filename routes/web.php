@@ -100,6 +100,8 @@ Route::middleware(['auth'])->group(function () {
         return view('layouts/user');  // Ensure 'user_dashboard.blade.php' exists in resources/views
     })->name('user.dashboard');
 
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
+
     // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
