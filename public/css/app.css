@@ -224,26 +224,37 @@ nav a:hover {
 }
 
 /* Company Details Section */
-.service-item {
-    width: 200px;  /* Adjust the width as necessary */
-    height: 150px; /* Adjust the height as necessary */
-    text-align: center;
-    padding: 20px 20px;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 10px; /* Adjust the 20px to increase or decrease spacing */
-    
+.company-details {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('images/industrial-background.jpg');
+    background-size: cover;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
 }
 
-.service-item i {
-    color: #2d2e6a; /* Bootstrap primary blue for example, adjust as needed */
-    margin-bottom: 10px;
+.company-details:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.company-title {
+    color: #2d2e6a;
+    /* Deep blue */
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+
+.company-title:hover {
+    color: #a5cd36;
+    /* Vibrant green */
+}
+
+.company-description {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.8;
+    text-align: justify;
 }
 
 
@@ -351,6 +362,163 @@ h3 {
         padding: 8px 16px; /* Smaller padding for smaller buttons */
         font-size: 14px; /* Smaller font size for better fit */
     }
+}
+
+/* Ensure that the container centers the content */
+.card-container {
+    width: 80%;
+    /* Control the width of the entire card container */
+    margin: 0 auto;
+    /* This will center the container */
+}
+
+/* Adjust the card size and the background image */
+.brand-card {
+    background-size: contain;
+    /* Adjust from 'cover' to 'contain' to ensure the entire image is visible */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #333c8b;
+    /* Ensures the image does not repeat */
+    height: 150px;
+    /* Adjust height accordingly */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    /* Ensure the card uses up all available width in the column */
+}
+
+/* Smaller hover effect */
+.brand-card:hover {
+    transform: scale(1.03);
+    /* Slightly reduce the scale effect for subtlety */
+    z-index: 10;
+}
+
+/* Full opacity overlay initially hidden, shown on hover */
+.brand-overlay {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    /* Keep initial transparent */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s ease-in-out, opacity 0.5s ease;
+    opacity: 0;
+}
+
+.brand-card:hover .brand-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    /* Darker for better readability */
+    opacity: 1;
+}
+
+/* Adjust text and button positioning */
+.brand-name {
+    font-size: 1em;
+    /* Adjust size for better fit */
+    font-weight: bold;
+    margin: 0;
+    padding: 10px 0;
+}
+
+.shop-now-btn {
+    background-color: #ffa500;
+    border: none;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.3s;
+    transform: translateY(10px);
+    /* Less movement for a subtler effect */
+    opacity: 0;
+}
+
+.brand-card:hover .shop-now-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* category section */
+.card-container {
+    width: 100%;
+    max-width: 1200px;
+    /* Limit the maximum width of the container */
+    margin: auto;
+    padding: 20px 0;
+}
+
+.card-category {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    height: 250px;
+    /* Adjusted for smaller cards */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    /* Subtle shadow for better visibility */
+}
+
+.card-category img {
+    transition: transform 0.3s ease;
+}
+
+.card-category:hover img {
+    transform: scale(1.1);
+    /* Zoom effect on the image */
+}
+
+.category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Dark overlay for better readability */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    padding: 10px;
+}
+
+.card-category:hover .category-overlay {
+    display: flex;
+    opacity: 1;
+    /* Show overlay on hover */
+}
+
+.subcategory-links {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.subcategory-links li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.subcategory-links li a:hover {
+    background-color: #ffa500;
+    /* Highlight links on hover */
 }
 
 /* Services Section */
