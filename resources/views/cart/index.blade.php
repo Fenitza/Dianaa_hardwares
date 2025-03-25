@@ -5,8 +5,8 @@
     <div class="cart-header" id="cart-header">
         <h2>Your Shopping Cart</h2>
     </div>
-    <?php if (Auth::user()->role === 'vendor'): ?>
-    <div class="catalog-item">Special discount for vendors! Just for you!</div>
+    <?php if (Auth::user() && Auth::user()->role === 'vendor'): ?>
+        <div class="catalog-item">Special discount for vendors! Just for you!</div>
     <?php endif; ?>
 
     <table class="cart-table" id="cart-table">

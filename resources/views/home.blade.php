@@ -37,12 +37,11 @@
     </div>
 </div>
 
-<!-- Spacer Block -->
-<div class="custom-spacer"></div>
+
 
 <!-- Featured Brands -->
-<div class="card-container my-4">
-    <h3 class="text-center mb-3" style="color: #2d2e6a; text-transform: uppercase; font-weight: bold;">FEATURED BRANDS</h3>
+<div id="featured-brands">
+    <h2 class="section-title">Featured Brands</h2>
     <div class="row justify-content-center">
         @foreach($manufacturers as $manufacturer)
         <div class="col-md-3 col-sm-6 text-center mb-4">
@@ -57,44 +56,37 @@
     </div>
 </div>
 
-<!-- Spacer Block -->
-<div class="custom-spacer"></div>
+
 
 <!-- Product Categories -->
-<div class="card-container my-3">
-    <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
+<div id="product-categories">
+    <h2 class="section-title">Product Categories</h2>
     <div class="row justify-content-center">
         @foreach ($categories as $category)
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">  <!-- Adjusted column sizes -->
-            <div class="card-category text-center" style="position: relative; overflow: hidden;">
-                <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid"
-                style="width: 100%; height: 150px; object-fit: contain;">  <!-- Adjusted image styling -->
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+            <div class="categ-card text-center">
+                <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid" style="height: 100px;">
                 <div class="card-body">
-                    <p class="card-text-category">{{ $category->Name }}</p>
+                    <p class="categ-card-title">{{ $category->Name }}</p>
                 </div>
-                <div class="category-overlay" style="display: none;"> <!-- Initial display none -->
+                <div class="category-overlay">
                     <ul class="subcategory-links">
-                        @foreach ($category->subcategories as $subcategory)
-                        <li><a href="{{ route('products', ['category' => $category->CategoryID, 'subcategory' => $subcategory->SubcategoryID]) }}" style="color: white; text-decoration: none;">{{ $subcategory->Name }}</a></li>
+                        @foreach ($category->subcategories->take(3) as $subcategory)
+                        <li><a href="{{ route('products', ['category' => $category->CategoryID, 'subcategory' => $subcategory->SubCategoryID]) }}">{{ $subcategory->Name }}</a></li>
                         @endforeach
-                        <li><a href="{{ route('products', ['category' => $category->CategoryID]) }}" style="color: white; text-decoration: none;">View All</a></li>  <!-- View all subcategories link -->
+                        <li><a href="{{ route('products', ['category' => $category->CategoryID]) }}" class="view-all-link">View All</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         @endforeach
     </div>
-    <div class="row">
-        <div class="col-12 text-center mt-4">
-            <a href="{{ route('products_main') }}" class="btn btn-primary" style="background-color: #a5cd36; color: #2d2e6a">Explore All Products</a>
-        </div>
-    </div>
 </div>
 
 
 <!-- Testimonials Section -->
 <div class="testimonials-container my-4">
-    <h3 class="text-center">What Our Clients Say</h3>
+    <h2 class="section-title ">What Our Clients say</h2>
     <div class="row">
         <div class="col-md-4">
             <blockquote class="blockquote">
@@ -119,7 +111,7 @@
 
 <!-- Latest News Section -->
 <div class="news-container my-4">
-    <h3 class="text-center">Latest News</h3>
+    <h2 class="section-title ">Latest News</h2>
     <div class="row">
         <div class="col-md-6">
             <div class="news-item">

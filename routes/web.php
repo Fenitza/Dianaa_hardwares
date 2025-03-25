@@ -38,10 +38,7 @@ Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/account', [UserController::class, 'account'])->name('account');
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-Route::patch('/cart/update/{itemId}', [CartController::class, 'updateQuantity'])->name('cart.update');
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
+
 
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
@@ -119,6 +116,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/cart/update/{itemId}', [CartController::class, 'updateItem'])->name('cart.update');
     Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+
 });
 
 

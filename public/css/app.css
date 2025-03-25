@@ -364,8 +364,52 @@ h3 {
     }
 }
 
+/* General Section Title Styling */
+.section-title {
+    font-size: 1em;
+    /* Adjust the font size as needed */
+    color: #2d2e6a;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 20px auto;
+    /* Centered margin for vertical spacing and auto for horizontal centering */
+    padding: 10px 0;
+    /* Padding for optical balance */
+    position: relative;
+    /* Needed for pseudo-elements */
+    display: inline-block;
+    /* Changes display to allow the use of text-width */
+    width: auto;
+    /* Auto width to shrink-wrap the content */
+}
+
+/* Using margin instead of absolute positioning */
+.section-title::before,
+.section-title::after {
+    content: "";
+    display: inline-block;
+    width: 50px;
+    /* Fixed width for the dividers */
+    height: 1px;
+    /* Thin line divider */
+    background-color: #ccc;
+    /* Light grey divider color */
+    vertical-align: middle;
+    /* Aligns with the middle of the text */
+    margin: 0 20px;
+    /* Space between the text and the dividers */
+}
+
+/* Ensuring that both titles have the same class applied */
+#featured-brands h2,
+#product-categories h2 {
+    class: "section-title";
+    /* This line is pseudo-code to illustrate the need for uniform class application */
+}
+
 /* Ensure that the container centers the content */
-.card-container {
+#featured-brands {
+    text-align: center;
     width: 80%;
     /* Control the width of the entire card container */
     margin: 0 auto;
@@ -374,6 +418,7 @@ h3 {
 
 /* Adjust the card size and the background image */
 .brand-card {
+    
     background-size: contain;
     /* Adjust from 'cover' to 'contain' to ensure the entire image is visible */
     background-position: center;
@@ -449,70 +494,92 @@ h3 {
     opacity: 1;
 }
 
-/* category section */
-.card-container {
+/* Category Card Adjustments */
+#product-categories {
+    text-align: center;
     width: 100%;
-    max-width: 1200px;
-    /* Limit the maximum width of the container */
-    margin: auto;
-    padding: 20px 0;
+    margin: 0 auto;
 }
 
-.card-category {
+.categ-card {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    height: 250px;
-    /* Adjusted for smaller cards */
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    /* Subtle shadow for better visibility */
+    border-radius: 10px;
+    /* Rounded corners for the card */
+    border: 1px solid #ccc;
+    /* Optional: adds a light border around the card */
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Optional: adds shadow for better depth */
 }
 
-.card-category img {
-    transition: transform 0.3s ease;
+.categ-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    /* Larger shadow on hover for a "lifting" effect */
 }
 
-.card-category:hover img {
-    transform: scale(1.1);
-    /* Zoom effect on the image */
+.product-img {
+    width: 100%;
+    /* Ensures the image covers the full width of the card */
+    /* height: auto; */
+    /* Adjusts height automatically to maintain the aspect ratio */
+    object-fit: contain;
+    /* Ensures the image covers the area, cropping if necessary */
+    border-radius: 10px 10px 0 0;
+    /* Rounded corners at the top of the image */
+}
+
+.card-body {
+    padding: 10px;
+    /* Reduced padding */
+}
+
+.categ-card-title {
+    font-size: 0.9em;
+    /* Reduced font size */
+    font-weight: bold;
+    color: #2d2e6a;
 }
 
 .category-overlay {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    /* Dark overlay for better readability */
+    background-color: rgba(0, 0, 0, 0.75);
     color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    z-index: 10;
     padding: 10px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
 }
 
-.card-category:hover .category-overlay {
+.categ-card:hover .category-overlay {
     display: flex;
-    opacity: 1;
-    /* Show overlay on hover */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .subcategory-links {
     list-style: none;
     padding: 0;
     text-align: center;
+    margin: 0;
 }
 
 .subcategory-links li a {
     color: white;
     text-decoration: none;
-    padding: 5px;
+    padding: 3px;
+    /* Reduced padding */
     display: block;
+    font-size: 0.8em;
+    /* Reduced font size */
     transition: background-color 0.3s;
 }
 
@@ -521,6 +588,105 @@ h3 {
     /* Highlight links on hover */
 }
 
+.view-all-link {
+    font-weight: bold;
+    color: #a5cd36;
+    margin-top: 5px;
+    /* Adjusted for better spacing */
+}
+
+/* General Styling for the Testimonials Section */
+.testimonials-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    /* Center the container */
+    padding: 20px;
+}
+
+.testimonials-container h3 {
+    font-size: 1.8em;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #2d2e6a;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.blockquote {
+    background: #fff;
+    /* Light background for contrast */
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    /* Rounded corners for modern look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+    transition: all 0.3s ease-in-out;
+}
+
+.blockquote:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* Increased shadow on hover for dynamic effect */
+}
+
+.blockquote p {
+    font-size: 16px;
+    /* Smaller font size for elegance */
+    line-height: 1.6;
+    color: #555;
+}
+
+.blockquote-footer {
+    text-align: right;
+    color: #666;
+    margin-top: 10px;
+    font-style: normal;
+}
+
+/* news section */
+.news-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.news-container h3 {
+    font-size: 1.8em;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #2d2e6a;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.news-item {
+    background: #fff;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+    /* Slight lift effect on hover */
+    border-color: #2d2e6a;
+}
+
+.news-item h4 {
+    color: #333;
+    font-size: 20px;
+}
+
+.news-item p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+}
 /* Services Section */
 .product-service-offers {
     display: flex;
