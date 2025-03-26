@@ -95,7 +95,11 @@
                     </button>
                     <ul class="subcategory-list" id="subcat-{{ $category->CategoryID }}" style="display: none;">
                         @foreach ($category->subcategories as $subcategory)
-                            <li class="subcategory-item"><a href="javascript:void(0);" onclick="loadProducts({{ $subcategory->SubCategoryID }})">{{ $subcategory->Name }}</a></li>
+                            <li class="subcategory-item">
+                                <a href="javascript:void(0);" onclick="loadProducts({{ $subcategory->SubCategoryID }})">
+                                    {{ $subcategory->Name }}
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -108,6 +112,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- Testimonials Section -->
@@ -182,16 +187,24 @@ function loadProducts(subcategoryId) {
         if (data.length > 0) {
             data.forEach(product => {
                 container.innerHTML += `
+                <a href="/subcategories/product/${product.ProductID}" class="card-link">
                     <div class="card mb-3">
                         <img src="/storage/${product.product_image}" class="card-img-top" alt="${product.name}">
                         <div class="card-body">
                             <h6 class="card-title">${product.Name}</h6>
-                            <p class="card-text"><small class="text-muted">$${product.SalePrice}</small></p>
-                            
+                            <p class="card-text"><small class="text-muted">₹${product.SalePrice}</small></p>
                         </div>
                     </div>
+                </a>
                 `;
+                
             });
+            // Add the View All button at the bottom
+                container.innerHTML += `
+                    <div class="text-center justify-content-center mt-4">
+                        <a href="/subcategories/${subcategoryId}" class="btn btn-primary">View All</a>
+                    </div>
+                `;
         } else {
             container.innerHTML = '<p>No products found in this category.</p>';
         }
@@ -200,6 +213,33 @@ function loadProducts(subcategoryId) {
         console.error('Error loading products:', error);
         container.innerHTML = '<p>Error loading products. Please try again later.</p>';
     });
+    
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOMContentLoaded event triggered");
+
+    // This function will attempt to load the first subcategory after ensuring the categories are fully loaded
+    function loadFirstSubcategory() {
+        console.log("Attempting to load the first subcategory");
+        
+        // Try to access the first subcategory link
+        const firstSubcategoryLink = document.querySelector('.category-sidebar .category-item .subcategory-list .subcategory-item a');
+        
+        if (firstSubcategoryLink) {
+            console.log("Found first subcategory link:", firstSubcategoryLink.textContent);
+            firstSubcategoryLink.click(); // Simulate a click to load the first category's products
+        } else {
+            console.log("First subcategory link not found, retrying...");
+            setTimeout(loadFirstSubcategory, 500); // Retry after 500ms if the subcategory link isn't found
+        }
+    }
+
+    // Start the attempt to load the first subcategory
+    setTimeout(loadFirstSubcategory, 1000); // Initial delay to allow full page setup
+});
+
+
+
 </script>
 

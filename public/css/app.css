@@ -605,9 +605,20 @@ h3 {
 
 /* Sidebar for categories */
 .category-sidebar {
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-right: 1px solid #ccc;
+    border: 2px solid transparent;
+        /* Prepares a border for active/hover states */
+        border-radius: 10px;
+        /* Rounded corners for tabs */
+        padding: 10px 20px;
+        /* Padding inside each tab */
+        transition: all 0.3s ease;
+        /* Smooth transition for background and border changes */
+        background-color: #d2dff0 !important;
+        /* Active and hover background */
+        color: #2d2e6a !important;
+        /* White text for active and hover states */
+        border-color: #2d2e6a !important;
+        /* Border color to match background */
 }
 
 .category-item {
@@ -620,8 +631,8 @@ h3 {
     width: 100%;
     text-align: left;
     padding: 10px;
-    font-size: 18px;
-    color: #007bff;
+    font-size: 15px;
+    color: #2d2e6a;
     font-weight: bold;
     cursor: pointer;
     /* Indicates that the element is clickable */
@@ -636,14 +647,14 @@ h3 {
 .subcategory-item a {
     display: block;
     padding: 5px 10px;
-    color: #666;
+    color: #414141;
     font-size: 14px;
     text-decoration: none;
     /* Removes underline from links */
 }
 
-.subcategory-item a:hover {
-    background-color: #e2e6ea;
+.subcategory-item a:hover, .subcategory-item a:active {
+    background-color: #f2f5f8;
     border-radius: 5px;
     text-decoration: none;
     /* Ensures no underline on hover */
@@ -656,8 +667,18 @@ h3 {
     /* 3 columns for larger screens */
     grid-gap: 20px;
     /* Sufficient space between cards */
-    padding: 20px;
-    /* Padding around the grid container */
+    border: 2px solid transparent;
+    /* Prepares a border for active/hover states */
+    border-radius: 10px;
+    /* Rounded corners for tabs */
+    padding: 10px 20px;
+    /* Padding inside each tab */
+    transition: all 0.3s ease;
+    /* Smooth transition for background and border changes */
+    background-color: #effad1 !important;
+    /* Active and hover background */
+    border-color: #2d2e6a !important;
+    /* Border color to match background */
 }
 
 #products-display .card {
@@ -671,13 +692,14 @@ h3 {
     /* Background color for cards */
     border: 1px solid #ddd;
     /* Adds a subtle border */
-    height: 200px;
+    height: 180px;
     /* Fixed height to ensure uniformity */
+    
 }
 
 #products-display .card-img-top {
     width: 100%;
-    height: 120px;
+    height: 100px;
     /* Adjusted height for better proportionality */
     object-fit: contain;
     /* Changes from contain to cover for better fill */
@@ -688,7 +710,7 @@ h3 {
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    
     /* Distributes space evenly within the card body */
 }
 
@@ -817,6 +839,7 @@ h3 {
     line-height: 1.6;
     color: #666;
 }
+
 /* Services Section */
 .product-service-offers {
     display: flex;

@@ -69,6 +69,8 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+//Search
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 // Custom registration routes
 Route::get('register', [RegisterController::class,'showRegistrationForm'])->name('register');
@@ -99,7 +101,7 @@ Route::middleware(['auth'])->group(function () {
         return view('layouts/user');  // Ensure 'user_dashboard.blade.php' exists in resources/views
     })->name('user.dashboard');
 
-    Route::get('/search', [SearchController::class, 'index'])->name('search');
+    
 
     // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
