@@ -11,7 +11,7 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="form-group">
+                        <div class="form-group"> 
                             @if (session('success'))
                                 <div class="alert alert-success">
                                     {{ session('success') }}

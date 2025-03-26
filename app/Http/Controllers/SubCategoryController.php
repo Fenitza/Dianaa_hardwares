@@ -52,6 +52,11 @@ class SubCategoryController extends Controller
         $products = $subcategory->products;
         return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
     }
+    
+    public function getProducts($id) {
+    $products = Subcategory::find($id)->products()->take(6)->get(); // Ensure to adjust according to your needs
+    return response()->json($products);
+}
 
     public function filter(Request $request, $subCategoryId) {
         $query = SubCategory::with(['products' => function($q) use ($request) {

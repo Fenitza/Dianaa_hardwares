@@ -47,6 +47,15 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function showCategories() {
+    $categories = Category::with(['subcategories' => function($query) {
+        $query->with(['products' => function($query) {
+            $query->take(6); // Adjust the number as needed
+        }]);
+    }])->get();
+    return view('home', compact('categories'));
+}
+
     public function admin_index(Request $request)
     {
         $search = $request->input('search', '');

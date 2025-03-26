@@ -83,6 +83,32 @@
     </div>
 </div>
 
+<!-- Product table container -->
+<div class="product-table-container mt-4">
+    <div class="row">
+        <!-- First column for categories and subcategories -->
+        <div class="col-md-3 category-sidebar">
+            @foreach ($categories as $category)
+                <div class="category-item">
+                    <button class="category-toggle" onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
+                        {{ $category->Name }}
+                    </button>
+                    <ul class="subcategory-list" id="subcat-{{ $category->CategoryID }}" style="display: none;">
+                        @foreach ($category->subcategories as $subcategory)
+                            <li class="subcategory-item"><a href="javascript:void(0);" onclick="loadProducts({{ $subcategory->SubCategoryID }})">{{ $subcategory->Name }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endforeach
+        </div>
+        
+        <!-- Second column for displaying products -->
+        <div class="col-md-9" id="products-display">
+            <!-- Products will be dynamically loaded here via JavaScript -->
+        </div>
+    </div>
+</div>
+
 
 <!-- Testimonials Section -->
 <div class="testimonials-container my-4">
@@ -128,12 +154,11 @@
     </div>
 </div>
 
-<!-- Spacer Block -->
-<div class="custom-spacer"></div>
+
 
 @endsection
 
-@push('scripts')
+
 <script>
 $(document).ready(function () {
     $('#heroCarousel').carousel({
@@ -141,5 +166,40 @@ $(document).ready(function () {
         wrap: true
     });
 });
+
+function toggleSubcategories(subcatId) {
+    var element = document.getElementById(subcatId);
+    element.style.display = (element.style.display === 'none') ? 'block' : 'none';
+}
+
+// Function to load products for a specific subcategory
+function loadProducts(subcategoryId) {
+    fetch(`/subcategories/${subcategoryId}/products`)
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('products-display');
+        container.innerHTML = ''; // Clear existing content
+        if (data.length > 0) {
+            data.forEach(product => {
+                container.innerHTML += `
+                    <div class="card mb-3">
+                        <img src="/storage/${product.product_image}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body">
+                            <h6 class="card-title">${product.Name}</h6>
+                            <p class="card-text"><small class="text-muted">$${product.SalePrice}</small></p>
+                            
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            container.innerHTML = '<p>No products found in this category.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading products:', error);
+        container.innerHTML = '<p>Error loading products. Please try again later.</p>';
+    });
+}
 </script>
-@endpush
+

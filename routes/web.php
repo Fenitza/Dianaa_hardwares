@@ -58,6 +58,8 @@ Route::post('/api/apply-filters/{subCategoryId}', [ProductController::class, 'ap
 //Home Products
 Route::get('/', [HomeController::class , 'index'])->name('home');
 Route::get('/products/{category}', [ProductController::class, 'showByCategory'])->name('products.category');
+Route::get('/products/{category}', [ProductController::class, 'showCategories'])->name('products.category');
+Route::get('/subcategories/{id}/products', [SubcategoryController::class, 'getProducts']);
 
 //Home brands
 Route::get('/categories/manufacturer/{manufacturer}', [ProductController::class,'showByManufacturer'])->name('categories.show');
