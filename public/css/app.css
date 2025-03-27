@@ -892,40 +892,62 @@ h3 {
     /* Enhanced shadow on hover for depth */
 }
 
-
-/* Products Screen tabs */
+/* products nav link */
 .products-container .nav-tabs {
-    border-bottom: none; /* Removes the default bottom border */
+    border-bottom: none;
+    /* Removes the default bottom border */
     display: flex;
-    justify-content: flex-start; /* Evenly space tabs */
-    background-color: #ffffff; /* Light background for the whole nav */
-    padding: 0.5rem 0; /* Padding around the tabs */
+    justify-content: flex-start;
+    /* Aligns tabs at the start */
+    background-color: #ffffff;
+    /* White background for the nav container */
+    padding: 0.5rem 1rem;
+    /* Adds padding around the tabs for better spacing */
     margin-top: 10px;
     margin-left: 50px;
+    /* Adjusts the left margin for alignment */
 }
 
 .products-container .nav-item {
-    margin: 0;
-    /* text-transform: uppercase; Capitalize letters as seen in the screenshot */
-    font-weight: bold; /* Make the font bold */
+    margin-right: 5px;
+    /* Adds spacing between tabs */
+    font-weight: bold;
+    /* Bold font for better readability */
 }
 
 .products-container .nav-link {
-    border: 2px solid transparent; /* Prepares a border for active/hover states */
-    border-radius: 10px; /* Rounded corners for tabs */
-    padding: 10px 20px; /* Padding inside each tab */
-    transition: all 0.3s ease; /* Smooth transition for background and border changes */
-    background-color: #A5CD36 !important;/* Active and hover background */
-    color: #2d2e6a !important; /* White text for active and hover states */
-    border-color: #2d2e6a !important; /* Border color to match background */
+    border: 2px solid transparent;
+    /* Sets up potential borders for hover/active states */
+    border-radius: 10px;
+    /* Rounded corners for a softer look */
+    padding: 10px 20px;
+    /* Adequate padding within each tab */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Smooth transition for colors */
+
+    color: #2d2e6a;
+    /* Default state text color, dark grey */
+    text-transform: uppercase;
+    /* Makes all letters uppercase */
+    background-color: #A5CD36 !important;
 }
 
-.products-container .nav-link.active, .products-container .nav-link:hover {
-    background-color: #2d2e6a !important;/* Active and hover background */
-    color: #ffff !important; /* White text for active and hover states */
-    border-color: #2d2e6a !important; /* Border color to match background */
+.products-container .nav-link:hover,
+.products-container .nav-link .active {
+    background-color: #2d2e6a !important;
+    /* Active state background color, a strong blue */
+    color: #ffffff !important;
+    /* White text on hover/active */
+    border-color: #2d2e6a;
+    /* Border color changes on hover/active to match */
 }
 
+.tab-content{
+    padding: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+
+}
 /* Subcategory Product detailed views */
 .product-grid {
     display: grid;

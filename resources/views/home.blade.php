@@ -72,7 +72,7 @@
                 <div class="category-overlay">
                     <ul class="subcategory-links">
                         @foreach ($category->subcategories->take(3) as $subcategory)
-                        <li><a href="{{ route('products', ['category' => $category->CategoryID, 'subcategory' => $subcategory->SubCategoryID]) }}">{{ $subcategory->Name }}</a></li>
+                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">{{ $subcategory->Name }}</a></li>
                         @endforeach
                         <li><a href="{{ route('products', ['category' => $category->CategoryID]) }}" class="view-all-link">View All</a></li>
                     </ul>

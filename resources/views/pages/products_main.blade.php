@@ -1,24 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="custom-spacer"></div>
+
+ <!-- Spacer Block -->
+<div class="custom-spacer" style="height: 20px;"></div>
 
 <!-- Product Categories -->
-<div class="card-container my-4">
-    <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
-    <div class="row justify-content-center"> <!-- Ensure center alignment -->
+<div id="product-categories">
+    <h2 class="section-title">Product Categories</h2>
+    <div class="row justify-content-center">
         @foreach ($categories as $category)
-        <div class="col-9 col-sm-5 col-md-4 col-lg-3 mb-4"> <!-- Adjusted for larger cards -->
-            <!-- The <a> tag starts here, wrapping the whole card -->
-            <a href="{{ route('products', ['category' => $category->CategoryID, 'manufacturer' => request()->manufacturer]) }}">
-                <div class="card-category text-center">
-                    <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid"
-                         style="width: auto; height: 150px; margin: 0 auto 20px; object-fit: contain;"> <!-- Increased height -->
-                    <div class="card-body">
-                        <p class="card-text-category">{{ $category->Name }}</p>
-                    </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+            <div class="categ-card text-center">
+                <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid" style="height: 100px;">
+                <div class="card-body">
+                    <p class="categ-card-title">{{ $category->Name }}</p>
                 </div>
-            </a> <!-- The <a> tag ends here -->
+                <div class="category-overlay">
+                    <ul class="subcategory-links">
+                        @foreach ($category->subcategories->take(3) as $subcategory)
+                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">{{ $subcategory->Name }}</a></li>
+                        @endforeach
+                        <li><a href="{{ route('products', ['category' => $category->CategoryID]) }}" class="view-all-link">View All</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
         @endforeach
     </div>

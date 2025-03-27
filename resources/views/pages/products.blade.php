@@ -10,33 +10,32 @@
         </li>
         @endforeach
     </ul>
-    <!-- Spacer Block -->
-    <div class="custom-spacer" style="height: 20px;"></div>
+ 
 
     <!-- Product Categories -->
-    <div class="container my-4">
-        <h3 class="text-center mb-3" style="color: #2d2e6a">PRODUCT CATEGORIES</h3>
-        <div class="tab-content" id="categoryContent">
-            @foreach($categories as $index => $category)
-            <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="category{{ $category->CategoryID }}" role="tabpanel" aria-labelledby="category-tab-{{ $category->CategoryID }}">
-                <div class="row justify-content-center">
-                    @foreach($category->subcategories as $subcategory)
-                    <div class="col-9 col-sm-6 col-md-4 col-lg-3 mb-4">
-                        <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'manufacturer' => request()->manufacturer]) }}">
-                            <div class="card-category text-center">
-                                <img src="{{ asset('storage/' . $subcategory->Image) }}" alt="{{ $subcategory->Name }}" class="product-img img-fluid"
-                                style="width: auto; height: 150px; margin: 0 auto 20px; object-fit: contain;">
+<div id="product-categories">
+    
+    <div class="tab-content" id="categoryContent">
+        @foreach($categories as $index => $category)
+        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="category{{ $category->CategoryID }}" role="tabpanel" aria-labelledby="category-tab-{{ $category->CategoryID }}">
+            <div class="row justify-content-center">
+                @foreach($category->subcategories as $subcategory)
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+                    <div class="categ-card text-center">
+                        <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'manufacturer' => request()->manufacturer]) }}" class="card-link-category">
+                            <div class="categ-card text-center">
+                                <img src="{{ asset('storage/' . $subcategory->Image) }}" alt="{{ $subcategory->Name }}" class="product-img img-fluid" style="height: 100px;">
                                 <div class="card-body">
-                                    <p class="card-text-category">{{ $subcategory->Name }}</p>
+                                    <p class="categ-card-title">{{ $subcategory->Name }}</p>
                                 </div>
                             </div>
                         </a>
                     </div>
-                    @endforeach
                 </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
+        @endforeach
     </div>
 </div>
 
