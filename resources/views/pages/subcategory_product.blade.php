@@ -1,23 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-4" style="max-width: 1300px;">
+<div class="container my-4" style="max-width: 1400px;">
     <div class="row">
         <!-- Filter Column -->
-        <div class="col-md-3">
+        <div class="col-md-3" id="filter-sidebar">
             <div class="row">
                 <!-- First column of filters -->
                 <form id="filter-form">
                 <div class="filter-section">
-                    <h5>Filters</h5>
-                    <div class="filter-category">
-                        <button type="button" class="collapsible">Available Only</button>
-                        <div class="content">
-                            <input type="checkbox" id="availability" name="availability">
-                            <label for="availability">Show Available Only</label>
-                        </div>
-                    </div>
-
+                    <h6>Filters</h6>
                     <div class="filter-category">
                         <button type="button" class="collapsible">Brand / Manufacturer</button>
                         <div class="content" id="brand-container"></div>
@@ -68,6 +60,22 @@
                     <strong>{{ $subcategory->Name }}</strong><br>
                     {{ $subcategory->Description }}
                 </div>
+
+                <!-- Product Grid -->
+                <div class="row align-items-center" style ="font=size:12px;">
+                <div class="col-md-12 text-md-right d-flex align-items-center justify-content-between">
+                    <!-- Items and Per Page Selection -->
+                    <div>
+                        <span>({{ $products->total() }} Items)</span>
+                        <select class="custom-select d-inline w-auto" id="perPage" onchange="changePerPage()">
+                            <option value="1" {{ request()->query('perPage') == '1' ? 'selected' : '' }}>1 Per Page</option>
+                            <option value="2" {{ request()->query('perPage') == '2' ? 'selected' : '' }}>2 Per Page</option>
+                            <option value="3" {{ request()->query('perPage') == '3' ? 'selected' : '' }}>3 Per Page</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
                 <div class="col-md-12 text-md-right d-flex align-items-center justify-content-end">
                     Sort by:
                     <select class="custom-select d-inline w-auto" id="sortProducts" onchange="updateSortAndView(this.value)">
@@ -83,6 +91,8 @@
                 </div>
 
             <hr>
+            <!-- Spacer Block -->
+            <div class="custom-spacer" style="height: 10px;"></div>
             <!-- Conditionally render the product layout -->
             @if ($viewType == 'grid')
                 @include('partials.product_grid', ['products' => $products])
@@ -91,14 +101,21 @@
             @elseif ($viewType == 'catalog')
                 @include('partials.product_catalog', ['products' => $products])
             @endif
+            <!-- Spacer Block -->
+            <div class="custom-spacer" style="height: 10px;"></div>
+             <div class="col-md-12 text-md-right d-flex align-items-center justify-content-center">
+                {{ $products->links('pagination.custom') }}
+            </div>
         </div>
     </div>
-</div>
-</div>
+    </div>
+    </div>
+
+    
 
 
- 
-@include('partials.product_detail_modal') <!-- Include modal as a partial -->
+
+
 
 <!-- Sort Script -->
 <script>
@@ -119,15 +136,6 @@ function updateView(type, value) {
     let params = new URLSearchParams(window.location.search);
     params.set(type, value);
     window.location.href = window.location.pathname + '?' + params.toString();
-}
-</script>
-
-<!-- catalog popup -->
-<script>
-function showProductDetails(productId) {
-    // AJAX call to fetch product details and populate the modal
-    // Then show the modal
-    $('#productDetailModal').modal('show');
 }
 </script>
 
@@ -188,7 +196,7 @@ function submitFilters() {
     for (let entry of formData.entries()) {
         console.log(entry[0], entry[1]); // Log each key and value
     }
-    fetch('/api/apply-filters', {
+    fetch('/api/applyFilters/{$subcategory->SubCategoryID}', {
         method: 'POST',
         body: formData,
         headers: {

@@ -14,10 +14,7 @@
 
 
     @yield('content')
-<!-- Spacer Block -->
-<div class="custom-spacer"></div>
-<!-- Spacer Block -->
-<div class="custom-spacer"></div>
+
 <!-- Spacer Block -->
 <div class="custom-spacer"></div>
      <!-- Services Section -->

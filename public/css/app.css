@@ -1037,13 +1037,23 @@ h3 {
     padding:5px 20px;
     border-radius :2px;
 }
-/* collapsible filter */
+
 /* Base styles for the filter sidebar */
-/* Base styles for the filter sidebar */
+#filter-sidebar {
+    position: sticky;
+    top: 20px;
+    /* Adjust this value based on your header's height or desired distance from the top */
+    height: calc(100vh - 20px);
+    /* Adjusts the height to take into account the top value, ensures it doesn't overflow the viewport */
+   
+    overflow-y: auto;
+    /* Allows scrolling within the sidebar if content is taller than the viewport */
+}
+
 .filter-section {
     background-color: #f8f9fa;
     /* Light grey background for the filter area */
-    padding: 20px;
+    padding: 10px;
     border-right: 1px solid #ddd;
     /* Subtle separation from the product display area */
 }
@@ -1052,7 +1062,7 @@ h3 {
     background-color: #ffffff;
     color: #333;
     cursor: pointer;
-    padding: 10px 15px;
+    padding: 10px 0px;
     /* Reduced padding for a more compact appearance */
     width: 100%;
     border: none;
@@ -1075,7 +1085,7 @@ h3 {
 }
 
 .content {
-    padding: 5px 15px;
+    padding: 5px 10px;
     /* Reduced padding inside collapsible content */
     display: none;
     overflow: hidden;
@@ -1085,6 +1095,7 @@ h3 {
 .content div {
     margin-bottom: 5px;
     /* Reduced vertical spacing between checkboxes */
+    font-size:medium;
 }
 
 /* Styling for checkboxes */
@@ -1099,12 +1110,13 @@ input[type="checkbox"] {
     background-color: #2d2e6a;
     /* Bootstrap primary color */
     color: white;
+    border-color: white;
     padding: 8px;
     /* Slightly reduced padding for the button */
-    border: none;
+    border: solid;
     cursor: pointer;
     border-radius: 5px;
-    margin-top: 20px;
+    margin-top: 0px;
     /* Space from the last filter */
 }
 
@@ -1124,7 +1136,8 @@ input[type="checkbox"] {
     cursor: pointer;
     border-radius: 5px;
     margin-top: 20px;
-    /* Space from the last filter */
+    width:fit-content;
+   
 }
 
 .filter-section #filter-apply:hover {
@@ -1156,8 +1169,13 @@ input[type="checkbox"] {
     color: red;
 }
 
+#sortProducts{
+    font-size: 14px;
+}
+
 .view-link {
-    color: #007bff; /* Bootstrap's default link color for consistency */
+    font-size: 14px;
+    color: #2d2e6a; /* Bootstrap's default link color for consistency */
     text-decoration: none; /* Removes underline by default */
     margin-left: 10px; /* Adds spacing between links */
     /* margin-right: 5px; Adjust spacing between links if necessary */

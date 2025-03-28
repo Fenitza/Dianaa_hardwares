@@ -4,80 +4,58 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
+use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
 class SubCategoryController extends Controller
 {
     public function show(Request $request, $subCategoryId) {
-        // Validate sort and view inputs
-        $sortOrder = $request->query('sort', 'best_match');
-        $validSortOptions = ['best_match', 'price_low_high', 'price_high_low'];
-        if (!in_array($sortOrder, $validSortOptions)) {
-            $sortOrder = 'best_match'; // Default if invalid sort order provided
-        }
-    
-        $viewType = $request->query('view', 'grid');
-        $validViewTypes = ['grid', 'list', 'catalog'];
-        if (!in_array($viewType, $validViewTypes)) {
-            $viewType = 'grid'; // Default if invalid view type provided
-        }
-    
-        $subcategory = SubCategory::with(['products' => function($query) use ($request, $sortOrder) {
-            // Apply manufacturer ID filter if provided
-            if ($request->filled('manufacturer')) {
-                $manufacturerIds = is_array($request->manufacturer) ? $request->manufacturer : [$request->manufacturer];
-                $query->whereIn('ManufacturerID', $manufacturerIds);
-            }
-    
-            // Apply other filters based on request inputs, like material, etc.
-            if ($request->filled('material')) {
-                $query->whereIn('material', (array) $request->material);
-            }
-    
-            // Apply sorting
-            switch ($sortOrder) {
-                case 'price_low_high':
-                    $query->orderBy('SalePrice', 'asc');
-                    break;
-                case 'price_high_low':
-                    $query->orderBy('SalePrice', 'desc');
-                    break;
-                default:
-                    $query->orderBy('Name', 'asc'); // Treats 'best_match' as a default case
-                    break;
-            }
-        }])->findOrFail($subCategoryId);
-        
-        $products = $subcategory->products;
-        return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
+    // Validate sort and view inputs
+    $sortOrder = $request->query('sort', 'best_match');
+    $validSortOptions = ['best_match', 'price_low_high', 'price_high_low'];
+    if (!in_array($sortOrder, $validSortOptions)) {
+        $sortOrder = 'best_match'; // Default if invalid sort order provided
     }
+
+    $viewType = $request->query('view', 'grid');
+    $validViewTypes = ['grid', 'list', 'catalog'];
+    if (!in_array($viewType, $validViewTypes)) {
+        $viewType = 'grid'; // Default if invalid view type provided
+    }
+
+    $perPage = $request->query('perPage', 1); // Set default per page or get from request
+
+    $subcategory = SubCategory::findOrFail($subCategoryId);
+    $products = $subcategory->products()->with('manufacturer')->when($request->filled('manufacturer'), function ($query) use ($request) {
+        $manufacturerIds = is_array($request->manufacturer) ? $request->manufacturer : [$request->manufacturer];
+        $query->whereIn('ManufacturerID', $manufacturerIds);
+    })->when($request->filled('material'), function ($query) use ($request) {
+        $query->whereIn('material', (array) $request->material);
+    })->when($sortOrder, function ($query) use ($sortOrder) {
+        switch ($sortOrder) {
+            case 'price_low_high':
+                $query->orderBy('SalePrice', 'asc');
+                break;
+            case 'price_high_low':
+                $query->orderBy('SalePrice', 'desc');
+                break;
+            default:
+                $query->orderBy('Name', 'asc'); // Treats 'best_match' as a default case
+                break;
+        }
+    })->paginate($perPage);
+
+    return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
+}
+
     
     public function getProducts($id) {
     $products = Subcategory::find($id)->products()->take(6)->get(); // Ensure to adjust according to your needs
     return response()->json($products);
 }
 
-    public function filter(Request $request, $subCategoryId) {
-        $query = SubCategory::with(['products' => function($q) use ($request) {
-            if ($request->filled('availability')) {
-                // Add availability filter logic
-            }
-            if ($request->filled('manufacturer')) {
-                $q->whereIn('manufacturer', $request->manufacturer);
-            }
-            if ($request->filled('material')) {
-                $q->whereIn('material', $request->material);
-            }
-        }])->findOrFail($subCategoryId);
     
-        $products = $query->products;
-    
-        return response()->json([
-            'html' => view('partials.product_grid', compact('products'))->render()
-        ]);
-    }
-
     public function index(Request $request)
     {
         $search = $request->input('search', '');

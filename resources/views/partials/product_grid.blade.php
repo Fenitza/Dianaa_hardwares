@@ -1,8 +1,8 @@
-<!-- Spacer Block -->
-<div class="custom-spacer" style="height: 30px;"></div>
 
-<!-- Product Grid -->
-<div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+
+<div class="col-md-12">
+            
+    <div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
     @foreach ($products as $product)
     <div class="product">
         <div class="row">
@@ -32,14 +32,15 @@
     </div>
     @endforeach
 </div>
+</div>
 
-<!-- Spacer Block -->
-<div class="custom-spacer" style="height: 50px;"></div>
 
-<!-- <script>
-    document.querySelectorAll('.product').forEach(item => {
-    item.addEventListener('click', function() {
-        window.location.href = "{{ url('subcategories/products') }}/" + this.getAttribute('data-product-id');
-    });
+
+<script>
+    document.getElementById('perPage').addEventListener('change', function() {
+    let perPage = this.value;
+    let currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('perPage', perPage);
+    window.location.href = currentUrl.href;
 });
-</script> -->
+</script>
