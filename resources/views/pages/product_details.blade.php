@@ -4,7 +4,7 @@
 <!-- Spacer Block -->
 <div class="custom-spacer"></div>
 
-<div class="container">
+<div class="product-detail-container">
     <div class="row product-detail-page" >
         <!-- First Column: Product Image -->
         <!-- <div class="col-md-4" style="margin-top: 50px; ">
@@ -49,13 +49,31 @@
         <!-- Second Column: Product Details and Attributes -->
 <!-- Product Details -->
         <div class="col-md-4 product-details">
-            <h2>{{ $product->Name }}</h2>
-            <ul class="list-unstyled" style="font-size:12px;">
-                <li><strong>Dianaa Fasteners Part No. (SKU):</strong> {{ $product->SKU }}</li>
-                <li><strong>Description:</strong> {{ $product->Description }}</li>
-                <li><strong>Standard:</strong> {{ $product->Standard }}</li>
-                <li><strong>Manufacturer:</strong> {{ $product->manufacturer->Name ?? 'No Manufacturer' }}</li>
-                <li><div class="catalog-item">This is a Catalog Item</div></li>
+           
+            <div class="product-descrp">
+    <h4>{{ $product->Name }}</h4>
+    <table class="product-details-table">
+        <tbody>
+            <tr>
+                <td><strong>Part No. (SKU):</strong></td>
+                <td>{{ $product->SKU }}</td>
+            </tr>
+            <tr>
+                <td><strong>Description:</strong></td>
+                <td>{{ $product->Description }}</td>
+            </tr>
+            <tr>
+                <td><strong>Standard:</strong></td>
+                <td>{{ $product->Standard }}</td>
+            </tr>
+            <tr>
+                <td><strong>Manufacturer:</strong></td>
+                <td>{{ $product->manufacturer->Name ?? 'No Manufacturer' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+                <div class="catalog-item">This is a Catalog Item</div>
                 <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
                 <li><strong>Size:</strong> {{ $product->Size }}</li>
                 <li><strong>Length:</strong> {{ $product->Length }}</li>

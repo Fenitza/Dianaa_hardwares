@@ -7,11 +7,17 @@ use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+\DB::enableQueryLog();
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SubCategoryController extends Controller
 {
     public function show(Request $request, $subCategoryId) {
+        \Log::info('Received subCategoryId: ', ['subCategoryId' => $subCategoryId]);
+    \Log::info('Request Data: ', $request->all());
     // Validate sort and view inputs
+   
     $sortOrder = $request->query('sort', 'best_match');
     $validSortOptions = ['best_match', 'price_low_high', 'price_high_low'];
     if (!in_array($sortOrder, $validSortOptions)) {
@@ -24,36 +30,108 @@ class SubCategoryController extends Controller
         $viewType = 'grid'; // Default if invalid view type provided
     }
 
-    $perPage = $request->query('perPage', 1); // Set default per page or get from request
+    $perPage = $request->query('perPage', 12); // Set default per page or get from request
 
     $subcategory = SubCategory::findOrFail($subCategoryId);
-    $products = $subcategory->products()->with('manufacturer')->when($request->filled('manufacturer'), function ($query) use ($request) {
-        $manufacturerIds = is_array($request->manufacturer) ? $request->manufacturer : [$request->manufacturer];
-        $query->whereIn('ManufacturerID', $manufacturerIds);
-    })->when($request->filled('material'), function ($query) use ($request) {
-        $query->whereIn('material', (array) $request->material);
-    })->when($sortOrder, function ($query) use ($sortOrder) {
-        switch ($sortOrder) {
-            case 'price_low_high':
-                $query->orderBy('SalePrice', 'asc');
-                break;
-            case 'price_high_low':
-                $query->orderBy('SalePrice', 'desc');
-                break;
-            default:
-                $query->orderBy('Name', 'asc'); // Treats 'best_match' as a default case
-                break;
-        }
-    })->paginate($perPage);
+
+    // Build the query on the products related to the subcategory
+    $productsQuery = $subcategory->products();
+
+    // Apply material filter if present
+    // Apply brand filter if present
+    if ($request->has('brand')) {
+        $brands = $request->query('brand');
+        $brands = is_array($brands) ? $brands : explode(',', $brands);
+        $productsQuery->whereIn('Manufacturer', $brands);
+        \Log::info('Applying brand filter with values:', $brands);
+    }
+
+    // Apply material filter if present
+    if ($request->has('material')) {
+        $materials = $request->query('material');
+        $materials = is_array($materials) ? $materials : explode(',', $materials);
+        $productsQuery->whereIn('Material', $materials);
+        \Log::info('Applying material filter with values:', $materials);
+    }
+
+    // Apply size filter if present
+    if ($request->has('size')) {
+        $sizes = $request->query('size');
+        $sizes = is_array($sizes) ? $sizes : explode(',', $sizes);
+        $productsQuery->whereIn('Size', $sizes);
+        \Log::info('Applying size filter with values:', $sizes);
+    }
+
+    // Apply length filter if present
+    if ($request->has('length')) {
+        $lengths = $request->query('length');
+        $lengths = is_array($lengths) ? $lengths : explode(',', $lengths);
+        $productsQuery->whereIn('Length', $lengths);
+        \Log::info('Applying length filter with values:', $lengths);
+    }
+
+    // Apply standard filter if present
+    if ($request->has('standard')) {
+        $standards = $request->query('standard');
+        $standards = is_array($standards) ? $standards : explode(',', $standards);
+        $productsQuery->whereIn('Standard', $standards);
+        \Log::info('Applying standard filter with values:', $standards);
+    }
+
+    // Apply color filter if present
+    if ($request->has('color')) {
+        $colors = $request->query('color');
+        $colors = is_array($colors) ? $colors : explode(',', $colors);
+        $productsQuery->whereIn('Color', $colors);
+        \Log::info('Applying color filter with values:', $colors);
+    }
+
+    // Apply property class filter if present
+    if ($request->has('propertyClass')) {
+        $propertyClasses = $request->query('propertyClass');
+        $propertyClasses = is_array($propertyClasses) ? $propertyClasses : explode(',', $propertyClasses);
+        $productsQuery->whereIn('Property_Class', $propertyClasses);
+        \Log::info('Applying property class filter with values:', $propertyClasses);
+    }
+
+    // Execute the query with filters applied
+    // $products = $productsQuery->get(); // Use get() for debugging, replace with paginate() if needed
+
+    // Log the query to see what SQL is executed
+    $lastQuery = \DB::getQueryLog();
+    \Log::info('Final SQL executed: ', end($lastQuery)); // Log the last executed SQL
+
+    // Apply sorting
+    switch ($sortOrder) {
+        case 'price_low_high':
+            $productsQuery->orderBy('SalePrice', 'asc');
+            break;
+        case 'price_high_low':
+            $productsQuery->orderBy('SalePrice', 'desc');
+            break;
+        default:
+            $productsQuery->orderBy('Name', 'asc');
+            break;
+    }
+
+    // Execute the query with pagination
+    $products = $productsQuery->paginate($request->query('perPage', 12));
+    // Optional: Log the executed query for debugging
+\DB::listen(function($query) {
+    \Log::info("Query executed: ".$query->sql);
+    \Log::info("Bindings: ", $query->bindings);
+    });
 
     return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
 }
 
+
     
-    public function getProducts($id) {
-    $products = Subcategory::find($id)->products()->take(6)->get(); // Ensure to adjust according to your needs
-    return response()->json($products);
-}
+    public function getProducts($id) 
+    {
+        $products = Subcategory::find($id)->products()->take(6)->get(); // Ensure to adjust according to your needs
+        return response()->json($products);
+    }
 
     
     public function index(Request $request)

@@ -1137,6 +1137,7 @@ input[type="checkbox"] {
     border-radius: 5px;
     margin-top: 20px;
     width:fit-content;
+    
    
 }
 
@@ -1169,7 +1170,7 @@ input[type="checkbox"] {
     color: red;
 }
 
-#sortProducts{
+#sortProducts, #perPage{
     font-size: 14px;
 }
 
@@ -1203,12 +1204,13 @@ input[type="checkbox"] {
 /* product details page */
 /* Custom Carousel Styling */
 .carousel-inner img {
-    height: 250px;
+    height: 200px;
     /* Adjust height as needed */
     object-fit: contain;
     /* Keeps the aspect ratio */
     width: 100%;
     /* Ensures the image is not wider than the carousel */
+    
 }
 
 .carousel-control-prev-icon,
@@ -1233,7 +1235,46 @@ input[type="checkbox"] {
 }
 
 /* products details */
+.product-descrp {
+    background-color: #f8f9fa;
+    /* Light gray background similar to Fastenal */
+    border: 1px solid #ddd;
+    /* Light border for separation */
+    padding: 10px;
+    /* Padding inside the container */
+    margin-top: 10px;
+    /* Space above the section */
+}
 
+.product-descrp h4 {
+    color: #333;
+    /* Dark text for better readability */
+    font-size: 18px;
+    /* Slightly larger font size for the product name */
+    margin-bottom: 5px;
+    /* Space below the product name */
+}
+
+.product-details-table {
+    width: 100%;
+    /* Full width of the container */
+    border-collapse: collapse;
+    /* Removes space between borders */
+}
+
+.product-details-table td {
+    padding: 8px;
+    /* Padding in cells for space around text */
+    border-bottom: 1px solid #eee;
+    /* Separator for each item */
+    font-size: 14px;
+    /* Consistent font size */
+}
+
+.product-details-table tr:last-child td {
+    border-bottom: none;
+    /* Remove border for the last row */
+}
 
 .product-detail-page .quantity input {
     width: auto;
@@ -1256,6 +1297,7 @@ input[type="checkbox"] {
 .product-details ul {
     padding: 0;
     list-style: none;
+    font-size:12px;
 }
 
 .product-details li {

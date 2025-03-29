@@ -53,7 +53,7 @@ Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'sho
 Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');//grid page
 Route::post('/subcategories/{subCategoryId}/filter', [SubCategoryController::class,'filter'])->name('subcategory.filter');
 Route::get('/filters', [ProductController::class, 'fetchFilters'])->name('product.filter');
-Route::post('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
+Route::any('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
 
 //Home Products
 Route::get('/', [HomeController::class , 'index'])->name('home');

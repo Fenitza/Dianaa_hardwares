@@ -2,7 +2,7 @@
 
 <div class="col-md-12">
             
-    <div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+    <div class="product-grid" id="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
     @foreach ($products as $product)
     <div class="product">
         <div class="row">
@@ -14,7 +14,7 @@
                 <p><b>Dianaa Fasteners Part No.(SKU): </b><span style="color: blue;">{{ $product->SKU }}</span></p>
                 <h4>{{ $product->Name }}</h4>
                 <p>{{ $product->Description }}</p>
-                <p><b>Manufacturer: </b>{{ $product->manufacturer->Name }}</p>
+                <p><b>Manufacturer: </b>{{ $product->Manufacturer }}</p>
                 <p><b>Online Price:</b> ₹{{ number_format($product->SalePrice, 2) }}</p>
             </div>
         </div>
@@ -23,11 +23,20 @@
                 {{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}
             </span>
             <div class="actions-right">
-                <input type="number" value="1" min="1" name="quantity{{ $product->id }}" class="quantity-input">
-                <button class="cart-btn">
-                    <i class="fas fa-shopping-cart"></i>
-                </button>
-            </div>
+                <input type="number" value="1" min="1" name="quantity{{ $product->ProductID }}" class="quantity-input">
+                @if (auth()->check())
+        
+                <button class="cart-btn" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i></button>
+                    
+            
+                @else
+        <!-- Link to the login page if the user is not authenticated -->
+         <a class="btn btn-primary btn-add-to-cart" href="{{ route('login') }}?redirect_to={{ url()->current() }}">
+    <i class="fas fa-shopping-cart"></i>
+</a>
+   
+    @endif       
+    </div>
         </div>
     </div>
     @endforeach

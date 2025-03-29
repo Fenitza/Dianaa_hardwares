@@ -277,8 +277,8 @@ class ProductController extends Controller
 
     public function fetchFilters()
 {
-    $brands = Manufacturer::select('Name as displayName')->distinct()->get();
-    \Log::info('Brands:', $brands->toArray());
+    $brands = Product::select('Manufacturer as displayName')->distinct()->get();
+    // \Log::info('Brands:', $brands->toArray());
     $materials = Product::select('Material as displayName')->distinct()->get();
     $sizes = Product::select('Size as displayName')->distinct()->get();
     $lengths = Product::select('Length as displayName')->distinct()->get();
@@ -299,43 +299,69 @@ class ProductController extends Controller
 
 public function applyFilters(Request $request, $subCategoryId)
 {
-    // Begin a query with a constraint to fetch only the specified subcategory with its related products
-    $query = SubCategory::with(['products' => function($q) use ($request) {
-        // Applying filters dynamically based on the request input
-        
-        // Filter by availability
-        if ($request->filled('availability')) {
-            $q->where('available', '=', true);
+    // Find the subcategory along with filtered products
+    $subcategory = SubCategory::with(['products' => function($query) use ($request) {
+        // Brand filter
+        if ($request->has('brand-container')) {
+            $query->whereIn('ManufacturerID', $request->input('brand-container'));
         }
-
-        // Filter by manufacturer if provided
-        if ($request->has('manufacturers') && is_array($request->input('manufacturers'))) {
-            $q->whereIn('manufacturer', $request->input('manufacturers'));
+        // Material filter
+        if ($request->has('material-container')) {
+            $query->whereIn('Material', $request->input('material-container'));
         }
-
-        // Filter by material if provided
-        if ($request->has('materials') && is_array($request->input('materials'))) {
-            $q->whereIn('material', $request->input('materials'));
+        // Size filter
+        if ($request->has('size-container')) {
+            $query->whereIn('Size', $request->input('size-container'));
         }
-
-        // Additional filters can be added here in the same manner
-        if ($request->has('sizes') && is_array($request->input('sizes'))) {
-            $q->whereIn('size', $request->input('sizes'));
+        // Length filter
+        if ($request->has('length-container')) {
+            $query->whereIn('Length', $request->input('length-container'));
         }
-        if ($request->has('colors') && is_array($request->input('colors'))) {
-            $q->whereIn('color', $request->input('colors'));
+        // Standard filter
+        if ($request->has('standard-container')) {
+            $query->whereIn('Standard', $request->input('standard-container'));
         }
+        // Color filter
+        if ($request->has('color-container')) {
+            $query->whereIn('Color', $request->input('color-container'));
+        }
+        // Property Class filter
+        if ($request->has('propertyClass-container')) {
+            $query->whereIn('Property_Class', $request->input('propertyClass-container'));
+        }
+    }])->find($subCategoryId);
 
-    }])->findOrFail($subCategoryId);  // Ensuring the subcategory exists
+    if (!$subcategory) {
+        return redirect()->back()->with('error', 'Subcategory not found');
+    }
 
-    // Accessing the products loaded with the subcategory
-    $products = $query->products;
+    // Apply sort order and pagination
+    $sortOrder = $request->query('sort', 'best_match');
+    switch ($sortOrder) {
+        case 'price_low_high':
+            $productsQuery = $subcategory->products()->orderBy('SalePrice', 'asc');
+            break;
+        case 'price_high_low':
+            $productsQuery = $subcategory->products()->orderBy('SalePrice', 'desc');
+            break;
+        default:
+            $productsQuery = $subcategory->products()->orderBy('Name', 'asc');
+            break;
+    }
 
-    // Return the HTML rendered view for the products grid, injected directly via JSON
-    return response()->json([
-        'html' => view('partials.product_grid', compact('products'))->render()
-    ]);
+    $perPage = $request->query('perPage', 12);
+    $products = $productsQuery->paginate($perPage);
+
+    // Determine the view type and ensure the correct partial is used
+    $viewType = $request->query('view', 'grid');
+    $viewName = 'partials.product_' . $viewType;
+
+    if (!view()->exists($viewName)) {
+        return redirect()->back()->with('error', 'Invalid view type specified');
+    }
+
+    // Render the product grid partial
+    return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
 }
-
 
 }
