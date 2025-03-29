@@ -73,9 +73,9 @@
         </tbody>
     </table>
 </div>
-                <div class="catalog-item">This is a Catalog Item</div>
-                <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
-                <table class="table table-striped"product-details-table">
+                
+                <div class="product-attributes-heading"><strong>Product Attributes</strong></div>
+                <table class=" product-details-table">
         <tbody>
             <tr>
                 <td><strong>Size</strong></td>
@@ -107,8 +107,8 @@
         </div>
       
         <!-- Third Column: Pricing and Supply Chain -->
-        <div class="col-md-4" style="margin-top: 50px;">
-            <h3>Price</h3>
+        <div class="col-md-3" style="margin-top: 50px;">
+            <h4>Price</h
             <p><strong>Online Price:</strong> ₹{{ number_format($product->SalePrice, 2) }}</p>
             <div class="quantity mb-3">
                 <label for="quantity"><strong>Quantity:</strong></label>
