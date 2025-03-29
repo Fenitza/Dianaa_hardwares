@@ -1283,13 +1283,14 @@ input[type="checkbox"] {
 
 .product-detail-page button {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
+    
 }
 
 .supply-chain p {
     margin-bottom: 5px;
 }
-.product-details h2 {
+.product-details h4 {
     color: #333; /* Customize the color to fit your design */
     margin-bottom: 20px;
 }
@@ -1313,6 +1314,7 @@ input[type="checkbox"] {
     border-left: 5px solid #007bff; /* Blue left border for emphasis */
     color: #333;
     font-style: italic;
+    font-size:medium;
 }
 .product-attributes-heading {
     padding: 8px 12px; /* Padding around the text */

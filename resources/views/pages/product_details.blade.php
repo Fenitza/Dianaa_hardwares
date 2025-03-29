@@ -108,7 +108,7 @@
       
         <!-- Third Column: Pricing and Supply Chain -->
         <div class="col-md-3" style="margin-top: 50px;">
-            <h4>Price</h
+            <h4>Price</h4>
             <p><strong>Online Price:</strong> ₹{{ number_format($product->SalePrice, 2) }}</p>
             <div class="quantity mb-3">
                 <label for="quantity"><strong>Quantity:</strong></label>
@@ -119,7 +119,7 @@
             
 
             @if (auth()->check())
-        <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}">Add to Cart</button>
+        <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
         <!-- Bulk Order Button -->
         <button class="btn btn-secondary mb-3 btn-bulk-order" data-bs-toggle="modal"data-product-id="{{ $product->ProductID }}"
         data-user-name="{{ auth()->user()->name }}"
@@ -158,16 +158,26 @@
         </div>
     @else
         <!-- Link to the login page if the user is not authenticated -->
-        <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3 btn-add-to-cart">Sign in to add to cart</a>
+        <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3 btn-add-to-cart"><i class="fas fa-shopping-cart"></i> Sign in to add to cart</a>
         <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-secondary mb-3">Sign in to request bulk order</a>
         @endif
     
             <ul class="list-unstyled">
-<li class="product-attributes-heading"><strong>Supply Chain</strong></li>
-                <p><strong>Availability:</strong> <span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></p>
-                <p><strong>Supply Chain Info:</strong> {{ $product->SupplyChain }}</p>
-                <p><strong>Direct Ship:</strong> Ships {{ $product->ShipDate }}</p>
+<div class="product-attributes-heading"><strong>Supply Chain</strong></div>
+<table class=" product-details-table">
+        <tbody>
+            <tr>
+                <td><strong>Availability</strong></td>
+                <td><span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></td>
+            </tr>
+            <tr>
+                <td><strong>Direct Ship</strong></td>
+                <td>Shipping in 5-7 days</td>
+            </tr>
 
+         </tbody>
+    </table>
+                
 </ul>
             
         </div>
