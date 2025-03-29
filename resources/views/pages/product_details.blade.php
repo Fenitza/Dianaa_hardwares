@@ -55,19 +55,19 @@
     <table class="product-details-table">
         <tbody>
             <tr>
-                <td><strong>Part No. (SKU):</strong></td>
+                <td><strong>Part No. (SKU)</strong></td>
                 <td>{{ $product->SKU }}</td>
             </tr>
             <tr>
-                <td><strong>Description:</strong></td>
+                <td><strong>Description</strong></td>
                 <td>{{ $product->Description }}</td>
             </tr>
             <tr>
-                <td><strong>Standard:</strong></td>
+                <td><strong>Standard</strong></td>
                 <td>{{ $product->Standard }}</td>
             </tr>
             <tr>
-                <td><strong>Manufacturer:</strong></td>
+                <td><strong>Manufacturer</strong></td>
                 <td>{{ $product->manufacturer->Name ?? 'No Manufacturer' }}</td>
             </tr>
         </tbody>
@@ -75,12 +75,34 @@
 </div>
                 <div class="catalog-item">This is a Catalog Item</div>
                 <li class="product-attributes-heading"><strong>Product Attributes</strong></li>
-                <li><strong>Size:</strong> {{ $product->Size }}</li>
-                <li><strong>Length:</strong> {{ $product->Length }}</li>
-                <li><strong>Material:</strong> {{ $product->Material }}</li>
-                <li><strong>Type:</strong> {{ $product->Type }}</li>
-                <li><strong>Color:</strong> {{ $product->Color }}</li>
-                <li><strong>Property Class:</strong> {{ $product->Property_Class }}</li>
+                <table class="table table-striped"product-details-table">
+        <tbody>
+            <tr>
+                <td><strong>Size</strong></td>
+                <td>{{ $product->Size }}</td>
+            </tr>
+            <tr>
+                <td><strong>Length</strong></td>
+                <td>{{ $product->Length }}</td>
+            </tr>
+            <tr>
+                <td><strong>Material</strong></td>
+                <td>{{ $product->Material }}</td>
+            </tr>
+            <tr>
+                <td><strong>Type</strong></td>
+                <td>{{ $product->Type }}</td>
+            </tr>
+            <tr>
+                <td><strong>Color</strong></td>
+                <td>{{ $product->Color }}</td>
+            </tr>
+            <tr>
+                <td><strong>Property Class</strong></td>
+                <td>{{ $product->Property_Class }}</td>
+            </tr>
+        </tbody>
+    </table>
             </ul>
         </div>
       
