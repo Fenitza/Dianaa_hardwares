@@ -8,7 +8,7 @@
         <div class="col-md-3" id="filter-sidebar">
             <div class="row">
                 <!-- First column of filters -->
-                <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
+                <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'brand' => request()->brand]) }}">
                 <div class="filter-section">
                     <h6>Filters</h6>
                     <div class="filter-category">
@@ -225,6 +225,27 @@ function clearFilters() {
     url.search = '';
     window.location.href = url;
 }
+
+document.querySelectorAll('[name="brand-container[]"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        updateUrlWithFilters();
+    });
+});
+
+function updateUrlWithFilters() {
+    let searchParams = new URLSearchParams(window.location.search);
+    let brands = [];
+    document.querySelectorAll('[name="brand-container[]"]:checked').forEach(checkbox => {
+        brands.push(checkbox.value);
+    });
+    if (brands.length > 0) {
+        searchParams.set('brand', brands.join(','));
+    } else {
+        searchParams.delete('brand');
+    }
+    window.location.search = searchParams.toString(); // Update the page with new query string
+}
+
 
 // function handleFilterChanges() {
 //     const filterForm = document.getElementById('filter-form');

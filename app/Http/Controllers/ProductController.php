@@ -52,18 +52,28 @@ class ProductController extends Controller
         return view('pages.product_details', compact('product'));
     }
 
-    public function showByManufacturer($manufacturerId)
-    {
-        $categories = Category::whereHas('products', function ($query) use ($manufacturerId) {
-            $query->where('manufacturer_id', $manufacturerId);
-        })->with(['subcategories' => function ($query) use ($manufacturerId) {
-            $query->whereHas('products', function ($subQuery) use ($manufacturerId) {
-                $subQuery->where('manufacturer_id', $manufacturerId);
-            });
-        }])->get();
+    public function showByManufacturer($manufacturerN)
+{
+    // Fetch categories that have products from a specific manufacturer
+    $categories = Category::whereHas('products', function ($query) use ($manufacturerN) {
+        $query->where('Manufacturer', $manufacturerN);
+    })->with(['subcategories' => function ($query) use ($manufacturerN) {
+        $query->whereHas('products', function ($subQuery) use ($manufacturerN) {
+            $subQuery->where('Manufacturer', $manufacturerN);
+        });
+    }, 'products' => function ($query) use ($manufacturerN) {
+        // Optionally load products here if needed for the view
+        $query->where('Manufacturer', $manufacturerN);
+    }])->get();
 
-        return view('categories.show', compact('categories'));
+    // Handle the case where no categories are found
+    if ($categories->isEmpty()) {
+        return redirect()->back()->with('error', 'No categories found for the selected manufacturer.');
     }
+
+    return view('categories.show', compact('categories'));
+}
+
 
     public function adminProducts()
         {

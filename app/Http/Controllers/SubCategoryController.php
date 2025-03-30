@@ -127,11 +127,21 @@ class SubCategoryController extends Controller
 
 
     
-    public function getProducts($id) 
-    {
-        $products = Subcategory::find($id)->products()->take(6)->get(); // Ensure to adjust according to your needs
-        return response()->json($products);
+    public function getProducts($id = null)
+{
+    // If no ID is provided, automatically determine the first subcategory of the first category
+    if (is_null($id)) {
+        $firstCategory = Category::with('subcategories')->first(); // Get the first category that has subcategories
+        if ($firstCategory && $firstCategory->subcategories->count() > 0) {
+            $id = $firstCategory->subcategories->first()->SubCategoryID; // Get the ID of the first subcategory
+        } else {
+            return response()->json(['error' => 'No products available'], 404); // No subcategories found
+        }
     }
+
+    $products = Subcategory::find($id)->products()->take(6)->get();
+    return response()->json($products);
+}
 
     
     public function index(Request $request)

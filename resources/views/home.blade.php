@@ -29,9 +29,11 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="company-details">
-                <h2 class="company-title">Dianaa Fasteners</h2>
-                <p class="company-description">Dianaa Fasteners is established as a key player in the fastener industry, aiming to provide quality products and services.
-                <br> Starting out with only ability, enthusiasm, and a clear vision of destination, our team has earned every single reputation and award.</p>
+                
+                <p>Dianaa Fasteners is established as a key player in the fastener industry, 
+                <br> aiming to provide quality products and services.
+                <br> Starting out with only ability, enthusiasm, and a clear vision of destination,
+                <br> our team has earned every single reputation and award.</p>
             </div>
         </div>
     </div>
@@ -48,7 +50,7 @@
             <div class="brand-card" style="background-image: url('{{ asset('storage/' . $manufacturer->Image) }}');">
                 <div class="brand-overlay">
                     <h4 class="brand-name">{{ $manufacturer->Name }}</h4>
-                    <a href="{{ route('products_main', ['manufacturer' => $manufacturer->ManufacturerID]) }}" class="shop-now-btn">SHOP NOW</a>
+                    <a href="{{ route('products_main', ['brand' => $manufacturer->Name]) }}" class="shop-now-btn">SHOP NOW</a>
                 </div>
             </div>
         </div>
@@ -107,7 +109,12 @@
         </div>
         
         <!-- Second column for displaying products -->
-        <div class="col-md-9" id="products-display">
+        <div class="col-md-9" id="products-display" class="categ-card">
+            <!-- Default message when no subcategory is selected -->
+            <div id="default-message" class="text-center mt-5">
+                <p>Select Categories from here</p>
+                <i class="fas fa-hand-point-left"></i> <!-- FontAwesome icon example -->
+            </div>
             <!-- Products will be dynamically loaded here via JavaScript -->
         </div>
     </div>
@@ -197,14 +204,13 @@ function loadProducts(subcategoryId) {
                     </div>
                 </a>
                 `;
-                
             });
-            // Add the View All button at the bottom
-                container.innerHTML += `
-                    <div class="text-center justify-content-center mt-4">
-                        <a href="/subcategories/${subcategoryId}" class="btn btn-primary">View All</a>
-                    </div>
-                `;
+            // Append View All button here, inside the check where products are found
+            container.innerHTML += `
+                <div class="text-center view-all-container">
+                    <a href="/subcategories/${subcategoryId}" class="btn btn-primary">View All</a>
+                </div>
+            `;
         } else {
             container.innerHTML = '<p>No products found in this category.</p>';
         }
@@ -219,24 +225,29 @@ function loadProducts(subcategoryId) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOMContentLoaded event triggered");
 
-    // This function will attempt to load the first subcategory after ensuring the categories are fully loaded
-    function loadFirstSubcategory() {
-        console.log("Attempting to load the first subcategory");
-        
-        // Try to access the first subcategory link
-        const firstSubcategoryLink = document.querySelector('.category-sidebar .category-item .subcategory-list .subcategory-item a');
-        
-        if (firstSubcategoryLink) {
-            console.log("Found first subcategory link:", firstSubcategoryLink.textContent);
-            firstSubcategoryLink.click(); // Simulate a click to load the first category's products
-        } else {
-            console.log("First subcategory link not found, retrying...");
-            setTimeout(loadFirstSubcategory, 500); // Retry after 500ms if the subcategory link isn't found
-        }
-    }
+      @if(count($categories) > 0 && count($categories[0]->subcategories) > 0)
+        // Automatically load products for the first subcategory of the first category
+        loadProducts({{ $categories[0]->subcategories[0]->SubCategoryID }});
+    @endif
 
-    // Start the attempt to load the first subcategory
-    setTimeout(loadFirstSubcategory, 1000); // Initial delay to allow full page setup
+    // // This function will attempt to load the first subcategory after ensuring the categories are fully loaded
+    // function loadFirstSubcategory() {
+    //     console.log("Attempting to load the first subcategory");
+        
+    //     // Try to access the first subcategory link
+    //     const firstSubcategoryLink = document.querySelector('.category-sidebar .category-item .subcategory-list .subcategory-item a');
+        
+    //     if (firstSubcategoryLink) {
+    //         console.log("Found first subcategory link:", firstSubcategoryLink.textContent);
+    //         firstSubcategoryLink.click(); // Simulate a click to load the first category's products
+    //     } else {
+    //         console.log("First subcategory link not found, retrying...");
+    //         setTimeout(loadFirstSubcategory, 500); // Retry after 500ms if the subcategory link isn't found
+    //     }
+    // }
+
+    // // Start the attempt to load the first subcategory
+    // setTimeout(loadFirstSubcategory, 1000); // Initial delay to allow full page setup
 });
 
 

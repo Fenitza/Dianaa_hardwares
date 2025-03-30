@@ -107,25 +107,30 @@
         </div>
       
         <!-- Third Column: Pricing and Supply Chain -->
-        <div class="col-md-3" style="margin-top: 50px;">
-            <h4>Price</h4>
-            <p><strong>Online Price:</strong> ₹{{ number_format($product->SalePrice, 2) }}</p>
-            <div class="quantity mb-3">
+        <div class="col-md-3">
+            <div class="price-container" style="margin-top: 30px;">
+                <!-- <h4 style="color: #333; font-size: 20px; margin-bottom: 10px;">Price</h4> -->
+                <p style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #0088cc; font-size: 18px;">Online Price:</strong>
+                    <span style="font-size: 24px; font-weight: bold; color: #2c3e50;">₹{{ number_format($product->SalePrice, 2) }}</span>
+                </p>
+            </div>
+            
+            <div class="catalog-item">Special discount for vendors! Checkout to explore!</div>
+            <div class="quantity mb-3" style="padding-top: 10px;">
                 <label for="quantity"><strong>Quantity:</strong></label>
                 <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
             </div>
 
-            <div class="catalog-item">Special discount for vendors! Checkout to explore!</div>
-            
 
             @if (auth()->check())
-        <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+        <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i><small> Add to Cart</small></button>
         <!-- Bulk Order Button -->
         <button class="btn btn-secondary mb-3 btn-bulk-order" data-bs-toggle="modal"data-product-id="{{ $product->ProductID }}"
         data-user-name="{{ auth()->user()->name }}"
         data-user-email="{{ auth()->user()->email }}"
         data-user-phone="{{ auth()->user()->phone_number }}"
-         data-bs-target="#bulkOrderModal">Request Bulk Order</button>
+         data-bs-target="#bulkOrderModal"><small>Request Bulk Order</small></button>
 
         <!-- Bulk Order Modal -->
         <div class="modal fade" id="bulkOrderModal" tabindex="-1" aria-labelledby="bulkOrderModalLabel" aria-hidden="true">
