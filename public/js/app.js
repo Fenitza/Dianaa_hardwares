@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.status === 'success') {
                     alert('Item added to cart!');
                     fetchCartCount(); // Refresh cart count
-                    location.reload(); // Reload to update cart page
+                    
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -76,6 +76,7 @@ function fetchCartCount() {
     .then(data => {
         if(data && data.cartCount !== undefined) {
             updateCartCount(data.cartCount); // Update count from server response
+           
         } else {
             console.error('Invalid response for cart count:', data);
         }
@@ -91,6 +92,8 @@ function updateCartCount(count) {
     if (cartCountElement) {
         cartCountElement.textContent = count;
         localStorage.setItem('cartCount', count); // Optionally update local storage
+        fetchCartCount(); // Refresh cart count
+        
     } else {
         console.error('Cart count element not found');
     }
@@ -110,7 +113,9 @@ function updateQuantity(itemId, newQuantity) {
     .then(data => {
         if (data.success) {
             alert('Quantity updated');
-            location.reload(); // Reload page to reflect updated quantity
+            updateCartCount(newQuantity);
+            fetchCartCount(); // Refresh cart count
+            
          } 
         // else {
         //     alert('Failed to update quantity: ' + data.message);
@@ -155,7 +160,7 @@ function emptyCart() {
             alert('Cart emptied');
             updateCartCount(0); // Update cart count to 0 in the UI
             localStorage.setItem('cartCount', 0);
-            location.reload(); // Reload to reflect empty cart
+            
         } else {
             alert('Failed to empty cart: ' + data.message);
         }

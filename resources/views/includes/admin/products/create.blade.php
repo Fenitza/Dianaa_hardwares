@@ -24,17 +24,17 @@
                 </div>
                 <div class="form-group">
                     <label for="salePrice">Sale Price</label>
-                    <input type="number" class="form-control" id="salePrice" name="salePrice" required>
+                    <input type="number" step="0.01" class="form-control" id="salePrice" name="salePrice" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="vendorPrice">Vendor Price</label>
-                    <input type="number" class="form-control" id="vendorPrice" name="vendorPrice" required>
+                    <input type="number" step="0.01" class="form-control" id="vendorPrice" name="vendorPrice" required>
                 </div>
 
                 <div class="form-group">
                     <label for="basePrice">Base Price</label>
-                    <input type="number" class="form-control" id="basePrice" name="basePrice" required>
+                    <input type="number" step="0.01" class="form-control" id="basePrice" name="basePrice" required>
                 </div>
                 
                 <div class="form-group">

@@ -11,14 +11,19 @@ class Product extends Model
     protected $primaryKey = 'ProductID';
 
     protected $fillable = [
-        'name', 'description', 'sku', 'salePrice','vendorPrice', 'quantity', 'product_image',
+        'name', 'description', 'sku', 'salePrice','vendorPrice', 'basePrice', 'quantity', 'product_image',
         'size', 'length', 'property_class', 'standard', 'material', 'ManufacturerID', 'SubCategoryID',
         'image_paths' 
     ];
 
     protected $casts = [
-        'image_paths' => 'array'  // Ensure that image_paths is treated as an array
-    ];
+    'salePrice' => 'float',  // or 'double'
+    'vendorPrice' => 'float',  // or 'double'
+    'basePrice' => 'float',  // or 'double'
+    'image_paths' => 'array'  // Ensure that image_paths is treated as an array
+];
+
+    
 
     public function subcategory()
     {

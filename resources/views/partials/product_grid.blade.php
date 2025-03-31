@@ -23,17 +23,15 @@
                 {{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}
             </span>
             <div class="actions-right">
-                <input type="number" value="1" min="1" name="quantity{{ $product->ProductID }}" class="quantity-input">
+                <input type="number" value="1" min="1" name="quantity{{ $product->ProductID }}" id="quantity" class="quantity-input">
                 @if (auth()->check())
-        
-                <button class="cart-btn" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i></button>
-                    
+                    <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i></button>
             
+                
                 @else
         <!-- Link to the login page if the user is not authenticated -->
-         <a class="btn btn-primary btn-add-to-cart" href="{{ route('login') }}?redirect_to={{ url()->current() }}">
-    <i class="fas fa-shopping-cart"></i>
-</a>
+         <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3 btn-add-to-cart"><i class="fas fa-shopping-cart"></i></a>
+
    
     @endif       
     </div>

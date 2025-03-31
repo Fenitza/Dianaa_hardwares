@@ -1,14 +1,7 @@
 <!-- Footer -->
 <footer class="site-footer">
     <div class="footer-container">
-        <div class="footer-column">
-            <h4>Products</h4>
-            <ul>
-                <li><a href="#">Prices drop</a></li>
-                <li><a href="#">New products</a></li>
-                <li><a href="#">Best sales</a></li>
-            </ul>
-        </div>
+        
         <div class="footer-column">
             <h4>Our company</h4>
             <ul>
@@ -34,16 +27,32 @@
             </ul>
         </div>
         <div class="footer-column">
-            <h4>Store Information</h4>
-            <p>ToolShop, Russia</p>
+            <h4>Head Quaters</h4>
+            <p><strong>Head Office, Coimbatore:</strong> 99-100 Srikant Ext, Grey Town, Coimbatore, 641018, Tamil Nadu</p>
+            <h4>Branch Office</h4>
+            <p><strong>Coimbatore:</strong> SF No. 141/1B-1C, Sri Kumaran Nagar, Vilankuruchi Road, Vilankuruchi, Coimbatore - 641035</p>
+        </div>
+        <div class="footer-column">
+            <h4>Branch Office</h4>
+                
+                <p><strong>Kanchipuram, Chennai:</strong> No.71, Indira Nagar, Panrutti Kandigai Village, Sriperumbudur Tk, Oragadam, Kanchipuram - 631604</p>
+                <p><strong>Kanchipuram, Chennai:</strong> Plot No A - 26/2-C, 8th Cross Street, SIPCOT Industrial Park, Pillaipakkam, Sriperumbudur, Kanchipuram District - 602105</p>
+                
             <p>Tel: 123 456 789</p>
             <p>Email: demo@demo.com</p>
-            <div class="payment-methods">
-                <i class="fab fa-cc-visa" aria-hidden="true"></i>
-                <i class="fab fa-cc-paypal" aria-hidden="true"></i>
-                <i class="fab fa-cc-mastercard" aria-hidden="true"></i>
-                <i class="fab fa-cc-amex" aria-hidden="true"></i>
-                <i class="fab fa-cc-discover" aria-hidden="true"></i>
+            <div class="social-media-links">
+                <a href="https://www.facebook.com/DianaaHardwares" target="_blank">
+                    <i class="fab fa-facebook"></i> 
+                </a>
+                <a href="https://www.linkedin.com/in/dianaa-fasteners-1214bbb333/" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://www.instagram.com/dianaafasteners/?hl=en" target="_blank">
+                    <i class="fab fa-instagram"></i> 
+                </a>
+                <a href="https://x.com/Dianaa_fastener" target="_blank">
+                    <i class="fab fa-xing"></i>
+                </a>
             </div>
         </div>
     </div>

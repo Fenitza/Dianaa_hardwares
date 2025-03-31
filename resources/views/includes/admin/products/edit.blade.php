@@ -24,23 +24,23 @@
                 </div>
                 <div class="form-group">
                     <label for="salePrice">Sale Price</label>
-                    <input type="number" class="form-control" id="salePrice" name="salePrice" value="{{ $product->SalePrice }}" required>
+                    <input type="decimal" class="form-control" id="salePrice" name="salePrice" value="{{ $product->SalePrice }}" required>
                 </div>
                 <div class="form-group">
                     <label for="vendorPrice">Vendor Price</label>
-                    <input type="number" class="form-control" id="vendorPrice" name="vendorPrice" value="{{ $product->VendorPrice }}" required>
+                    <input type="decimal" class="form-control" id="vendorPrice" name="vendorPrice" value="{{ $product->VendorPrice }}" required>
                 </div>
                 <div class="form-group">
                     <label for="basePrice">Base Price</label>
-                    <input type="number" class="form-control" id="basePrice" name="basePrice" value="{{ $product->basePrice }}" required>
+                    <input type="number" step="0.01" class="form-control" id="basePrice" name="basePrice" value="{{ $product->BasePrice }}" required>
                 </div>
                 <div class="form-group">
                     <label for="quantity">Quantity</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $product->Quantity }}" required>
+                    <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" value="{{ $product->Quantity }}" required>
                 </div>
                 <div class="form-group">
                     <label for="size">Size</label>
-                    <input type="text" class="form-control" id="size" name="size" value="{{ $product->Size }}">
+                    <input type="text"  class="form-control" id="size" name="size" value="{{ $product->Size }}">
                 </div>
                 <div class="form-group">
                     <label for="length">Length</label>

@@ -122,10 +122,10 @@
                 <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
             </div>
 
-
+ 
             @if (auth()->check())
-        <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i><small> Add to Cart</small></button>
-        <!-- Bulk Order Button -->
+            <button class="btn btn-primary mb-3 btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}"><i class="fas fa-shopping-cart"></i><small> Add to Cart</small></button>
+            <!-- Bulk Order Button -->
         <button class="btn btn-secondary mb-3 btn-bulk-order" data-bs-toggle="modal"data-product-id="{{ $product->ProductID }}"
         data-user-name="{{ auth()->user()->name }}"
         data-user-email="{{ auth()->user()->email }}"

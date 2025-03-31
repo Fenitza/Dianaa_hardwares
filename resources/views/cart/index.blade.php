@@ -39,7 +39,7 @@
                     @else
                         <p>Product not found</p>
                     @endif
-                </td>
+                </td> 
                 <td>
                     <input type="number" value="{{ $item->quantity }}" min="1" style="width: 50px; display: inline-block;" onchange="updateQuantity({{ $item->id }}, this.value)">
                     <button class="btn btn-danger btn-sm" onclick="removeItem({{ $item->id }})" style="margin-left: 10px;">

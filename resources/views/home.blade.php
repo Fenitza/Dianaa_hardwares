@@ -3,26 +3,33 @@
 
 @section('content')
 
-<!-- Hero Carousel -->
-<div id="heroCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+<!-- Hero Image Carousel -->
+<div class="col-md-12">
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators/dots -->
     <ol class="carousel-indicators">
-        <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#heroCarousel" data-slide-to="1"></li>
-        <li data-target="#heroCarousel" data-slide-to="2"></li>
+        <li data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#heroCarousel" data-bs-slide-to="1"></li>
+        
     </ol>
+
+    <!-- The slideshow/images -->
     <div class="carousel-inner" role="listbox">
-        <div class="carousel-item active" style="background-image: url('images/banners/slider1.webp'); height: 400px;"></div>
-        <div class="carousel-item " style="background-image: url('images/banners/careers.jpg'); height: 400px;"></div>
-    </div>
-    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+    `<div class="carousel-item active" style="background: url('/images/banners/slider1.webp') center center / cover no-repeat; height: 400px;"></div>
+    <div class="carousel-item" style="background: url('/images/banners/slider2.webp') center center / cover no-repeat; height: 400px;"></div>
+</div>`
+    <!-- Left and right controls/icons -->
+    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
+        <span class="visually-hidden">Previous</span>
     </a>
-    <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+    <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
+        <span class="visually-hidden">Next</span>
     </a>
 </div>
+</div>
+
 
 <div class="container my-4">
     <!-- Company Details Section -->
@@ -172,12 +179,34 @@
 
 
 <script>
-$(document).ready(function () {
-    $('#heroCarousel').carousel({
-        interval: 5000,
-        wrap: true
+document.addEventListener('DOMContentLoaded', function() {
+    var myCarousel = document.querySelector('#heroCarousel');
+    var carousel = new bootstrap.Carousel(myCarousel, {
+        interval: 5000,  // Carousel changes every 3 seconds
+        wrap: true       // Allows the carousel to loop continuously
+    });
+
+    // Optional: To add interactions if needed
+    document.querySelectorAll('.carousel-control-prev, .carousel-control-next').forEach(function(control) {
+        control.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (this.classList.contains('carousel-control-next')) {
+                carousel.next();
+            } else {
+                carousel.prev();
+            }
+        });
+    });
+
+    document.querySelectorAll('.carousel-indicators li').forEach(function(indicator, idx) {
+        indicator.addEventListener('click', function(e) {
+            e.preventDefault();
+            carousel.to(idx); // Move to the slide indexed by the clicked indicator
+        });
     });
 });
+
+
 
 function toggleSubcategories(subcatId) {
     var element = document.getElementById(subcatId);
@@ -230,24 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadProducts({{ $categories[0]->subcategories[0]->SubCategoryID }});
     @endif
 
-    // // This function will attempt to load the first subcategory after ensuring the categories are fully loaded
-    // function loadFirstSubcategory() {
-    //     console.log("Attempting to load the first subcategory");
-        
-    //     // Try to access the first subcategory link
-    //     const firstSubcategoryLink = document.querySelector('.category-sidebar .category-item .subcategory-list .subcategory-item a');
-        
-    //     if (firstSubcategoryLink) {
-    //         console.log("Found first subcategory link:", firstSubcategoryLink.textContent);
-    //         firstSubcategoryLink.click(); // Simulate a click to load the first category's products
-    //     } else {
-    //         console.log("First subcategory link not found, retrying...");
-    //         setTimeout(loadFirstSubcategory, 500); // Retry after 500ms if the subcategory link isn't found
-    //     }
-    // }
-
-    // // Start the attempt to load the first subcategory
-    // setTimeout(loadFirstSubcategory, 1000); // Initial delay to allow full page setup
 });
 
 
