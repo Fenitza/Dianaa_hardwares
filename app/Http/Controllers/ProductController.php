@@ -124,7 +124,7 @@ class ProductController extends Controller
     // Define validation rules
     $rules = [
         'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
+        'description' => 'required|string',
         'sku' => 'required|string|max:50',
         'salePrice' => 'required|decimal:2',
         'basePrice' => 'required|decimal:2',
@@ -202,7 +202,7 @@ class ProductController extends Controller
     // Define validation rules
     $rules = [
         'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
+        'description' => 'required|string',
         'sku' => 'required|string|max:50',
         'salePrice' => 'required|numeric|between:0,999999.99',
         'basePrice' => 'required|numeric|between:0,999999.99',

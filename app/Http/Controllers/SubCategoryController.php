@@ -139,7 +139,7 @@ class SubCategoryController extends Controller
         }
     }
 
-    $products = Subcategory::find($id)->products()->take(6)->get();
+    $products = Subcategory::find($id)->products()->take(3)->get();
     return response()->json($products);
 }
 
