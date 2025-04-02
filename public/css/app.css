@@ -22,7 +22,8 @@ header {
     align-items: center;
     background-color: #333c8b; /* Navy blue */
     color: white;
-    padding: 10px 20px;
+    padding: 10px 15px;
+    
     
 }
 .header-top-row :hover{
@@ -47,6 +48,7 @@ header {
     flex-grow: 1;
     max-width: 800px; /* Slightly larger search bar */
     margin: 0 20px;
+    padding-top: -20px;
 }
 
 .header-search-bar input[type="text"] {
@@ -60,7 +62,7 @@ header {
 }
 
 .header-search-bar button {
-    padding: 5px 20px;
+    padding: 5px 10px;
     background-color: #F0D422; /* Mustard yellow */
     color: #2a2e6a; /* Navy blue text */
     border: none;
@@ -189,46 +191,176 @@ nav a:hover {
     }
 }
 
-
-
-/* Home hero section */
-/* Ensuring the carousel takes full width */
+/* Basic styling for the carousel container */
 #heroCarousel {
+    
     width: 100%;
-    margin: 0 auto;
-    /* Centering just in case */
+    /* Ensures the carousel takes the full width */
+    margin: auto;
+    /* Center align the carousel if needed */
 }
 
-/* Carousel items - making sure images cover the area properly */
+/* Styling for carousel items */
+.carousel-item {
+    width: 100%;
+    /* Ensures each item takes the full width of the carousel */
+    transition: transform 0.5s ease;
+    /* Smooth transition for sliding */
+}
+
+/* Image styles to ensure they are responsive and cover the area well */
 .carousel-item img {
     width: 100%;
-    height: 500px;
-    /* Adjust this value based on your design needs */
-    object-fit: cover;
-    /* Ensures the image covers the area without being stretched */
-    object-position: center;
-    /* Centers the image within the element's frame */
+    height: auto;
+    /* Maintain aspect ratio */
+    display: block;
+    /* Remove extra space below images */
 }
 
-/* Adjusting height of the carousel */
-.carousel-item {
-    height: 500px;
-    /* This should match the image height or be slightly larger */
-}
 
-/* Optional: Ensuring the carousel controls are visible and properly positioned */
+
+/* Styling for carousel controls icons to ensure they are visible and properly sized */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     background-color: #000;
-    /* Adding background color for better visibility */
-    border-radius: 50%;
-    /* Circular background */
-    padding: 10px;
-    /* Space around the arrow icons */
+        /* Adding background color for better visibility */
+        border-radius: 50%;
+        /* Circular background */
+        padding: 10px;
+        /* Space around the arrow icons */
 }
 
-/* Company Details Section */
+.carousel-indicators{
+    position: relative !important;;
+    margin-bottom: -20px !important;
+    color:#2d2e6a !important;
+}
+
+/* Ensure carousel indicators are visible and easy to interact with */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+
+    
+
+   
+}
+
+@media (max-width: 576px) {
+    .carousel-item img {
+        height: 200px !important;
+        /* Set a fixed height for very small devices */
+    }
+
+    
+}
+
 .company-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 30px 100px;
+    background-color: #f8f8f8de;
+    /* Light gray background */
+    
+}
+
+.company-text h2 {
+    font-size: 26px;
+    /* Larger size for heading */
+    font-weight: bold;
+    /* Bolder font weight for emphasis */
+    color: #333;
+    /* Darker color for better readability */
+}
+
+.company-text span.intro {
+    font-size: 26px;
+    /* Slightly larger font size for introductory text */
+    color: #555;
+    /* Slightly lighter than the heading */
+    font-weight: normal;
+    /* Normal weight to differentiate from the heading */
+}
+
+.company-text p {
+    font-size: 16px;
+    /* Standard text size */
+    color: #666;
+    /* Lighter color for regular text */
+    margin-top: 10px;
+    /* Space between paragraphs */
+}
+
+.company-text,
+.services {
+    flex-basis: 50%;
+    /* Sets each child to take up 50% of the parent container's width */
+    padding: 10px;
+    /* Adds padding inside each section for some internal spacing */
+}
+
+.services {
+    display: flex;
+    justify-content: space-evenly;
+    /* Distributes space evenly between items */
+    align-items: center;
+    /* Centers items vertically */
+    padding: 20px;
+    gap: 10px;
+    /* Optional: adds some space between the boxes */
+}
+
+.service-item {
+    text-align: center;
+    /* Centers the text and icon */
+    padding: 20px;
+    flex: 1;
+    /* Each service item will take equal space */
+    min-width: 50px;
+    /* Minimum width of each service box */
+    min-height: 100px;
+    background-color: #ffffff;
+    /* White background for each service box */
+    border: 1px solid #ccc;
+    /* Subtle border for the boxes */
+    border-radius: 5px;
+    /* Rounded corners for the boxes */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+    flex-direction: column;
+    /* Stacks icon and text vertically */
+    justify-content: center;
+    /* Aligns content vertically centered */
+    align-items: center;
+    /* Aligns content horizontally centered */
+}
+
+.service-item i {
+    font-size: 30px;
+    /* Icon size */
+    color: #2d2e6a;
+    /* Icon color matching your theme */
+    margin-bottom: 50px 10px;
+    /* Space between the icon and text */
+}
+
+.service-item p {
+    margin: 0;
+    /* Removes default margin to handle spacing */
+}
+
+.service-item img,
+.service-item i {
+    width: 50px;
+    /* Size of the icon */
+    height: 50px;
+    /* Maintain aspect ratio */
+    margin-bottom: 10px;
+    /* Space between icon and text */
+}
+/* Company Details Section
+.company-detail {
     max-width: 1400px;
     background: linear-gradient(to right, #9294f5, rgba(255, 255, 255, 0.9));
     background-size: cover;
@@ -239,52 +371,52 @@ nav a:hover {
     text-align: center;
     color: #333;
     /* Darker text for better contrast */
-    font-size: 18px;
+    /* font-size: 18px; */
     /* Slightly larger font size */
-    font-style: italic;
-    font-weight:600;
-}
+    /* font-style: italic; */
+    /* font-weight:600; */
+/* } */
 
-.company-details:hover {
+/* .company-details:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+} */
 
-.company-title {
+/* .company-title {
     color: #2d2e6a;
-    /* Deep blue */
+    Deep blue
     margin-bottom: 20px;
     transition: color 0.3s ease;
-}
+} */
 
-.company-title:hover {
+/* .company-title:hover {
     color: #a5cd36;
-    /* Vibrant green */
-}
+    Vibrant green
+} */
 
-.company-description {
+/* .company-description {
     background: #ffffff;
-    /* Light background to stand out */
+    Light background to stand out
     padding: 20px 40px;
     /* Ample padding around the text */
-    border-radius: 8px;
+    /* border-radius: 8px; */
     /* Slightly rounded corners for a modern look */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
     /* Subtle shadow for depth */
-    margin: 20px auto;
+    /* margin: 20px auto; */
     /* Centering the block with some margin */
-    max-width: 80%;
+    /* max-width: 80%; */
     /* Limiting width for better readability */
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; */
     /* Modern, readable font */
-    line-height: 1.6;
+    /* line-height: 1.6; */
     /* Improved line spacing */
-    color: #333;
+    /* color: #333; */
     /* Darker text for better contrast */
-    font-size: 20px;
+    /* font-size: 20px; */
     /* Slightly larger font size */
-    font-style:italic;
-}
+    /* font-style:italic; */
+/* }  */
 
 
 /* spacer */
@@ -335,7 +467,7 @@ h3 {
 
 /* Card body styling */
 .card-body {
-    padding: 15px 10px; /* padding inside the card for spacing */
+    padding: 0px; /* padding inside the card for spacing */
 }
 
 /* Text styling within cards */
@@ -535,7 +667,7 @@ h3 {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 6px;
     /* Rounded corners for the card */
     border: 1px solid #ccc;
     /* Optional: adds a light border around the card */
@@ -543,6 +675,7 @@ h3 {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     /* Optional: adds shadow for better depth */
     background-color: white;
+    
 }
 
 .categ-card:hover {
@@ -563,15 +696,19 @@ h3 {
 }
 
 .card-body {
-    padding: 10px;
+    padding: 0px;
     /* Reduced padding */
+    
 }
 
 .categ-card-title {
     font-size: 0.9em;
     /* Reduced font size */
     font-weight: bold;
-    color: #2d2e6a;
+    color: white;
+    background-color: #2d2e6a;
+    padding:10px;
+    
 }
 
 .category-overlay {
@@ -638,15 +775,15 @@ h3 {
 .category-sidebar {
     border: 2px solid transparent;
         /* Prepares a border for active/hover states */
-        border-radius: 10px;
+        border-radius: 5px;
         /* Rounded corners for tabs */
         padding: 10px 20px;
         /* Padding inside each tab */
         transition: all 0.3s ease;
         /* Smooth transition for background and border changes */
-        background-color: #d2dff0 !important;
+        background-color: white !important;
         /* Active and hover background */
-        color: #2d2e6a !important;
+        color: white !important;
         /* White text for active and hover states */
         border-color: #2d2e6a !important;
         /* Border color to match background */
@@ -657,18 +794,62 @@ h3 {
 }
 
 .category-toggle {
-    background: #2d2e6a;
-    border: none;
     width: 100%;
+    background-color: white;
+    /* Dark blue background */
+    color: #2d2e6a;
+    /* White text */
+    padding: 8px 15px;
+    /* Padding inside the button */
+    border: none;
+    /* No border */
+    border-radius: 4px;
+    /* Rounded corners */
     text-align: left;
-    padding: 5px;
-    font-size: 15px;
-    color: white;
-    font-weight: bold;
+    /* Aligns text to the left */
+    font-size: 16px;
+    /* Larger font size for readability */
     cursor: pointer;
-    /* Indicates that the element is clickable */
+    /* Cursor indicates it's clickable */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+    margin-bottom: 5px;
+    /* Reduced bottom margin to bring closer to the divider */
+}
+.category-item.active .category-toggle {
+    background-color: #41458D;
+    /* Darker shade for active state */
+    color: white;
 }
 
+/* Active state styling for subcategories */
+.subcategory-item a.active {
+    background-color: #41458D;
+    /* Darker shade for active subcategory */
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+/* Styling for the divider */
+.category-divider {
+    border: none;
+    /* No border */
+    height: 1px;
+    /* Thin line */
+    background-color: #ccc;
+    /* Light gray color */
+    margin-top: 5px;
+    /* Small space above the divider */
+    margin-bottom: 10px;
+    /* Slightly larger space below the divider to separate from next category */
+}
+
+/* Optionally, remove the divider after the last category item */
+.category-item:last-child .category-divider {
+    display: none;
+    /* Hide the last divider */
+}
 
 .subcategory-list {
     list-style-type: none;
@@ -680,131 +861,125 @@ h3 {
 .subcategory-item a {
     display: block;
     padding: 5px 10px;
-    color: #414141;
+    color: #2d2e6a;
     font-size: 14px;
     text-decoration: none;
     /* Removes underline from links */
 }
 
-.subcategory-item a:hover, .subcategory-item a:active {
-    background-color: #f2f5f8;
-    border-radius: 5px;
-    text-decoration: none;
-    /* Ensures no underline on hover */
-}
+
 
 /* Product Display Area */
 #products-display {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 columns for larger screens */
-    grid-gap: 20px;
-    /* Sufficient space between cards */
     border: 2px solid transparent;
-    /* Prepares a border for active/hover states */
-    border-radius: 3px;
-    /* Rounded corners for tabs */
-    padding: 10px 20px;
-    /* Padding inside each tab */
-    transition: all 0.3s ease;
-    /* Smooth transition for background and border changes */
-    background-color: white !important;
-    /* Active and hover background */
     border-color: #2d2e6a !important;
-    /* Border color to match background */
-}
-#products-display #default-message {
-    text-align: center;
-        
-        font-size: 14px;
-        /* Adjust based on your preference */
-        color: #333;
-        /* Better text color for readability */
-        animation: pulse 1s infinite alternate;
-        /* Adding animation to the text */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /* Creates a responsive grid layout */
+    grid-gap: 20px;
+    /* Space between cards */
+    padding: 20px;
+    /* Padding around the grid */
+    background-color: white;
+    /* Light background color for the grid area */
 }
 
-#products-display #default-message i {
-    font-size: 24px;
-        animation: bounce 2s infinite;
-        /* Bounce animation for the arrow */
-}
-
-/* Bounce animation keyframes */
-@keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        transform: translateY(0);
-    }
-
-    40% {
-        transform: translateY(-30px);
-    }
-
-    60% {
-        transform: translateY(-15px);
-    }
-}
-
-/* Pulse animation for text */
-@keyframes pulse {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0.5;
-    }
-}
-
-#products-display .card {
+.card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Ensures content is spaced evenly */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out;
-    background: #fff;
-    /* Background color for cards */
-    border: 1px solid #ddd;
-    /* Adds a subtle border */
-    height: 180px;
-    /* Fixed height to ensure uniformity */
-    
+    background: #ffffff;
+    /* White background for each card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+    border: none;
+    /* No borders */
+    border-radius: 8px;
+    /* Rounded corners for the cards */
+    overflow: hidden;
+    /* Ensures nothing overflows from the card */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    /* Smooth transition for hover effects */
+    height:200px;
 }
 
-#products-display .card-img-top {
+.card:hover {
+    transform: scale(1.03);
+    /* Slight scale up on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    /* Increased shadow on hover for a "lifting" effect */
+}
+
+.card-img-top {
     width: 100%;
+    /* Full width of the card */
     height: 100px;
-    /* Adjusted height for better proportionality */
+    /* Fixed height for images */
     object-fit: contain;
-    /* Changes from contain to cover for better fill */
+    /* Ensures images cover the area well without stretching */
 }
 
-#products-display .card-body {
-    padding: 2px;
-    text-align: center;
+.card-body {
+    padding: 15px;
+    /* Padding within the card body */
     display: flex;
     flex-direction: column;
-    
-    /* Distributes space evenly within the card body */
+    justify-content: space-between;
+    flex-grow: 1;
+    /* Allows the body to fill the space not taken by the image */
 }
 
-.card-title,
-.card-text {
+.card-title {
+    text-decoration:none;
+    font-size: 1rem;
+    /* Appropriate font size for titles */
+    color: #2d2e6a;
+    /* Dark color for text */
     margin-bottom: 5px;
-    /* Uniform spacing for all text elements */
+    /* Space below the title */
 }
 
+.card-text {
+    text-decoration: none;
+    font-size: 1rem;
+    /* Smaller font size for additional text */
+    color: red;
+    /* Lighter text color for price or other info */
+    margin-bottom: 10px;
+    /* Space below the text */
+}
+.card-title,
+.card-text,
+.card-text small,
+/* Targeting the small tag specifically */
+.card-text a,
+/* In case there are any anchor tags */
+.card-link {
+    /* If the whole card is a link */
+    text-decoration: none;
+    /* Removes underline from text and links */
+    color: inherit;
+    /* Ensures text color is consistent and not overridden by link styles */
+}
+
+/* Additional styling to handle any hover effects that might introduce underlines */
+.card-link:hover,
+.card-link a:hover,
+.card-title:hover,
+.card-text:hover,
+.card-text a:hover {
+    text-decoration: none;
+    /* Ensure no underline appears on hover */
+}
+
+/* Add a subtle separator inside the card if needed */
 .card-footer {
-    padding: 2px;
-    text-align: center;
-    /* Centers footer content */
+    padding: 10px 15px;
+    /* Padding for the footer */
+    background: #f8f8f8;
+    /* Slightly different background for the footer */
     border-top: 1px solid #eee;
+    /* Separator line */
 }
 
 .view-all-container {

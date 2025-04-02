@@ -5,19 +5,19 @@
 
 <!-- Hero Image Carousel -->
 <div class="col-md-12">
-<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-    <!-- Indicators/dots -->
-    <ol class="carousel-indicators">
-        <li data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></li>
-        <li data-bs-target="#heroCarousel" data-bs-slide-to="1"></li>
-        
-    </ol>
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color:#a79a9a;">
+    
 
     <!-- The slideshow/images -->
     <div class="carousel-inner" role="listbox">
-    `<div class="carousel-item active" style="background: url('/images/banners/slider1.webp') center center / cover no-repeat; height: 400px;"></div>
-    <div class="carousel-item" style="background: url('/images/banners/slider2.webp') center center / cover no-repeat; height: 400px;"></div>
-</div>`
+    <div class="carousel-item active">
+        <img src="/images/banners/slider1.webp" alt="Slider Image 1" style="width:100%; height:auto;">
+    </div>
+    <div class="carousel-item">
+        <img src="/images/banners/slider2.webp" alt="Slider Image 2" style="width:100%; height:auto;">
+    </div>
+</div>
+
     <!-- Left and right controls/icons -->
     <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -28,14 +28,48 @@
         <span class="visually-hidden">Next</span>
     </a>
 </div>
+<!-- Indicators/dots -->
+    <ol class="carousel-indicators">
+        <li data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#heroCarousel" data-bs-slide-to="1"></li>
+        
+    </ol>
 </div>
 
+<div class="company-details">
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+             <div class="company-text">
+        
+        <h2>Dianaa Fasteners <span class="intro"><h4>Leading Provider of Engineering and Fasteners Solutions</h4></span></h2>
+            <p>Dianaa Fasteners is established as a key player in the fastener industry, aiming to provide quality products and services. Starting out with only ability, enthusiasm, and a clear vision of destination,our team has earned every single reputation and award.</p>
+    </div>
+    </div>
+    <div class="col-lg-6 col-md-12 d-none d-md-block">
+    <div class="services">
+        <div class="service-item">
+            <i class="fas fa-hammer fa-3x"></i>
+            <p>Construction</p>
+        </div>
+        <div class="service-item">
+            <i class="fas fa-paint-roller fa-3x"></i>
+            <p>Renovations</p>
+        </div>
+        <div class="service-item">
+            <i class="fas fa-seedling fa-3x"></i>
+            <p>Green Building</p>
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
+</div>
 
-<div class="container my-4">
-    <!-- Company Details Section -->
+<!-- <div class="container my-4">
+    Company Details Section
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="company-details">
+            <div class="company-detail">
                 
                 <p>Dianaa Fasteners is established as a key player in the fastener industry, 
                 <br> aiming to provide quality products and services.
@@ -44,7 +78,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 
@@ -102,12 +136,14 @@
                     <button class="category-toggle" onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
                         {{ $category->Name }}
                     </button>
+                    <!-- <hr class="category-divider">  -->
                     <ul class="subcategory-list" id="subcat-{{ $category->CategoryID }}" style="display: none;">
                         @foreach ($category->subcategories as $subcategory)
                             <li class="subcategory-item">
-                                <a href="javascript:void(0);" onclick="loadProducts({{ $subcategory->SubCategoryID }})">
+                                <a href="javascript:void(0);" onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})" class="subcategory-link">
                                     {{ $subcategory->Name }}
                                 </a>
+                                
                             </li>
                         @endforeach
                     </ul>
@@ -210,7 +246,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function toggleSubcategories(subcatId) {
     var element = document.getElementById(subcatId);
-    element.style.display = (element.style.display === 'none') ? 'block' : 'none';
+    // Toggle visibility of the subcategory list
+    element.style.display = element.style.display === 'block' ? 'none' : 'block';
+
+    // Remove 'active' class from all category items
+    document.querySelectorAll('.category-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Add 'active' class to the current category item
+    var parentCategoryItem = element.closest('.category-item');
+    if (parentCategoryItem) {
+        parentCategoryItem.classList.add('active');
+    }
+}
+
+function selectSubcategory(element, subcategoryId) {
+    // Load the products as before
+    loadProducts(subcategoryId);
+
+    // Update active link for subcategories
+    document.querySelectorAll('.subcategory-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    element.classList.add('active');
 }
 
 // Function to load products for a specific subcategory
@@ -235,11 +294,7 @@ function loadProducts(subcategoryId) {
                 `;
             });
             // Append View All button here, inside the check where products are found
-            container.innerHTML += `
-                <div class="text-center view-all-container">
-                    <a href="/subcategories/${subcategoryId}" class="btn btn-primary">View All</a>
-                </div>
-            `;
+           
         } else {
             container.innerHTML = '<p>No products found in this category.</p>';
         }
