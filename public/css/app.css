@@ -14,6 +14,11 @@ header {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+}
+.header-logo {
+    height: 60px;
+    /* Smaller logo for mobile screens */
 }
 
 .header-top-row {
@@ -22,25 +27,15 @@ header {
     align-items: center;
     background-color: #333c8b; /* Navy blue */
     color: white;
-    padding: 10px 15px;
+    padding:8px auto;
+    padding-left: 15px;
+    padding-right: 15px;
     
     
 }
 .header-top-row :hover{
     color:#F0D422;
 
-}
-
-.header-bottom-row {
-    display: flex;
-    justify-content: center;
-    background-color: #696baf; 
-    padding: 10px 0;
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-}
-
-.header-logo img {
-    height: 60px;
 }
 
 .header-search-bar form {
@@ -96,22 +91,6 @@ nav a:hover {
     color: #f0f422; /* Mustard yellow text on hover */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .header-top-row, .header-bottom-row {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .header-search-bar form {
-        width: 90%;
-        margin-top: 10px;
-    }
-
-    .header-cart-login, nav {
-        margin-top: 10px;
-    }
-}
 
 /* Footer Styling */
 .site-footer {
