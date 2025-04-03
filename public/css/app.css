@@ -828,7 +828,7 @@ h3 {
         /* Padding inside each tab */
         transition: all 0.3s ease;
         /* Smooth transition for background and border changes */
-        background-color: white !important;
+        background-color: #2d2e6a !important;
         /* Active and hover background */
         color: white !important;
         /* White text for active and hover states */
@@ -842,9 +842,9 @@ h3 {
 
 .category-toggle {
     width: 100%;
-    background-color: white;
+    background-color: #2d2e6a;
     /* Dark blue background */
-    color: #2d2e6a;
+    color: white;
     /* White text */
     padding: 8px 15px;
     /* Padding inside the button */
@@ -908,7 +908,7 @@ h3 {
 .subcategory-item a {
     display: block;
     padding: 5px 10px;
-    color: #2d2e6a;
+    color: white;
     font-size: 14px;
     text-decoration: none;
     /* Removes underline from links */
@@ -919,7 +919,7 @@ h3 {
 /* Product Display Area */
 #products-display {
     border: 2px solid transparent;
-    border-color: #2d2e6a !important;
+    border-color: white !important;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     /* Creates a responsive grid layout */
@@ -929,6 +929,7 @@ h3 {
     /* Padding around the grid */
     background-color: white;
     /* Light background color for the grid area */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card {

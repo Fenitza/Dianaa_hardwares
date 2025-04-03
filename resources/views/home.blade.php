@@ -165,7 +165,7 @@
         <div class="col-md-3 d-none d-md-block category-sidebar">
             @foreach ($categories as $category)
                 <div class="category-item mb-2">
-                    <button class="category-toggle btn btn-outline-primary w-100 text-start"
+                    <button class="category-toggle 3 text-start"
                             onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
                         {{ $category->Name }}
                     </button>
@@ -275,19 +275,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function toggleSubcategories(subcatId) {
+    // Get the current element
     var element = document.getElementById(subcatId);
-    // Toggle visibility of the subcategory list
-    element.style.display = element.style.display === 'block' ? 'none' : 'block';
 
-    // Remove 'active' class from all category items
-    document.querySelectorAll('.category-item').forEach(item => {
-        item.classList.remove('active');
+    // Get all category elements
+    var allSubcatElements = document.querySelectorAll('.subcategory-list');
+
+    // Loop through all elements and close them except the current one
+    allSubcatElements.forEach(subcat => {
+        if (subcat.id !== subcatId) {
+            subcat.style.display = 'none';
+            // Optionally remove the 'active' class from other categories
+            subcat.closest('.category-item').classList.remove('active');
+        }
     });
 
-    // Add 'active' class to the current category item
+    // Toggle the current element
+    element.style.display = element.style.display === 'block' ? 'none' : 'block';
+
+    // Handle 'active' class for the current category item
     var parentCategoryItem = element.closest('.category-item');
     if (parentCategoryItem) {
-        parentCategoryItem.classList.add('active');
+        parentCategoryItem.classList.toggle('active');
     }
 }
 
