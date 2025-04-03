@@ -177,13 +177,21 @@ header {
 }
 
 .footer-column h4 {
-    color: #F0D422; /* Mustard yellow for headers */
+    color: white; /* Mustard yellow for headers */
     margin-bottom: 10px;
+    text-decoration: underline;
+    font-size: 16px;
 }
 
 .footer-column ul {
     list-style: none;
     padding: 0;
+    font-size: 14px;
+}
+.footer-column p {
+    list-style: none;
+    padding: 0;
+    font-size: 14px;
 }
 
 .footer-column ul li a {
@@ -197,7 +205,7 @@ header {
 }
 
 .social-media-links i {
-    font-size: 24px;
+    font-size: 26px;
     margin-right: 10px;
     color: #F0D422; /* Mustard yellow for payment icons */
 }
@@ -226,7 +234,7 @@ header {
     }
 
     .payment-methods {
-        margin-top: 20px; /* Additional space for icons */
+        margin-top: 30px; /* Additional space for icons */
     }
 }
 
@@ -1311,9 +1319,13 @@ h3 {
 }
 
 .quantity-input {
-    width: 50px;
+    width: 40px;
     padding: 5px;
     text-align: center;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    margin-bottom:-20px;
 }
 
 .cart-btn {

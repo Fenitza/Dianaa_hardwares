@@ -17,7 +17,7 @@
                     <!-- Timeline items -->
                     @foreach([
                         ['year' => 'Year 2000', 'events' => [
-                            'Founding of Diana Fasteners - Established as a key player in the fastener industry.',
+                            'Founding of Dianaa Fasteners - Established as a key player in the fastener industry.',
                             'Partnership with Sundram Fasteners Limited - Became the largest stockist of TVS brand fasteners.'
                         ]],
                         ['year' => 'Year 2010', 'events' => [

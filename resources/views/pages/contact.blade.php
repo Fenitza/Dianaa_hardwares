@@ -14,11 +14,13 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Visit Us:</h4>
-                <p>5th Avenue, London</p>
+                <p>99-100 Srikant Ext, Grey Town,
+                    <br> Coimbatore-641018,
+                    <br> Tamil Nadu, India.</p>
                 <h4>Call Us:</h4>
-                <p>+12 34567890</p>
+                <p>+91 95662 75630</p>
                 <h4>Mail Us:</h4>
-                <p>info@example.com</p>
+                <p>mkt1@dhw.co.in</p>
             </div>
             <div class="col-md-6">
                 <form>
