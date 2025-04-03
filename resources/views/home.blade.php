@@ -38,7 +38,7 @@
 
 <div class="company-details">
     <div class="row">
-        <div class="col-lg-6 col-md-12">
+        <div class="col-lg-6 col-md-12 col-sm-12">
              <div class="company-text">
         
         <h2>Dianaa Fasteners <span class="intro"><h4>Leading Provider of Engineering and Fasteners Solutions</h4></span></h2>
@@ -126,43 +126,73 @@
     </div>
 </div>
 
-<!-- Product table container -->
-<div class="product-table-container mt-4">
+<div class="container product-table-container mt-4">
     <div class="row">
-        <!-- First column for categories and subcategories -->
-        <div class="col-md-3 category-sidebar">
+        <!-- Small/Medium Screens: Accordion for Categories -->
+        <div class="col-12 d-block d-md-none mb-3">
+            <div class="accordion" id="categoryAccordion">
+                @foreach ($categories as $category)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-{{ $category->CategoryID }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse-{{ $category->CategoryID }}" aria-expanded="false"
+                                    aria-controls="collapse-{{ $category->CategoryID }}">
+                                {{ $category->Name }}
+                            </button>
+                        </h2>
+                        <div id="collapse-{{ $category->CategoryID }}" class="accordion-collapse collapse"
+                             aria-labelledby="heading-{{ $category->CategoryID }}" data-bs-parent="#categoryAccordion">
+                            <div class="accordion-body p-2">
+                                <ul class="list-unstyled">
+                                    @foreach ($category->subcategories as $subcategory)
+                                        <li class="mb-1">
+                                            <a href="javascript:void(0);"
+                                               onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})"
+                                               class="subcategory-link text-decoration-none">
+                                                {{ $subcategory->Name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Large Screens: Sidebar for Categories -->
+        <div class="col-md-3 d-none d-md-block category-sidebar">
             @foreach ($categories as $category)
-                <div class="category-item">
-                    <button class="category-toggle" onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
+                <div class="category-item mb-2">
+                    <button class="category-toggle btn btn-outline-primary w-100 text-start"
+                            onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
                         {{ $category->Name }}
                     </button>
-                    <!-- <hr class="category-divider">  -->
-                    <ul class="subcategory-list" id="subcat-{{ $category->CategoryID }}" style="display: none;">
+                    <ul class="subcategory-list list-unstyled ps-3 pt-2" id="subcat-{{ $category->CategoryID }}" style="display: none;">
                         @foreach ($category->subcategories as $subcategory)
-                            <li class="subcategory-item">
-                                <a href="javascript:void(0);" onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})" class="subcategory-link">
+                            <li class="subcategory-item mb-1">
+                                <a href="javascript:void(0);"
+                                   onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})"
+                                   class="subcategory-link text-decoration-none d-block">
                                     {{ $subcategory->Name }}
                                 </a>
-                                
                             </li>
                         @endforeach
                     </ul>
                 </div>
             @endforeach
         </div>
-        
-        <!-- Second column for displaying products -->
-        <div class="col-md-9" id="products-display" class="categ-card">
-            <!-- Default message when no subcategory is selected -->
+
+        <!-- Product Display -->
+        <div class="col-12 col-md-9" id="products-display">
             <div id="default-message" class="text-center mt-5">
-                <p>Select Categories from here</p>
-                <i class="fas fa-hand-point-left"></i> <!-- FontAwesome icon example -->
+                <p class="text-muted">Select Categories from here</p>
+                <i class="fas fa-hand-point-left fa-2x text-primary"></i>
             </div>
-            <!-- Products will be dynamically loaded here via JavaScript -->
         </div>
     </div>
 </div>
-
 
 
 <!-- Testimonials Section -->

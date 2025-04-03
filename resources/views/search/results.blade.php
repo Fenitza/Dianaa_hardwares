@@ -58,13 +58,13 @@
 
     .search-title {
         color: #2a2e6a;
-        font-size: 1.8rem;
+        font-size: 1.2rem;
         font-weight: bold;
         margin-bottom: 30px;
     }
 
     .results-heading {
-        font-size: 1.4rem;
+        font-size: 0.8rem;
         color: #2a2e6a;
         border-bottom: 2px solid #A5CD36;
         padding-bottom: 5px;

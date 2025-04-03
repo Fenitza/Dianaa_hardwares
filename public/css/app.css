@@ -25,7 +25,8 @@ header {
     display: flex;
     justify-content:space-around;
     align-items: center;
-    background-color: #333c8b; /* Navy blue */
+    background-color: #333c8b; 
+    /* Navy blue */
     color: white;
     padding:8px auto;
     padding-left: 15px;
@@ -76,19 +77,78 @@ header {
     transition: color 0.3s; /* Smooth transition for hover effect */
 }
 
-/* Hover effects */
-.header-bottom-row:hover {
-    background-color: #98bf2f; /* Slightly darker shade of lime green */
-    color:#2a2e6a !important;
-}
 
 .header-search-bar button:hover {
     background-color: #e8c52f; /* Lighter shade of yellow */
     color: white; /* White text for better visibility */
 }
 
-nav a:hover {
+.header-cart-login a:hover, nav a:hover {
     color: #f0f422; /* Mustard yellow text on hover */
+}
+@media (max-width: 991px) {
+    .btn-sm i {
+        font-size: 1rem;
+    }
+
+    .navbar-toggler {
+        border: none;
+        background: transparent;
+    }
+}
+
+/* Dropdown panel */
+#navbarToggleExternalContent {
+    background-color: #1d237e;
+    border-radius: 8px;
+    margin: 20px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: fadeSlideDown 0.3s ease;
+}
+
+/* Menu links */
+#navbarToggleExternalContent a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Remove border for last item */
+#navbarToggleExternalContent a:last-child {
+    border-bottom: none;
+}
+
+/* Icon color and animation */
+#navbarToggleExternalContent i {
+    color: #ffc107;
+    font-size: 1rem;
+}
+
+/* Hover style */
+#navbarToggleExternalContent a:hover {
+    background-color: #2a318f;
+    padding-left: 8px;
+    border-radius: 4px;
+}
+
+/* Fade + slide animation */
+@keyframes fadeSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
