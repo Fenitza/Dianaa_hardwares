@@ -1,6 +1,6 @@
 <header>
     <!-- Section for Small and Medium Screens -->
-    <div class="d-block d-lg-none text-white py-2" style="background-color: #333c8b;">
+    <div class="d-block d-lg-none text-white py-2" style="background-color: #333c8b; padding-left: 30px; padding-right: 30px;">
     <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
             <!-- Left: Toggler and Logo -->
@@ -28,10 +28,17 @@
                     </button>
 
                     <!-- Login Icon -->
-                    @if(Auth::check())
-                        <a href="{{ route('user.profile') }}" class="btn btn-outline-light btn-sm" title="Account">
-                            <i class="bi bi-person-fill"></i>
-                        </a>
+                      @if(Auth::check())
+                @if(Auth::user()->role === 'admin')
+                    <!-- Admin specific link -->
+                    <a href="{{ route('admin.products') }}" class="btn btn-outline-light btn-sm" title="Account">
+                            <i class="bi bi-person-fill"></i></a> 
+                @else
+                    <!-- Standard user link -->
+                    <a href="{{ route('user.profile') }}"class="btn btn-outline-light btn-sm" title="Account">
+                            <i class="bi bi-person-fill"></i></a> 
+                @endif
+                   
                     @else
                         <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm" title="Login">
                             <i class="bi bi-box-arrow-in-right"></i>
@@ -91,10 +98,15 @@
                             <a href="{{ route('products_main') }}" class="me-2 text-decoration-none">
                                 <i class="bi bi-grid-3x3-gap-fill"></i> Products
                             </a> |
-                            @if(Auth::check())
-                                <a href="{{ route('user.profile') }}" class="me-2  text-decoration-none">
-                                    <i class="bi bi-person-fill"></i> {{ Auth::user()->name }}
-                                </a> |
+
+                             @if(Auth::check())
+                                    @if(Auth::user()->role === 'admin')
+                                        <!-- Admin specific link -->
+                                        <a href="{{ route('admin.products') }}">{{ Auth::user()->name }}</a> | 
+                                    @else
+                                        <!-- Standard user link -->
+                                        <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a> | 
+                                    @endif
                                 <a href="{{ route('logout') }}" class=" text-decoration-none"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout 
@@ -135,7 +147,14 @@
             <a href="{{ route('about_us') }}"><i class="bi bi-info-circle"></i> About Us</a>
             <a href="{{ route('products_main') }}" class="text-white d-block"><i class="bi bi-grid-3x3-gap-fill"></i> Products</a>
             @if(Auth::check())
-                <a href="{{ route('user.profile') }}" class="text-white d-block"><i class="bi bi-person-fill"></i>  {{ Auth::user()->name }}</a>
+                @if(Auth::user()->role === 'admin')
+                    <!-- Admin specific link -->
+                    <a href="{{ route('admin.products') }}" class="text-white d-block"><i class="bi bi-person-fill"></i>{{ Auth::user()->name }}</a> | 
+                @else
+                    <!-- Standard user link -->
+                    <a href="{{ route('user.profile') }}" class="text-white d-block"><i class="bi bi-person-fill"></i>{{ Auth::user()->name }}</a> | 
+                @endif
+
                 <a href="{{ route('logout') }}" class="text-white d-block" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             @else
                 <a href="{{ route('login') }}" class="text-white d-block"><i class="bi bi-box-arrow-in-right"></i> Login</a>
