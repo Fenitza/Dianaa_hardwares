@@ -137,8 +137,9 @@ class ProductController extends Controller
         'property_class' => 'nullable|string',
         'standard' => 'nullable|string',
         'material' => 'nullable|string',
-        'ManufacturerID' => 'nullable|integer',
-        'SubCategoryID' => 'nullable|integer',
+        'type' => 'required|string',
+        'ManufacturerID' => 'required|integer',
+        'SubCategoryID' => 'required|integer',
     ];
 
     // Run validation
@@ -215,8 +216,9 @@ class ProductController extends Controller
         'property_class' => 'nullable|string',
         'standard' => 'nullable|string',
         'material' => 'nullable|string',
-        'ManufacturerID' => 'nullable|integer',
-        'SubCategoryID' => 'nullable|integer',
+        'type' => 'required|string',
+        'ManufacturerID' => 'required|integer',
+        'SubCategoryID' => 'required|integer',
     ];
 
     // Run validation

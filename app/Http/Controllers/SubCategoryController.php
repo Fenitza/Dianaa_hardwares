@@ -126,20 +126,41 @@ class SubCategoryController extends Controller
 }
 
 
-    
-    public function getProducts($id = null)
+public function getProducts(Request $request, $id = null)
 {
+    $type = $request->query('type'); // Get the type from query parameters
+
     // If no ID is provided, automatically determine the first subcategory of the first category
     if (is_null($id)) {
-        $firstCategory = Category::with('subcategories')->first(); // Get the first category that has subcategories
+        $firstCategory = Category::with(['subcategories' => function($query) use ($type) {
+            // Optionally filter subcategories that have at least one product of the specified type
+            if ($type) {
+                $query->whereHas('products', function($q) use ($type) {
+                    $q->where('type', $type);
+                });
+            }
+        }])->first();
+
         if ($firstCategory && $firstCategory->subcategories->count() > 0) {
-            $id = $firstCategory->subcategories->first()->SubCategoryID; // Get the ID of the first subcategory
+            $id = $firstCategory->subcategories->first()->SubCategoryID;
         } else {
-            return response()->json(['error' => 'No products available'], 404); // No subcategories found
+            return response()->json(['error' => 'No products available'], 404); // No subcategories or products of the specified type found
         }
     }
 
-    $products = Subcategory::find($id)->products()->take(3)->get();
+    $subcategory = Subcategory::find($id);
+    if (!$subcategory) {
+        return response()->json(['error' => 'Subcategory Products not found'], 404);
+    }
+
+    // Construct the products query based on the type
+    $productsQuery = $subcategory->products(); // Assuming 'products' is a relationship defined in Subcategory model
+    if ($type) {
+        $productsQuery->where('type', $type);
+    }
+
+    $products = $productsQuery->take(3)->get();
+
     return response()->json($products);
 }
 

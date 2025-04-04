@@ -45,7 +45,12 @@
                     <label for="size">Size</label>
                     <input type="text" class="form-control" id="size" name="size">
                 </div>
-                <div class="form-group">
+                
+           
+        </div>
+            <div class="col-md-4">
+        
+            <div class="form-group">
                     <label for="length">Length</label>
                     <input type="text" class="form-control" id="length" name="length">
                 </div>
@@ -61,11 +66,15 @@
                     <label for="material">Material</label>
                     <input type="text" class="form-control" id="material" name="material">
                 </div>
-           
-        </div>
-            <div class="col-md-4">
-        
-            
+
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select id="type" name="type" required class="form-control">
+                        <option value="Featured">Featured</option>
+                        <option value="Best Sellers">Best Sellers</option>
+                        <option value="New Arrivals">New Arrivals</option>
+                    </select>
+                </div>
             <div class="form-group">
                 <label for="product_image">Product Images</label>
                 <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple required>
@@ -78,7 +87,7 @@
             <div class="form-group">
                 <label for="ManufacturerID">Manufacturer</label>
                 <!-- Manufacturer Select -->
-                <select class="form-control" id="ManufacturerID" name="ManufacturerID">
+                <select class="form-control" id="ManufacturerID" name="ManufacturerID" required>
                     @foreach ($manufacturers as $manufacturer)
                         <option value="{{ $manufacturer->ManufacturerID }}">{{ $manufacturer->Name }}</option>
                     @endforeach
@@ -88,7 +97,7 @@
             </div>
             <div class="form-group">
                 <label for="SubCategoryID">Category</label>
-                <select class="form-control" id="SubCategoryID" name="SubCategoryID">
+                <select class="form-control" id="SubCategoryID" name="SubCategoryID" required`>
                 @foreach ($subcategories as $subcategory)
                     <option value="{{ $subcategory->SubCategoryID }}">{{ $subcategory->Name }}</option>
                 @endforeach

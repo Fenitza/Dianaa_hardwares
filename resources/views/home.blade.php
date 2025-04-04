@@ -99,34 +99,8 @@
     </div>
 </div>
 
-
-
-<!-- Product Categories -->
-<div id="product-categories">
-    <h2 class="section-title">Product Categories</h2>
-    <div class="row justify-content-center">
-        @foreach ($categories as $category)
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
-            <div class="categ-card text-center">
-                <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid" style="height: 100px;">
-                <div class="card-body">
-                    <p class="categ-card-title">{{ $category->Name }}</p>
-                </div>
-                <div class="category-overlay">
-                    <ul class="subcategory-links">
-                        @foreach ($category->subcategories->take(3) as $subcategory)
-                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">{{ $subcategory->Name }}</a></li>
-                        @endforeach
-                        <li><a href="{{ route('products', ['category' => $category->CategoryID]) }}" class="view-all-link">View All</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
-
-<div class="container product-table-container mt-4">
+<!-- Product table with type -->
+ <div class="container product-table-container mt-4">
     <div class="row">
         <!-- Small/Medium Screens: Accordion for Categories -->
         <div class="col-12 d-block d-md-none mb-3">
@@ -165,7 +139,7 @@
         <div class="col-md-3 d-none d-md-block category-sidebar">
             @foreach ($categories as $category)
                 <div class="category-item mb-2">
-                    <button class="category-toggle 3 text-start"
+                    <button class="category-toggle text-start"
                             onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
                         {{ $category->Name }}
                     </button>
@@ -184,15 +158,64 @@
             @endforeach
         </div>
 
-        <!-- Product Display -->
-        <div class="col-12 col-md-9" id="products-display">
-            <div id="default-message" class="text-center mt-5">
-                <p class="text-muted">Select Categories from here</p>
-                <i class="fas fa-hand-point-left fa-2x text-primary"></i>
+        <!-- Product Display Tabs -->
+        <div class="col-md-9">
+            <ul class="nav table-nav-tabs">
+                <li class="table-nav-item">
+                    <a class="table-nav-link active"  onclick="loadProducts(currentSubcategoryId, 'Featured')">Featured</a>
+                </li>
+                <li class="table-nav-item">
+                    <a class="table-nav-link"  onclick="loadProducts(currentSubcategoryId, 'New Arrivals')">New Arrival</a>
+                </li>
+                <li class="table-nav-item">
+                    <a class="table-nav-link"  onclick="loadProducts(currentSubcategoryId, 'Best Sellers')">Best Sellers</a>
+                </li>
+            </ul>
+            <!-- Product Display -->
+            <div id="products-display" class="mt-3">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="default-message" class="text-center">
+                            <p class="text-muted">Select a category above to view products</p>
+                            <i class="fas fa-hand-point-up fa-2x text-primary"></i>
             </div>
         </div>
     </div>
 </div>
+ </div>
+    </div>
+</div>
+
+<!-- Product Categories -->
+<div id="product-categories">
+    <h2 class="section-title">Product Categories</h2>
+    <div class="row justify-content-center">
+        @foreach ($categories as $category)
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+            <div class="categ-card text-center">
+                <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid" style="height: 100px;">
+                <div class="card-body">
+                    <p class="categ-card-title">{{ $category->Name }}</p>
+                </div>
+                <div class="category-overlay">
+                    <ul class="subcategory-links">
+                        @foreach ($category->subcategories->take(3) as $subcategory)
+                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">{{ $subcategory->Name }}</a></li>
+                        @endforeach
+                        <li><a href="{{ route('products', ['category' => $category->CategoryID]) }}" class="view-all-link">View All</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+
+
+
+ 
+
 
 
 <!-- Testimonials Section -->
@@ -273,50 +296,58 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
+let currentSubcategoryId = null; 
 function toggleSubcategories(subcatId) {
-    // Get the current element
-    var element = document.getElementById(subcatId);
+        const element = document.getElementById(subcatId);
+        const allSubcatElements = document.querySelectorAll('.subcategory-list');
 
-    // Get all category elements
-    var allSubcatElements = document.querySelectorAll('.subcategory-list');
+        allSubcatElements.forEach(subcat => {
+            if (subcat.id !== subcatId) {
+                subcat.style.display = 'none';
+                subcat.closest('.category-item').classList.remove('active');
+            }
+        });
 
-    // Loop through all elements and close them except the current one
-    allSubcatElements.forEach(subcat => {
-        if (subcat.id !== subcatId) {
-            subcat.style.display = 'none';
-            // Optionally remove the 'active' class from other categories
-            subcat.closest('.category-item').classList.remove('active');
+        element.style.display = element.style.display === 'block' ? 'none' : 'block';
+        const parentCategoryItem = element.closest('.category-item');
+        if (parentCategoryItem) {
+            parentCategoryItem.classList.toggle('active');
         }
-    });
-
-    // Toggle the current element
-    element.style.display = element.style.display === 'block' ? 'none' : 'block';
-
-    // Handle 'active' class for the current category item
-    var parentCategoryItem = element.closest('.category-item');
-    if (parentCategoryItem) {
-        parentCategoryItem.classList.toggle('active');
     }
-}
+    function selectSubcategory(element, subcategoryId) {
+    console.log("Selected Subcategory ID:", subcategoryId);
+    currentSubcategoryId = subcategoryId; // Update the current subcategory ID
 
-function selectSubcategory(element, subcategoryId) {
-    // Load the products as before
-    loadProducts(subcategoryId);
-
-    // Update active link for subcategories
+    // Remove the 'active' class from all subcategory links
     document.querySelectorAll('.subcategory-link').forEach(link => {
         link.classList.remove('active');
     });
+
+    // Add the 'active' class to the clicked element
     element.classList.add('active');
+
+    // Load products after setting the ID and updating the active class
+    loadProducts(currentSubcategoryId, 'Featured');
 }
 
-// Function to load products for a specific subcategory
-function loadProducts(subcategoryId) {
-    fetch(`/subcategories/${subcategoryId}/products`)
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('products-display');
+    function loadProducts(currentSubcategoryId, type) {
+        if (currentSubcategoryId === null) {
+            console.error('Subcategory ID is not set.');
+            return;
+        }
+        document.querySelectorAll('.table-nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // Set active class on clicked tab - You need to pass the clicked element or find it
+    // If you are using 'this' or an event object to identify the clicked tab, use it to add 'active'
+    // For example, if `this` is the clicked element:
+    event.target.classList.add('active');
+
+        fetch(`/subcategories/${currentSubcategoryId}/products?type=${type}`)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('products-display');
         container.innerHTML = ''; // Clear existing content
         if (data.length > 0) {
             data.forEach(product => {

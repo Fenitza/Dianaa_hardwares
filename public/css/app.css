@@ -914,7 +914,64 @@ h3 {
     /* Removes underline from links */
 }
 
+/* Base styles for the product table navigation */
+.nav {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #003366;
+    /* Dark blue background for the navbar */
+}
 
+.table-nav-item {
+    flex-grow: 0;
+    /* Ensure that nav items evenly distribute the space */
+}
+
+.table-nav-link {
+    display: block;
+    text-align: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: white;
+    /* White text color */
+    background-color: #003366;
+    /* Dark blue background for non-active links */
+    border: none;
+    transition: background-color 0.3s ease;
+    /* Smooth transition for hover effect */
+}
+
+.table-nav-link:hover
+ {
+    background-color: #0057b8;
+    color:white;
+    /* Lighter blue on hover */
+}
+
+.table-nav-link.active {
+    background-color: #4CAF50;
+    /* Green background for the active link */
+    transform: scale(1.07);
+}
+
+ .product-table-container .row {
+     flex-wrap: nowrap;
+ }
+
+ .category-sidebar,
+ .product-table-container .col-md-9 {
+     flex-grow: 1;
+     display: flex;
+     flex-direction: column;
+ }
+
+ .category-item,
+ #products-display {
+     flex: 1;
+     overflow: hidden;
+ }
 
 /* Product Display Area */
 #products-display {

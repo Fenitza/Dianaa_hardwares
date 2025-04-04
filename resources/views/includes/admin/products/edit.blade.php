@@ -42,6 +42,11 @@
                     <label for="size">Size</label>
                     <input type="text"  class="form-control" id="size" name="size" value="{{ $product->Size }}">
                 </div>
+                
+                
+            </div>
+
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="length">Length</label>
                     <input type="text" class="form-control" id="length" name="length" value="{{ $product->Length }}">
@@ -58,8 +63,15 @@
                     <label for="material">Material</label>
                     <input type="text" class="form-control" id="material" name="material" value="{{ $product->Material }}">
                 </div>
+            
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select id="type" name="type" required class="form-control">
+                    <option value="Featured" {{ $product->Type == 'Featured' ? 'selected' : '' }}>Featured</option>
+                    <option value="Best Sellers" {{ $product->Type == 'Best Sellers' ? 'selected' : '' }}>Best Sellers</option>
+                    <option value="New Arrivals" {{ $product->Type == 'New Arrivals' ? 'selected' : '' }}>New Arrivals</option>
+                </select>
             </div>
-            <div class="col-md-4">
                 <div class="form-group">
                 <label for="product_image">Product Images</label>
                 <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple required>
@@ -68,7 +80,7 @@
             </div>
                 <div class="form-group">
                     <label for="ManufacturerID">Manufacturer</label>
-                    <select class="form-control" id="ManufacturerID" name="ManufacturerID">
+                    <select class="form-control" id="ManufacturerID" name="ManufacturerID" required>
                         @foreach ($manufacturers as $manufacturer)
                             <option value="{{ $manufacturer->ManufacturerID }}" {{ $product->ManufacturerID == $manufacturer->ManufacturerID ? 'selected' : '' }}>{{ $manufacturer->Name }}</option>
                         @endforeach
@@ -76,7 +88,7 @@
                 </div>
                 <div class="form-group">
                     <label for="SubCategoryID">Category</label>
-                    <select class="form-control" id="SubCategoryID" name="SubCategoryID">
+                    <select class="form-control" id="SubCategoryID" name="SubCategoryID" required>
                         @foreach ($subcategories as $subcategory)
                             <option value="{{ $subcategory->SubCategoryID }}" {{ $product->SubCategoryID == $subcategory->SubCategoryID ? 'selected' : '' }}>{{ $subcategory->Name }}</option>
                         @endforeach
