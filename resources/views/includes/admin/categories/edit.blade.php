@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mt-4">
+<div class="container mt-4"> 
     <h1 class="mb-4">Edit Category</h1>
     <form action="{{ route('admin.categories.update', $category->CategoryID) }}" method="POST" enctype="multipart/form-data">
         @csrf

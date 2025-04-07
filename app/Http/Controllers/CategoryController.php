@@ -51,7 +51,7 @@ class CategoryController extends Controller
     $categories = Category::with(['subcategories' => function($query) {
         $query->with(['products' => function($query) {
             $query->take(6); // Adjust the number as needed
-        }]);
+        }]); 
     }])->get();
     return view('home', compact('categories'));
 }

@@ -11,8 +11,8 @@
             <!-- Existing sorting and button functionalities -->
                 <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data" style="display: inline-block;">
                     @csrf
-                    <input type="file" name="product_file" id="product_file" accept=".xlsx, .xls" hidden onchange="this.form.submit()">
-                    <label for="product_file" class="btn btn-info">Upload Excel File</label>
+                    <input type="file" name="excel_file" id="excel_file" accept=".xlsx, .xls" hidden onchange="this.form.submit()">
+                    <label for="excel_file" class="btn btn-info">Upload Excel File</label>
                 </form>
         
                 <div class="sort">
