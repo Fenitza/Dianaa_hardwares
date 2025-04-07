@@ -45,6 +45,10 @@
                     <label for="size">Size</label>
                     <input type="text" class="form-control" id="size" name="size">
                 </div>
+                <div class="form-group">
+                    <label for="color">Colour</label>
+                    <input type="text" class="form-control" id="color" name="color">
+                </div>
                 
            
         </div>

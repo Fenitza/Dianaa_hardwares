@@ -920,7 +920,7 @@ h3 {
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: #003366;
+    background-color: #2d2e6a;
     /* Dark blue background for the navbar */
 }
 
@@ -936,7 +936,7 @@ h3 {
     text-decoration: none;
     color: white;
     /* White text color */
-    background-color: #003366;
+    background-color: #2d2e6a;
     /* Dark blue background for non-active links */
     border: none;
     transition: background-color 0.3s ease;
@@ -953,7 +953,7 @@ h3 {
 .table-nav-link.active {
     background-color: #4CAF50;
     /* Green background for the active link */
-    transform: scale(1.07);
+    transform: scale(1.07); 
 }
 
  .product-table-container .row {

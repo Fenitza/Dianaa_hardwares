@@ -173,16 +173,14 @@
             </ul>
             <!-- Product Display -->
             <div id="products-display" class="mt-3">
-                <div class="row">
-                    <div class="col-12">
+               
                         <div id="default-message" class="text-center">
-                            <p class="text-muted">Select a category above to view products</p>
-                            <i class="fas fa-hand-point-up fa-2x text-primary"></i>
+                            <p class="text-muted">Select a category here to view products</p>
+                            <i class="fas fa-hand-point-left fa-2x text-primary"></i>
+                        </div>
+                  
             </div>
         </div>
-    </div>
-</div>
- </div>
     </div>
 </div>
 

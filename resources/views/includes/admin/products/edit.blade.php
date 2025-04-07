@@ -42,6 +42,10 @@
                     <label for="size">Size</label>
                     <input type="text"  class="form-control" id="size" name="size" value="{{ $product->Size }}">
                 </div>
+                <div class="form-group">
+                    <label for="color">Colour</label>
+                    <input type="text" class="form-control" id="color" name="color" value="{{ $product->Color }}">
+                </div>
                 
                 
             </div>
@@ -74,9 +78,18 @@
             </div>
                 <div class="form-group">
                 <label for="product_image">Product Images</label>
-                <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple required>
+                <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple >
                 <div id="file-name-display" class="mt-2"></div> <!-- Container to display file names -->
-                <div id="image-preview-container" class="mt-2"></div>
+                <div id="image-preview-container" class="mt-2">
+                     {{-- Display existing images --}}
+                     @php
+                        
+                        $images = json_decode($product->image_paths, true); // Assuming images are stored as JSON
+                    @endphp
+                    @foreach ($images as $image)
+                        <img src="{{ Storage::url($image) }}" alt="Image preview" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                    @endforeach
+                </div>
             </div>
                 <div class="form-group">
                     <label for="ManufacturerID">Manufacturer</label>

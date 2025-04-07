@@ -159,7 +159,7 @@ public function getProducts(Request $request, $id = null)
         $productsQuery->where('type', $type);
     }
 
-    $products = $productsQuery->take(3)->get();
+    $products = $productsQuery->take(6)->get();
 
     return response()->json($products);
 }

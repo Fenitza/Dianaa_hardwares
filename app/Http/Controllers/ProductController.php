@@ -99,7 +99,7 @@ class ProductController extends Controller
             $lastRow = $worksheet->getHighestRow();
 
             for ($row = 6; $row <= $lastRow; $row++) {
-                $imageNames = $worksheet->getCell('Q' . $row)->getValue();
+                $imageNames = $worksheet->getCell('R' . $row)->getValue();
                 $imageNamesArray = explode(',', $imageNames); // Assuming names are comma-separated
                 $imagePathsJson = [];
                 $productImage = null;
@@ -139,22 +139,23 @@ class ProductController extends Controller
                     'vendorPrice' => $worksheet->getCell('G' . $row)->getValue(),
                     'quantity' => $worksheet->getCell('H' . $row)->getValue(),
                     'size' => trim($worksheet->getCell('I' . $row)->getValue()),
-                    'length' => trim($worksheet->getCell('J' . $row)->getValue()),
-                    'property_class' => trim($worksheet->getCell('K' . $row)->getValue()),
-                    'standard' => trim($worksheet->getCell('L' . $row)->getValue()),
-                    'material' => trim($worksheet->getCell('M' . $row)->getValue()),
-                    'type' => trim($worksheet->getCell('N' . $row)->getValue()),
-                    'ManufacturerID' => (int)$worksheet->getCell('O' . $row)->getValue(),
-                    'SubCategoryID' => (int)$worksheet->getCell('P' . $row)->getValue(),
+                    'color' => trim($worksheet->getCell('J' . $row)->getValue()),
+                    'length' => trim($worksheet->getCell('K' . $row)->getValue()),
+                    'property_class' => trim($worksheet->getCell('L' . $row)->getValue()),
+                    'standard' => trim($worksheet->getCell('M' . $row)->getValue()),
+                    'material' => trim($worksheet->getCell('N' . $row)->getValue()),
+                    'type' => trim($worksheet->getCell('O' . $row)->getValue()),
+                    'ManufacturerID' => (int)$worksheet->getCell('P' . $row)->getValue(),
+                    'SubCategoryID' => (int)$worksheet->getCell('Q' . $row)->getValue(),
                     'image_paths' => json_encode($imagePathsJson),
                     'product_image' => $productImage,
                 ];
 
                 $product = Product::updateOrCreate(['sku' => $sku], $productData);
                 if ($product->wasRecentlyCreated) {
-                    Log::info('Product created successfully', ['id' => $product->id]);
+                    Log::info('Product created successfully', ['id' => $product->ProductID]);
                 } else {
-                    Log::info('Product updated successfully', ['id' => $product->id]);
+                    Log::info('Product updated successfully', ['id' => $product->ProductID]);
                 }
             }
 
@@ -191,6 +192,7 @@ class ProductController extends Controller
         'image_path' => 'nullable|array',
         'image_path.*' => 'image|max:2048', // Validates each file in the array
         'size' => 'nullable|string',
+        'color' => 'nullable|string',
         'length' => 'nullable|string',
         'property_class' => 'nullable|string',
         'standard' => 'nullable|string',
@@ -270,6 +272,7 @@ class ProductController extends Controller
         'image_path' => 'nullable|array',
         'image_path.*' => 'image|max:2048', // Validates each file in the array
         'size' => 'nullable|string',
+        'color' => 'nullable|string',
         'length' => 'nullable|string',
         'property_class' => 'nullable|string',
         'standard' => 'nullable|string',
