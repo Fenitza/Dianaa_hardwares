@@ -88,7 +88,8 @@ class ProductController extends Controller
         return view('includes.admin.products.create', compact( 'manufacturers', 'subcategories'));
     }
 
-   public function importExcel(Request $request)
+
+    public function importExcel(Request $request)
     {
         $inputFileName = $request->file('excel_file')->path();  // Assuming file input name is 'excel_file'
         $productImagePath = storage_path('app/public/products/');  // Ensure this path is correct and writable
@@ -129,6 +130,7 @@ class ProductController extends Controller
                     }
                 }
 
+                // Product data population from the spreadsheet
                 $sku = trim($worksheet->getCell('D' . $row)->getValue());
                 $productData = [
                     'name' => trim($worksheet->getCell('B' . $row)->getValue()),
@@ -165,6 +167,8 @@ class ProductController extends Controller
             return redirect()->back()->withErrors('Failed to import products: ' . $e->getMessage());
         }
     }
+
+
   
 
 
