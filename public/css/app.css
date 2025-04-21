@@ -633,6 +633,7 @@ h3 {
     background-position: center;
     background-repeat: no-repeat;
     background-color: #333c8b;
+    color: #fff4c430;
     /* Ensures the image does not repeat */
     height: 150px;
     /* Adjust height accordingly */
