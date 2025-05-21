@@ -11,16 +11,21 @@ class Product extends Model
     protected $primaryKey = 'ProductID';
 
     protected $fillable = [
-        'name', 'description', 'sku', 'salePrice','vendorPrice', 'basePrice', 'quantity', 'product_image',
-        'size', 'length', 'property_class', 'standard', 'material', 'ManufacturerID', 'SubCategoryID',
-        'image_paths' , 'type', 'color'
+        // 'name', 'description', 'sku', 'salePrice','vendorPrice', 'basePrice', 'quantity', 'product_image',
+        // 'size', 'length', 'property_class', 'standard', 'material', 'ManufacturerID', 'SubCategoryID',
+        // 'image_paths' , 'type', 'color'
+        'slno','sku','description','salePrice','vendorPrice', 'basePrice','discount','moq',
+        'chapterID','SubCategoryID','standardISO','grade','size','threadType','color','metric','type',
+        'standardType','point','pitch','pitchType','length','weight','image_paths'
     ];
 
     protected $casts = [
     'salePrice' => 'float',  // or 'double'
     'vendorPrice' => 'float',  // or 'double'
     'basePrice' => 'float',  // or 'double'
-    'image_paths' => 'array'  // Ensure that image_paths is treated as an array
+    'image_paths' => 'array',  // Ensure that image_paths is treated as an array
+    'pitch' => 'float',  // or 'double'
+    'weight' => 'float',  // or 'double'
 ];
 
     
