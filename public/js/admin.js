@@ -71,41 +71,35 @@ function previewMultipleImages(event) {
 
 
 // file name display
-document.addEventListener('DOMContentLoaded', function() {
-    var fileInput = document.getElementById('image_path');
-    var fileDisplayArea = document.getElementById('file-name-display');
-    var previewContainer = document.getElementById('image-preview-container'); // Ensure this div exists in your HTML
+document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('image_path');
+        const fileDisplayArea = document.getElementById('file-name-display');
+        const previewContainer = document.getElementById('image-preview-container');
 
-    fileInput.addEventListener('change', function(event) {
-        var files = event.target.files;
-        var fileNames = [];
+        fileInput.addEventListener('change', function (event) {
+            const files = event.target.files;
+            let fileNames = [];
 
-        previewContainer.innerHTML = ''; // Clear existing previews
+            previewContainer.innerHTML = ''; // Clear existing previews
 
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            fileNames.push(file.name); // Add file name to the list
+            Array.from(files).forEach(file => {
+                fileNames.push(file.name);
 
-            // Check if the file is an image.
-            if (file.type.startsWith('image/')) {
-                var img = document.createElement('img');
-                img.classList.add('img-preview');
-                img.style.width = '100px'; // Set image preview size
-                img.style.height = '100px'; // Set image preview size
-                img.style.objectFit = 'cover'; // Set how the image should be resized to fit the container
-                img.style.marginRight = '10px'; // Add some space between images
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.classList.add('img-preview');
 
-                previewContainer.appendChild(img); // Add the image to the container
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
 
-                var reader = new FileReader();
-                reader.onload = (function(aImg) {
-                    return function(e) { aImg.src = e.target.result; };
-                })(img);
-                reader.readAsDataURL(file);
-            }
-        }
+                    previewContainer.appendChild(img);
+                }
+            });
 
-        // Display all filenames
-        fileDisplayArea.textContent = fileNames.join(', ');
+            // Display filenames
+            fileDisplayArea.innerHTML = `<strong>Selected:</strong> ${fileNames.join(', ')}`;
+        });
     });
-});

@@ -182,26 +182,35 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
 {
-    $product = Product::findOrFail($id); // Retrieve the product or fail if not found
+    $product = Product::findOrFail($id);
 
-    // Define validation rules
     $rules = [
-        'name' => 'required|string|max:255',
+        'slno' => 'required|string|max:255',
+        'sku' => 'required|string|max:50|unique:products,sku,' . $id . ',ProductID',
         'description' => 'required|string',
-        'sku' => 'required|string|max:50',
-        'salePrice' => 'required|decimal:2',
-        'basePrice' => 'required|decimal:2',
-        'vendorPrice' => 'required|decimal:2',
-        'quantity' => 'required|integer',
-        'image_path' => 'nullable|array',
-        'image_path.*' => 'image|max:2048', // Validates each file in the array
+        'salePrice' => 'required|numeric',
+        'vendorPrice' => 'required|numeric',
+        'basePrice' => 'required|numeric',
+        'discount' => 'nullable|numeric',
+        'moq' => 'nullable|integer',
+        'chapterID' => 'nullable|string',
+        'SubCategoryID' => 'required|exists:sub_categories,SubCategoryID',
+        'ManufacturerID' => 'required|exists:manufacturers,ManufacturerID',
+        'standardISO' => 'nullable|string',
+        'grade' => 'nullable|string',
         'size' => 'nullable|string',
+        'threadType' => 'nullable|string',
         'color' => 'nullable|string',
-        'length' => 'nullable|string',
-        'property_class' => 'nullable|string',
-        'standard' => 'nullable|string',
-        'material' => 'nullable|string',
+        'metric' => 'nullable|string',
         'type' => 'required|string',
+        'standardType' => 'nullable|string',
+        'point' => 'nullable|string',
+        'pitch' => 'nullable|numeric',
+        'pitchType' => 'nullable|string',
+        'length' => 'nullable|string',
+        'weight' => 'nullable|numeric',
+        'quantity' => 'required|integer',
+        'image_path.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         'ManufacturerID' => 'required|integer',
         'SubCategoryID' => 'required|integer',
     ];
@@ -262,30 +271,37 @@ class ProductController extends Controller
 
 
     public function store(Request $request)
-    {
-        // dd($request->all());
-    // Define validation rules
+{
     $rules = [
-        'name' => 'required|string|max:255',
+        'slno' => 'required|string|max:255',
+        'sku' => 'required|string|max:50|unique:products,sku',
         'description' => 'required|string',
-        'sku' => 'required|string|max:50',
-        'salePrice' => 'required|numeric|between:0,999999.99',
-        'basePrice' => 'required|numeric|between:0,999999.99',
-        'vendorPrice' => 'required|numeric|between:0,999999.99',
-        'quantity' => 'required|integer',
-        'image_path' => 'nullable|array',
-        'image_path.*' => 'image|max:2048', // Validates each file in the array
+        'salePrice' => 'required|numeric',
+        'vendorPrice' => 'required|numeric',
+        'basePrice' => 'required|numeric',
+        'discount' => 'nullable|numeric',
+        'moq' => 'nullable|integer',
+        'chapterID' => 'nullable|string',
+        'SubCategoryID' => 'required|exists:sub_categories,SubCategoryID',
+        'ManufacturerID' => 'required|exists:manufacturers,ManufacturerID',
+        'standardISO' => 'nullable|string',
+        'grade' => 'nullable|string',
         'size' => 'nullable|string',
+        'threadType' => 'nullable|string',
         'color' => 'nullable|string',
-        'length' => 'nullable|string',
-        'property_class' => 'nullable|string',
-        'standard' => 'nullable|string',
-        'material' => 'nullable|string',
+        'metric' => 'nullable|string',
         'type' => 'required|string',
+        'standardType' => 'nullable|string',
+        'point' => 'nullable|string',
+        'pitch' => 'nullable|numeric',
+        'pitchType' => 'nullable|string',
+        'length' => 'nullable|string',
+        'weight' => 'nullable|numeric',
+        'quantity' => 'required|integer',
+        'image_path.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         'ManufacturerID' => 'required|integer',
         'SubCategoryID' => 'required|integer',
     ];
-
     // Run validation
     $validator = Validator::make($request->all(), $rules);
 

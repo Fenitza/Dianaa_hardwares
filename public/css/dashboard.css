@@ -454,18 +454,25 @@ main h1 {
     border-radius: 4px;
 }
 
-#image_preview_container {
-    width: 100%; /* Adjust width as needed */
-    height: 300px; /* Fixed height for consistency */
-    overflow: hidden; /* Ensures no overflow of the container */
-    display: flex; /* Utilizes Flexbox for centering */
-    align-items: center; /* Centers image vertically */
-    justify-content: center; /* Centers image horizontally */
-    border: 1px solid #ccc; /* Adds a subtle border around the image container */
+.img-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-#image_preview {
-    max-width: 100%; /* Maximum width of the image is the container width */
-    max-height: 100%; /* Maximum height of the image is the container height */
-    object-fit: contain; /* Ensures the image is scaled properly within the container */
+#image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#file-name-display {
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 5px;
 }
