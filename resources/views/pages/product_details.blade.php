@@ -14,36 +14,42 @@
 
         <!-- Product Image Carousel -->
         <div class="col-md-4" style="margin-top: 50px;">
-            @if(!empty($product->image_paths) && is_array($product->image_paths))
-<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-    <!-- Indicators/dots -->
-    <ol class="carousel-indicators">
-        @foreach($product->image_paths as $key => $imagePath)
-            <li data-bs-target="#productCarousel" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
-        @endforeach
-    </ol>
-
-    <!-- The slideshow/images -->
-    <div class="carousel-inner">
-        @foreach($product->image_paths as $key => $imagePath)
-            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                <img src="{{ asset('storage/' . $imagePath) }}" class="d-block w-100" alt="Image">
+    @if(!empty($product->image_paths) && is_array($product->image_paths))
+        <div id="productCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+            <!-- Carousel Inner -->
+            <div class="carousel-inner">
+                @foreach($product->image_paths as $key => $imagePath)
+                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                        <img src="{{ asset('storage/' . $imagePath) }}" class="d-block w-100" alt="Product Image">
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
 
-    <!-- Left and right controls/icons -->
-    <a class="carousel-control-prev" href="#productCarousel" role="button" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#productCarousel" role="button" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </a>
+            <!-- Controls -->
+            <a class="carousel-control-prev" href="#productCarousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#productCarousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            @foreach($product->image_paths as $key => $imagePath)
+                <img 
+                    src="{{ asset('storage/' . $imagePath) }}" 
+                    class="img-thumbnail product-thumb" 
+                    data-bs-target="#productCarousel" 
+                    data-bs-slide-to="{{ $key }}" 
+                    style="width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 4px;">
+            @endforeach
+        </div>
+    @endif
 </div>
-@endif
-</div>
+
             
 
         <!-- Second Column: Product Details and Attributes -->
@@ -64,7 +70,7 @@
             </tr>
             <tr>
                 <td><strong>Standard</strong></td>
-                <td>{{ $product->Standard }}</td>
+                <td>{{ $product->standardISO }}</td>
             </tr>
             <tr>
                 <td><strong>Manufacturer</strong></td>
@@ -73,12 +79,11 @@
         </tbody>
     </table>
 </div>
-                
-                <div class="product-attributes-heading"><strong>Product Attributes</strong></div>
+                <div class="product-attributes-heading"><strong>Product Description</strong></div>
                 <table class=" product-details-table">
         <tbody>
             <tr>
-                <td><strong>Size</strong></td>
+                <td><strong>Thread Size</strong></td>
                 <td>{{ $product->Size }}</td>
             </tr>
             <tr>
@@ -86,28 +91,73 @@
                 <td>{{ $product->Length }}</td>
             </tr>
             <tr>
-                <td><strong>Material</strong></td>
-                <td>{{ $product->Material }}</td>
+                <td><strong>Grade</strong></td>
+                <td>{{ $product->grade }}</td>
             </tr>
             <tr>
-                <td><strong>Type</strong></td>
-                <td>{{ $product->Type }}</td>
+                <td><strong>Pitch</strong></td>
+                <td>{{ $product->pitch }}</td>
             </tr>
             <tr>
                 <td><strong>Color</strong></td>
                 <td>{{ $product->Color }}</td>
             </tr>
             <tr>
-                <td><strong>Property Class</strong></td>
-                <td>{{ $product->Property_Class }}</td>
+                <td><strong>Weight</strong></td>
+                <td>{{ $product->weight }}</td>
             </tr>
+            </tbody>
+    </table>
+ </ul>
+                <div class="product-attributes-heading"><strong>Product Attributes</strong></div>
+                <table class=" product-details-table">
+        <tbody>
+            
+            <tr>
+                <td><strong>Full / Half Thread</strong></td>
+                <td>{{ $product->threadType }}</td>
+            </tr>
+            <tr>
+                <td><strong>Metric or Inches</strong></td>
+                <td>{{ $product->metric }}</td>
+            </tr>
+            <tr>
+                <td><strong>UNC / UNF / BSF / BSW</strong></td>
+                <td>{{ $product->standardType }}</td>
+            </tr>
+            <tr>
+                <td><strong>Cone/Cup/Flat Points</strong></td>
+                <td>{{ $product->point }}</td>
+            </tr>
+            <tr>
+                <td><strong>Pitch Type</strong></td>
+                <td>{{ $product->pitchType }}</td>
+            </tr>
+            
         </tbody>
     </table>
-            </ul>
-        </div>
+           
+                    
+</div>
       
         <!-- Third Column: Pricing and Supply Chain -->
         <div class="col-md-3">
+            <ul class="list-unstyled">
+<div class="product-attributes-heading"><strong>Supply Chain</strong></div>
+<table class=" product-details-table">
+        <tbody>
+            <tr>
+                <td><strong>Availability</strong></td>
+                <td><span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></td>
+            </tr>
+            <tr>
+                <td><strong>Direct Ship</strong></td>
+                <td>Shipping in 5-7 days</td>
+            </tr>
+
+         </tbody>
+    </table>                
+</ul>
             <div class="price-container" style="margin-top: 30px;">
                 <!-- <h4 style="color: #333; font-size: 20px; margin-bottom: 10px;">Price</h4> -->
                 <p style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
@@ -119,7 +169,7 @@
             <div class="catalog-item">Special discount for vendors! Checkout to explore!</div>
             <div class="quantity mb-3" style="padding-top: 10px;">
                 <label for="quantity"><strong>Quantity:</strong></label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control w-auto">
+                <input type="number" id="quantity" name="quantity" min="1" value="{{$product->moq}}" class="form-control w-auto">
             </div>
 
  
@@ -167,23 +217,7 @@
         <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-secondary mb-3">Sign in to request bulk order</a>
         @endif
     
-            <ul class="list-unstyled">
-<div class="product-attributes-heading"><strong>Supply Chain</strong></div>
-<table class=" product-details-table">
-        <tbody>
-            <tr>
-                <td><strong>Availability</strong></td>
-                <td><span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span></td>
-            </tr>
-            <tr>
-                <td><strong>Direct Ship</strong></td>
-                <td>Shipping in 5-7 days</td>
-            </tr>
-
-         </tbody>
-    </table>
-                
-</ul>
+            
             
         </div>
     </div>
