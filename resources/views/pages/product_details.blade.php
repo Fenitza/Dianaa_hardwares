@@ -158,13 +158,54 @@
          </tbody>
     </table>                
 </ul>
-            <div class="price-container" style="margin-top: 30px;">
-                <!-- <h4 style="color: #333; font-size: 20px; margin-bottom: 10px;">Price</h4> -->
-                <p style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #0088cc; font-size: 18px;">Online Price:</strong>
-                    <span style="font-size: 24px; font-weight: bold; color: #2c3e50;">₹{{ number_format($product->SalePrice, 2) }}</span>
-                </p>
-            </div>
+            @php
+    $salePrice = $product->SalePrice;
+    $discount = $product->discount;
+
+    // Calculate sale price from base price and discount
+    $basePrice = $salePrice - ($salePrice * $discount / 100);
+    $savings = $salePrice - $basePrice;
+@endphp
+
+<div class="price-container p-3 rounded shadow-sm bg-light border" style="max-width: 320px; font-family: 'Segoe UI', sans-serif;">
+    
+    @if ($discount > 0)
+        <div class="mb-3">
+            <span class="badge" style="
+                background-color: #dc3545;
+                color: #fff;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-weight: 600;
+            ">
+                {{ $discount }}% OFF
+            </span>
+        </div>
+    @endif
+
+    <div class="mb-2" style="color: #6c757d; font-size: 0.95rem;">
+        <strong style="color: #007bff;">Original Price:</strong>
+        <span style="text-decoration: line-through; font-weight: 600;">
+            ₹{{ number_format($salePrice, 2) }}
+        </span>
+    </div>
+
+    <div class="mb-2" style="color: #28a745; font-size: 0.95rem;">
+        <strong>You Save:</strong>
+        ₹{{ number_format($savings, 2) }}
+    </div>
+
+    <div class="mb-1" style="color: #007bff; font-size: 1rem; font-weight: 600;">
+        Online Price:
+    
+    <span style="font-size: 1.7rem; font-weight: bold; color: #212529;">
+        ₹{{ number_format($basePrice, 2) }}
+</span>
+</div>
+</div>
+
+
             
             <div class="catalog-item">Special discount for vendors! Checkout to explore!</div>
             <div class="quantity mb-3" style="padding-top: 10px;">
@@ -222,5 +263,12 @@
         </div>
     </div>
 </div>
+<style>
+    .price-container:hover {
+        transform: translateY(-2px);
+        transition: 0.3s ease;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+</style>
 @endsection
 
