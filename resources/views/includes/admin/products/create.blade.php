@@ -41,7 +41,7 @@
                             <label for="ManufacturerID">Manufacturer</label>
                             <select class="form-control" id="ManufacturerID" name="ManufacturerID" required>
                                 @foreach ($manufacturers as $manufacturer)
-                                    <option value="{{ $manufacturer->ManufacturerID }}">{{ $manufacturer->Name }}</option>
+                                <option value="{{ $manufacturer->ManufacturerID }}">{{ $manufacturer->Name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -50,7 +50,7 @@
                             <label for="SubCategoryID">Sub Category</label>
                             <select class="form-control" id="SubCategoryID" name="SubCategoryID" required>
                                 @foreach ($subcategories as $subcategory)
-                                    <option value="{{ $subcategory->SubCategoryID }}">{{ $subcategory->Name }}</option>
+                                <option value="{{ $subcategory->SubCategoryID }}">{{ $subcategory->Name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -72,10 +72,10 @@
                             <input type="number" step="0.01" class="form-control" id="vendorPrice" name="vendorPrice" required>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="basePrice">Base Price</label>
                             <input type="number" step="0.01" class="form-control" id="basePrice" name="basePrice" required>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
                             <label for="discount">Discount %</label>
@@ -135,7 +135,10 @@
 
                         <div class="form-group">
                             <label for="threadType">Full Thread / Half Thread</label>
-                            <input type="text" class="form-control" id="threadType" name="threadType">
+                            <select class="form-control" id="threadType" name="threadType">
+                                <option value="Full Thread">Full Thread</option>
+                                <option value="Half Thread">Half Thread</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -145,7 +148,10 @@
 
                         <div class="form-group">
                             <label for="metric">Metric / Inches</label>
-                            <input type="text" class="form-control" id="metric" name="metric">
+                            <select class="form-control" id="metric" name="metric">
+                                <option value="MM">MM</option>
+                                <option value="Inches">Inches</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -156,9 +162,9 @@
                         <div class="form-group">
                             <label for="point">Cone / Cup / Flat Points</label>
                             <select class="form-control" id="point" name="point">
-                                <option value="Cone">Cone</option>
-                                <option value="Cup">Cup</option>
-                                <option value="Flat">Flat</option>
+                                <option value="Cone ">Cone Point</option>
+                                <option value="Cup">Cup Point</option>
+                                <option value="Flat">Flat Point</option>
                             </select>
                         </div>
 

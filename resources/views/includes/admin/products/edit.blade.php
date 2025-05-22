@@ -42,9 +42,9 @@
                             <label for="ManufacturerID">Manufacturer</label>
                             <select class="form-control" id="ManufacturerID" name="ManufacturerID" required>
                                 @foreach ($manufacturers as $manufacturer)
-                                    <option value="{{ $manufacturer->ManufacturerID }}" @if ($product->ManufacturerID == $manufacturer->ManufacturerID) selected @endif>
-                                        {{ $manufacturer->Name }}
-                                    </option>
+                                <option value="{{ $manufacturer->ManufacturerID }}" @if ($product->ManufacturerID == $manufacturer->ManufacturerID) selected @endif>
+                                    {{ $manufacturer->Name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -53,27 +53,27 @@
                             <label for="SubCategoryID">Sub Category</label>
                             <select class="form-control" id="SubCategoryID" name="SubCategoryID" required>
                                 @foreach ($subcategories as $subcategory)
-                                    <option value="{{ $subcategory->SubCategoryID }}" @if ($product->SubCategoryID == $subcategory->SubCategoryID) selected @endif>
-                                        {{ $subcategory->Name }}
-                                    </option>
+                                <option value="{{ $subcategory->SubCategoryID }}" @if ($product->SubCategoryID == $subcategory->SubCategoryID) selected @endif>
+                                    {{ $subcategory->Name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="form-group">
-                <label for="product_image">Product Images</label>
-                <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple >
-                <div id="file-name-display" class="mt-2"></div> <!-- Container to display file names -->
-                <div id="image-preview-container" class="mt-2">
-                     {{-- Display existing images --}}
-                     @php
-                        
-                        $images = json_decode($product->image_paths, true); // Assuming images are stored as JSON
-                    @endphp
-                    @foreach ($images as $image)
-                        <img src="{{ Storage::url($image) }}" alt="Image preview" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
-                    @endforeach
-                </div>
+                            <label for="product_image">Product Images</label>
+                            <input type="file" class="form-control-file" id="image_path" name="image_path[]" multiple>
+                            <div id="file-name-display" class="mt-2"></div> <!-- Container to display file names -->
+                            <div id="image-preview-container" class="mt-2">
+                                {{-- Display existing images --}}
+                                @php
+
+                                $images = json_decode($product->image_paths, true); // Assuming images are stored as JSON
+                                @endphp
+                                @foreach ($images as $image)
+                                <img src="{{ Storage::url($image) }}" alt="Image preview" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                                @endforeach
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -86,10 +86,10 @@
                             <input type="number" step="0.01" class="form-control" id="vendorPrice" name="vendorPrice" value="{{ $product->VendorPrice }}" required>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="basePrice">Base Price</label>
                             <input type="number" step="0.01" class="form-control" id="basePrice" name="basePrice" value="{{ $product->BasePrice }}" required>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
                             <label for="discount">Discount %</label>
@@ -149,7 +149,10 @@
 
                         <div class="form-group">
                             <label for="threadType">Full Thread / Half Thread</label>
-                            <input type="text" class="form-control" id="threadType" name="threadType" value="{{ $product->threadType }}">
+                            <select class="form-control" id="point" name="point">
+                                <option value="Full Thread" @if ($product->threadType === 'Full Thread') selected @endif>Full Thread</option>
+                                <option value="Half Thread" @if ($product->threadType === 'Half Thread') selected @endif>Half Thread</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -159,7 +162,10 @@
 
                         <div class="form-group">
                             <label for="metric">Metric / Inches</label>
-                            <input type="text" class="form-control" id="metric" name="metric" value="{{ $product->metric }}">
+                            <select class="form-control" id="point" name="point">
+                                <option value="MM" @if ($product->metric === 'MM') selected @endif>MM</option>
+                                <option value="Inches" @if ($product->metric === 'Inches') selected @endif>Inches</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -170,9 +176,9 @@
                         <div class="form-group">
                             <label for="point">Cone / Cup / Flat Points</label>
                             <select class="form-control" id="point" name="point">
-                                <option value="Cone" @if ($product->point === 'Cone') selected @endif>Cone</option>
-                                <option value="Cup" @if ($product->point === 'Cup') selected @endif>Cup</option>
-                                <option value="Flat" @if ($product->point === 'Flat') selected @endif>Flat</option>
+                                <option value="Cone" @if ($product->point === 'Cone Point') selected @endif>Cone Point</option>
+                                <option value="Cup" @if ($product->point === 'Cup Point') selected @endif>Cup Point</option>
+                                <option value="Flat" @if ($product->point === 'Flat Point') selected @endif>Flat Point</option>
                             </select>
                         </div>
 
@@ -193,12 +199,12 @@
 
 <!-- Optional CSS for Image Previews -->
 <style>
-.img-preview {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 10px;
-}
+    .img-preview {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
 </style>
 @endsection
