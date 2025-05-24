@@ -17,6 +17,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Manufacturer;
 use App\Models\SubCategory;
+use App\Jobs\ImportProductsFromExcel;
 
 
 class ProductController extends Controller
@@ -92,83 +93,17 @@ class ProductController extends Controller
 
 
     public function importExcel(Request $request)
-    {
-        $inputFileName = $request->file('excel_file')->path();  // Assuming file input name is 'excel_file'
-        $productImagePath = storage_path('app/public/products/');  // Ensure this path is correct and writable
+{
+    $request->validate([
+        'excel_file' => 'required|file|mimes:xlsx,xls',
+    ]);
 
-        try {
-            $spreadsheet = IOFactory::load($inputFileName);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $lastRow = $worksheet->getHighestRow();
+    $path = $request->file('excel_file')->storeAs('temp', uniqid() . '.xlsx');
 
-            for ($row = 6; $row <= $lastRow; $row++) {
-                $imageNames = $worksheet->getCell('R' . $row)->getValue();
-                $imageNamesArray = explode(',', $imageNames); // Assuming names are comma-separated
-                $imagePathsJson = [];
-                $productImage = null;
+    ImportProductsFromExcel::dispatch(storage_path('app/' . $path)); // 🚀 QUEUE
 
-                foreach ($imageNamesArray as $index => $imageName) {
-                    $originalPath = trim($imageName);
-                    $originalPath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $originalPath);  // Normalize path separators
-
-                    if (file_exists($originalPath)) {
-                        $fileExtension = pathinfo($originalPath, PATHINFO_EXTENSION);
-                        $encodedFileName = md5(uniqid(rand(), true)) . '.' . $fileExtension; // Encode the filename
-                        $destinationPath = $productImagePath . $encodedFileName;
-
-                        if (copy($originalPath, $destinationPath)) {
-                            $key = 'image_' . ($index + 1);
-                            $imagePathsJson[$key] = 'products/' . $encodedFileName;
-                            if ($index === 0) { // Set the first image as the main product image
-                                $productImage = $imagePathsJson[$key];
-                            }
-
-                            Log::debug("Image copied and added: {$key} => {$destinationPath}");
-                        } else {
-                            Log::warning("Failed to copy image to destination: {$destinationPath}");
-                        }
-                    } else {
-                        Log::warning("Original image not found at path: {$originalPath}");
-                    }
-                }
-
-                // Product data population from the spreadsheet
-                $sku = trim($worksheet->getCell('D' . $row)->getValue());
-                $productData = [
-                    'name' => trim($worksheet->getCell('B' . $row)->getValue()),
-                    'description' => trim($worksheet->getCell('C' . $row)->getValue()),
-                    'sku' => $sku,
-                    'salePrice' => $worksheet->getCell('E' . $row)->getValue(),
-                    'basePrice' => $worksheet->getCell('F' . $row)->getValue(),
-                    'vendorPrice' => $worksheet->getCell('G' . $row)->getValue(),
-                    'quantity' => $worksheet->getCell('H' . $row)->getValue(),
-                    'size' => trim($worksheet->getCell('I' . $row)->getValue()),
-                    'color' => trim($worksheet->getCell('J' . $row)->getValue()),
-                    'length' => trim($worksheet->getCell('K' . $row)->getValue()),
-                    'property_class' => trim($worksheet->getCell('L' . $row)->getValue()),
-                    'standard' => trim($worksheet->getCell('M' . $row)->getValue()),
-                    'material' => trim($worksheet->getCell('N' . $row)->getValue()),
-                    'type' => trim($worksheet->getCell('O' . $row)->getValue()),
-                    'ManufacturerID' => (int)$worksheet->getCell('P' . $row)->getValue(),
-                    'SubCategoryID' => (int)$worksheet->getCell('Q' . $row)->getValue(),
-                    'image_paths' => json_encode($imagePathsJson),
-                    'product_image' => $productImage,
-                ];
-
-                $product = Product::updateOrCreate(['sku' => $sku], $productData);
-                if ($product->wasRecentlyCreated) {
-                    Log::info('Product created successfully', ['id' => $product->ProductID]);
-                } else {
-                    Log::info('Product updated successfully', ['id' => $product->ProductID]);
-                }
-            }
-
-            return redirect()->route('admin.products')->with('success', 'Products imported and updated successfully!');
-        } catch (\Exception $e) {
-            Log::error('Failed to import products', ['error' => $e->getMessage()]);
-            return redirect()->back()->withErrors('Failed to import products: ' . $e->getMessage());
-        }
-    }
+    return redirect()->back()->with('success', 'File uploaded! Products will be imported shortly.');
+}
 
 
   
