@@ -1,14 +1,15 @@
 <?php
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
+namespace App\Jobs;
+
 use App\Models\Product;
-use App\Models\Manufacturer;
-use App\Models\SubCategory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use Illuminate\Support\Facades\Log;
 
 class ImportProductsFromExcel implements ShouldQueue
 {
@@ -23,67 +24,87 @@ class ImportProductsFromExcel implements ShouldQueue
 
     public function handle()
     {
-        $spreadsheet = IOFactory::load($this->filePath);
-        $sheet = $spreadsheet->getActiveSheet();
-        $manufacturerMap = Manufacturer::pluck('ManufacturerID', 'name')->toArray();
-        $subCategoryMap = SubCategory::pluck('SubCategoryID', 'name')->toArray();
-        $productImagePath = storage_path('app/public/products/');
+        ini_set('memory_limit', '1024M');
+        Log::info("Starting Excel import for file: " . $this->filePath);
+
+        $reader = new Xlsx();
+        $reader->setReadDataOnly(true);
+        $reader->setReadEmptyCells(false);
+        $spreadsheet = $reader->load($this->filePath);
+
+        $sheet = $spreadsheet->getSheetByName('Sheet1');
+        $codesSheet = $spreadsheet->getSheetByName('Codes');
+
+        // Load mapping from Codes sheet
+        $codeRows = $codesSheet->toArray();
+        $codeMap = [];
+        foreach ($codeRows as $row) {
+            if (!empty($row[0]) && !empty($row[2])) {
+                $subcatKey = strtolower(trim($row[0]));
+                $manufKey = strtolower(trim($row[2]));
+                $codeMap[$subcatKey . '||' . $manufKey] = [
+                    'SubCategoryID' => $row[1],
+                    'ManufacturerID' => $row[3],
+                ];
+            }
+        }
 
         $highestRow = $sheet->getHighestRow();
+        $headers = $sheet->rangeToArray('A5:Z5')[0];
 
         for ($row = 6; $row <= $highestRow; $row++) {
-            $manufacturerName = trim($sheet->getCell('F' . $row)->getValue());
-            $subCategoryName = trim($sheet->getCell('G' . $row)->getValue());
-            $sku = trim($sheet->getCell('C' . $row)->getValue());
+            try {
+                $rowData = array_combine($headers, $sheet->rangeToArray("A{$row}:Z{$row}")[0]);
+                Log::debug("Row {$row} raw data", $rowData);
 
-            $imagesRaw = $sheet->getCell('Z' . $row)->getValue(); // Adjust if needed
-            $imageArray = explode("\n", $imagesRaw);
-            $imagePaths = [];
-            $mainImage = null;
+                $sku = trim($rowData['SKU'] ?? '');
+                $subcatName = strtolower(trim($rowData['Subcategory'] ?? ''));
+                $manufName = strtolower(trim($rowData['Manufacturer'] ?? ''));
 
-            foreach ($imageArray as $i => $imageName) {
-                $imageName = trim($imageName);
-                if (!$imageName) continue;
+                $mapKey = $subcatName . '||' . $manufName;
+                $mappedIds = $codeMap[$mapKey] ?? null;
 
-                $srcPath = public_path('uploads/temp/' . $imageName); // adjust accordingly
-                if (!file_exists($srcPath)) continue;
-
-                $uniqueName = md5($imageName . time()) . '.' . pathinfo($srcPath, PATHINFO_EXTENSION);
-                $destPath = $productImagePath . $uniqueName;
-
-                if (copy($srcPath, $destPath)) {
-                    $key = 'image_' . ($i + 1);
-                    $imagePaths[$key] = 'products/' . $uniqueName;
-                    if ($i == 0) $mainImage = $imagePaths[$key];
+                if (!$sku) {
+                    Log::warning("Row {$row} skipped: missing SKU");
+                    continue;
                 }
+
+                if (!$mappedIds) {
+                    Log::warning("Row {$row} skipped: mapping not found for key '{$mapKey}'");
+                    continue;
+                }
+
+                $productData = [
+                    'sku' => $sku,
+                    'description' => trim($rowData['Description'] ?? ''),
+                    'chapterID' => trim($rowData['ChapterID'] ?? ''),
+                    'ManufacturerID' => $mappedIds['ManufacturerID'],
+                    'SubCategoryID' => $mappedIds['SubCategoryID'],
+                    'standardISO' => trim($rowData['Standard ISO'] ?? ''),
+                    'grade' => trim($rowData['Grade'] ?? ''),
+                    'threadType' => trim($rowData['Thread Type'] ?? ''),
+                    'size' => trim($rowData['Size'] ?? ''),
+                    'color' => trim($rowData['Color'] ?? ''),
+                    'length' => trim($rowData['Length'] ?? ''),
+                    'type' => trim($rowData['Type'] ?? ''),
+                    'pitch' => $rowData['Pitch'] ?? null,
+                    'salePrice' => $rowData['Sale Price'] ?? null,
+                    'discount' => $rowData['Discount'] ?? null,
+                    'moq' => $rowData['MOQ'] ?? null,
+                    'weight' => $rowData['Weight'] ?? null,
+                    'quantity' => $rowData['Quantity'] ?? 0,
+                    'basePrice' => $rowData['Base Price'] ?? 0,
+                    'vendorPrice' => $rowData['Vendor Price'] ?? 0,
+                ];
+
+                Product::updateOrCreate(['sku' => $sku], $productData);
+                Log::info("Row {$row} imported successfully with SKU: {$sku}");
+
+            } catch (\Exception $e) {
+                Log::error("Row {$row} failed: " . $e->getMessage());
             }
-
-            $productData = [
-                'sku' => $sku,
-                'description' => trim($sheet->getCell('D' . $row)->getValue()),
-                'chapterID' => trim($sheet->getCell('E' . $row)->getValue()),
-                'ManufacturerID' => $manufacturerMap[$manufacturerName] ?? null,
-                'SubCategoryID' => $subCategoryMap[$subCategoryName] ?? null,
-                'standardISO' => trim($sheet->getCell('H' . $row)->getValue()),
-                'grade' => trim($sheet->getCell('I' . $row)->getValue()),
-                'threadType' => trim($sheet->getCell('J' . $row)->getValue()),
-                'size' => trim($sheet->getCell('K' . $row)->getValue()),
-                'color' => trim($sheet->getCell('L' . $row)->getValue()),
-                'length' => trim($sheet->getCell('M' . $row)->getValue()),
-                'type' => trim($sheet->getCell('N' . $row)->getValue()),
-                'pitch' => $sheet->getCell('O' . $row)->getValue(),
-                'salePrice' => $sheet->getCell('P' . $row)->getValue(),
-                'discount' => $sheet->getCell('Q' . $row)->getValue(),
-                'moq' => $sheet->getCell('R' . $row)->getValue(),
-                'weight' => $sheet->getCell('S' . $row)->getValue(),
-                'image_paths' => json_encode($imagePaths),
-                'product_image' => $mainImage,
-                'quantity' => 100,
-                'basePrice' => 0,
-                'vendorPrice' => 0,
-            ];
-
-            Product::updateOrCreate(['sku' => $sku], $productData);
         }
+
+        Log::info("Excel import completed for file: " . $this->filePath);
     }
 }
