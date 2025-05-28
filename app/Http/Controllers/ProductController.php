@@ -98,12 +98,16 @@ class ProductController extends Controller
         'excel_file' => 'required|file|mimes:xlsx,xls',
     ]);
 
-    $path = $request->file('excel_file')->storeAs('temp', uniqid() . '.xlsx');
+    $filename = uniqid() . '.' . $request->file('excel_file')->getClientOriginalExtension();
+    $path = $request->file('excel_file')->storeAs('temp', $filename);
 
-    ImportProductsFromExcel::dispatch(storage_path('app/' . $path)); // 🚀 QUEUE
+    \Log::info("Dispatching ImportProductsFromExcel with file at: " . storage_path('app/' . $path));
 
-    return redirect()->back()->with('success', 'File uploaded! Products will be imported shortly.');
+    ImportProductsFromExcel::dispatch(storage_path('app/' . $path));
+
+    return redirect()->back()->with('success', 'Excel file uploaded. Product import will begin shortly.');
 }
+
 
 
   

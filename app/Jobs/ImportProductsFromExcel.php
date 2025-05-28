@@ -9,6 +9,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+\DB::enableQueryLog();
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ImportProductsFromExcel implements ShouldQueue
@@ -25,17 +28,16 @@ class ImportProductsFromExcel implements ShouldQueue
     public function handle()
     {
         ini_set('memory_limit', '1024M');
-        Log::info("Starting Excel import for file: " . $this->filePath);
+        Log::info("🟡 Starting Excel import: {$this->filePath}");
 
         $reader = new Xlsx();
         $reader->setReadDataOnly(true);
-        $reader->setReadEmptyCells(false);
         $spreadsheet = $reader->load($this->filePath);
 
         $sheet = $spreadsheet->getSheetByName('Sheet1');
         $codesSheet = $spreadsheet->getSheetByName('Codes');
 
-        // Load mapping from Codes sheet
+        // Build SubCategory-Manufacturer mapping
         $codeRows = $codesSheet->toArray();
         $codeMap = [];
         foreach ($codeRows as $row) {
@@ -49,38 +51,43 @@ class ImportProductsFromExcel implements ShouldQueue
             }
         }
 
-        $highestRow = $sheet->getHighestRow();
         $headers = $sheet->rangeToArray('A5:Z5')[0];
+        $highestRow = $sheet->getHighestRow();
 
         for ($row = 6; $row <= $highestRow; $row++) {
             try {
                 $rowData = array_combine($headers, $sheet->rangeToArray("A{$row}:Z{$row}")[0]);
-                Log::debug("Row {$row} raw data", $rowData);
+                Log::debug("🔍 Row {$row} raw data: ", $rowData);
 
-                $sku = trim($rowData['SKU'] ?? '');
+                $errors = [];
+
+                $sku = trim($rowData['Part Number'] ?? '');
+                if (!$sku) {
+                    $errors[] = "Missing Part Number (SKU)";
+                }
+
                 $subcatName = strtolower(trim($rowData['Subcategory'] ?? ''));
                 $manufName = strtolower(trim($rowData['Manufacturer'] ?? ''));
-
                 $mapKey = $subcatName . '||' . $manufName;
                 $mappedIds = $codeMap[$mapKey] ?? null;
 
-                if (!$sku) {
-                    Log::warning("Row {$row} skipped: missing SKU");
-                    continue;
+                if (!$subcatName) $errors[] = "Missing Subcategory";
+                if (!$manufName) $errors[] = "Missing Manufacturer";
+                if ($subcatName && $manufName && !$mappedIds) {
+                    $errors[] = "Mapping not found for '{$subcatName}' and '{$manufName}'";
                 }
 
-                if (!$mappedIds) {
-                    Log::warning("Row {$row} skipped: mapping not found for key '{$mapKey}'");
+                if (count($errors)) {
+                    Log::warning("⚠️ Row {$row} skipped: " . implode('; ', $errors));
                     continue;
                 }
 
                 $productData = [
                     'sku' => $sku,
-                    'description' => trim($rowData['Description'] ?? ''),
-                    'chapterID' => trim($rowData['ChapterID'] ?? ''),
+                    'description' => trim($rowData['Item Description'] ?? ''),
                     'ManufacturerID' => $mappedIds['ManufacturerID'],
                     'SubCategoryID' => $mappedIds['SubCategoryID'],
-                    'standardISO' => trim($rowData['Standard ISO'] ?? ''),
+                    'standard' => trim($rowData['Standard ISO'] ?? ''),
                     'grade' => trim($rowData['Grade'] ?? ''),
                     'threadType' => trim($rowData['Thread Type'] ?? ''),
                     'size' => trim($rowData['Size'] ?? ''),
@@ -98,13 +105,13 @@ class ImportProductsFromExcel implements ShouldQueue
                 ];
 
                 Product::updateOrCreate(['sku' => $sku], $productData);
-                Log::info("Row {$row} imported successfully with SKU: {$sku}");
+                Log::info("✅ Row {$row} imported with SKU: {$sku}");
 
             } catch (\Exception $e) {
-                Log::error("Row {$row} failed: " . $e->getMessage());
+                Log::error("❌ Row {$row} failed: " . $e->getMessage());
             }
         }
 
-        Log::info("Excel import completed for file: " . $this->filePath);
+        Log::info("✅ Excel import completed: {$this->filePath}");
     }
 }
