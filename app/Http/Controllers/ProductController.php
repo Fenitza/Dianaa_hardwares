@@ -162,7 +162,7 @@ public function importExcel(Request $request)
 
         // Optional aliasing
         $manufacturerAliases = [
-            'tvs' => 'tvs fasteners',
+            'tvs' => 'tvs',
             'dianaa' => 'dianaa fasteners',
         ];
         if (isset($manufacturerAliases[$manufName])) {
@@ -180,6 +180,8 @@ public function importExcel(Request $request)
             Log::warning("⚠️ Row {$rowIndex} skipped: " . implode('; ', $errors));
             continue;
         }
+        Log::debug("🔍 Trying to resolve manufacturer '{$manufName}' and subcategory '{$subcatName}'");
+        Log::debug("📌 Manufacturer keys available: ", array_keys($manufMap));
 
         // Final product data
         $productData = [
@@ -201,7 +203,9 @@ public function importExcel(Request $request)
             'pitchType' => $rowData['pitch type'] ?? null,
             'point' => $rowData['cone/cup/flat points'] ?? null,
             'salePrice' => $rowData['list price'] ?? null,
-            'discount' => $rowData['discount'] ?? null,
+            'discount' => isset($rowData['discount']) 
+                ? (float) str_replace('%', '', $rowData['discount']) 
+                : null,
             'moq' => $rowData['moq'] ?? null,
             'weight' => $rowData['weight'] ?? null,
             'quantity' => $rowData['quantity'] ?? 0,
