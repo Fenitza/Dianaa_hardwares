@@ -95,7 +95,7 @@ class ProductController extends Controller
     }
 
 
-public function importExcel(Request $request)
+    public function importExcel(Request $request)
 {
     $request->validate([
         'excel_file' => 'required|file|mimes:xlsx,xls',
@@ -112,7 +112,7 @@ public function importExcel(Request $request)
     $sheet = $spreadsheet->getSheetByName('Sheet1');
     $codesSheet = $spreadsheet->getSheetByName('Codes');
 
-    // ✅ Build individual maps for subcategories and manufacturers
+    // ✅ Build maps from Codes sheet
     $subcatMap = [];
     $manufMap = [];
 
@@ -125,13 +125,13 @@ public function importExcel(Request $request)
         }
     }
 
-    // ✅ Read headers
+    // ✅ Read headers dynamically
     $headerRow = 5;
-    $rawHeaders = $sheet->rangeToArray("A{$headerRow}:Z{$headerRow}")[0];
+    $lastCol = $sheet->getHighestColumn(); // auto-detect highest column like "AE"
+    $rawHeaders = $sheet->rangeToArray("A{$headerRow}:{$lastCol}{$headerRow}")[0];
     $normalizedHeaders = array_map(fn($h) => strtolower(trim($h)), $rawHeaders);
-    Log::info("📋 Headers from Excel: ", $normalizedHeaders);
+    Log::info("📋 Headers from Excel", $normalizedHeaders);
 
-    // ✅ Process rows
     $rowIterator = $sheet->getRowIterator($headerRow + 1);
 
     foreach ($rowIterator as $row) {
@@ -146,11 +146,14 @@ public function importExcel(Request $request)
             $rowData[$key] = $cell->getValue();
         }
 
-        if (collect($rowData)->filter()->isEmpty()) {
+        // ✅ Skip blank rows
+        if (empty(trim($rowData['part number'] ?? '')) &&
+            empty(trim($rowData['subcategory'] ?? '')) &&
+            empty(trim($rowData['manufacturer'] ?? ''))) {
             continue;
         }
 
-        Log::debug("📦 Processing row {$rowIndex}", $rowData);
+        Log::debug("📦 Row {$rowIndex}", $rowData);
 
         // Validation
         $errors = [];
@@ -158,32 +161,46 @@ public function importExcel(Request $request)
         if (!$sku) $errors[] = "Missing Part Number (SKU)";
 
         $subcatName = strtolower(trim($rowData['subcategory'] ?? ''));
-        $manufName = strtolower(trim( $rowData['manufacturer'] ?? ''));
+        $manufName = strtolower(trim($rowData['manufacturer'] ?? ''));
 
-        // Optional aliasing
-        $manufacturerAliases = [
-            'tvs' => 'tvs',
-            'dianaa' => 'dianaa fasteners',
-        ];
+        // Alias
+        $manufacturerAliases = ['tvs' => 'tvs', 'dianaa' => 'dianaa fasteners'];
         if (isset($manufacturerAliases[$manufName])) {
             $manufName = $manufacturerAliases[$manufName];
         }
 
-        // Lookup IDs from maps
         $subcatId = $subcatMap[$subcatName] ?? null;
         $manufId = $manufMap[$manufName] ?? null;
 
-        if (!$subcatName || !$subcatId) $errors[] = "Missing or unmapped Subcategory";
-        if (!$manufName || !$manufId) $errors[] = "Missing or unmapped Manufacturer";
+        if (!$subcatId) $errors[] = "Missing or unmapped Subcategory";
+        if (!$manufId) $errors[] = "Missing or unmapped Manufacturer";
 
         if (!empty($errors)) {
             Log::warning("⚠️ Row {$rowIndex} skipped: " . implode('; ', $errors));
             continue;
         }
-        Log::debug("🔍 Trying to resolve manufacturer '{$manufName}' and subcategory '{$subcatName}'");
-        Log::debug("📌 Manufacturer keys available: ", array_keys($manufMap));
 
-        // Final product data
+        // ✅ Handle image paths
+        $imagePathsJson = [];
+        $firstImage = null;
+        $imageRaw = trim($rowData['image paths'] ?? '');
+
+        if (!empty($imageRaw)) {
+            $imageNames = array_map('trim', explode(',', $imageRaw));
+            foreach ($imageNames as $i => $imageName) {
+                if ($imageName !== '') {
+                    $key = 'image_' . ($i + 1);
+                    $imagePathsJson[$key] = 'products/' . $imageName;
+
+                    if ($i === 0) {
+                        $firstImage = 'products/' . $imageName;
+                    }
+                }
+            }
+        }
+
+        Log::debug("🖼 SKU {$sku} Images: ", $imagePathsJson);
+
         $productData = [
             'sku' => $sku,
             'slno' => trim($rowData['sl no.'] ?? ''),
@@ -211,10 +228,12 @@ public function importExcel(Request $request)
             'quantity' => $rowData['quantity'] ?? 0,
             'basePrice' => $rowData['after discount'] ?? 0,
             'vendorPrice' => $rowData['vendor price'] ?? 0,
+            'image_paths' => json_encode($imagePathsJson),
+            'product_image' => $firstImage,
         ];
 
         \App\Models\Product::updateOrCreate(['sku' => $sku], $productData);
-        Log::info("✅ Row {$rowIndex} imported successfully with SKU: {$sku}");
+        Log::info("✅ Imported SKU: {$sku}");
     }
 
     Log::info("✅ Excel import completed.");

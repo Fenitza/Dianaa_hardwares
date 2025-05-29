@@ -16,7 +16,7 @@ class Product extends Model
         // 'image_paths' , 'type', 'color'
         'slno','sku','description','salePrice','vendorPrice', 'basePrice','discount','moq','quantity',
         'chapterID','SubCategoryID','ManufacturerID','standardISO','grade','size','threadType','color','metric','type',
-        'standardType','point','pitch','pitchType','length','weight','image_paths'
+        'standardType','point','pitch','pitchType','length','weight','image_paths','product_image'
     ];
 
     protected $casts = [
