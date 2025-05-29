@@ -95,121 +95,123 @@ class ProductController extends Controller
     }
 
 
+public function importExcel(Request $request)
+{
+    $request->validate([
+        'excel_file' => 'required|file|mimes:xlsx,xls',
+    ]);
 
-    public function importExcel(Request $request)
-    {
-        $request->validate([
-            'excel_file' => 'required|file|mimes:xlsx,xls',
-        ]);
-    
-        ini_set('max_execution_time', 600);
-        ini_set('memory_limit', '-1');
-    
-        $filePath = $request->file('excel_file')->getRealPath();
-        $reader = IOFactory::createReaderForFile($filePath);
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($filePath);
-    
-        $sheet = $spreadsheet->getSheetByName('Sheet1');
-        $codesSheet = $spreadsheet->getSheetByName('Codes');
-    
-        // ✅ 1. Load Code Mappings from Codes Sheet
-        $codeMap = [];
-        foreach ($codesSheet->toArray() as $row) {
-            if (!empty($row[0]) && !empty($row[2])) {
-                $subcatKey = strtolower(trim($row[0]));
-                $manufKey = strtolower(trim($row[2]));
-                $codeMap[$subcatKey . '||' . $manufKey] = [
-                    'SubCategory ID' => $row[1],
-                    'Manufacturer ID' => $row[3],
-                ];
-            }
+    ini_set('max_execution_time', 600);
+    ini_set('memory_limit', '-1');
+
+    $filePath = $request->file('excel_file')->getRealPath();
+    $reader = IOFactory::createReaderForFile($filePath);
+    $reader->setReadDataOnly(true);
+    $spreadsheet = $reader->load($filePath);
+
+    $sheet = $spreadsheet->getSheetByName('Sheet1');
+    $codesSheet = $spreadsheet->getSheetByName('Codes');
+
+    // ✅ Build individual maps for subcategories and manufacturers
+    $subcatMap = [];
+    $manufMap = [];
+
+    foreach ($codesSheet->toArray() as $row) {
+        if (!empty($row[0]) && !empty($row[1])) {
+            $subcatMap[strtolower(trim($row[0]))] = $row[1];
         }
-    
-        // ✅ 2. Get headers from Row 5
-        $headerRow = 5;
-        $rawHeaders = $sheet->rangeToArray("A{$headerRow}:Z{$headerRow}")[0];
-        $normalizedHeaders = array_map(fn($h) => strtolower(trim($h)), $rawHeaders);
-        Log::info("📋 Headers from Excel: ", $normalizedHeaders);
-    
-        // ✅ 3. Process each data row from Row 6 onward
-        $rowIterator = $sheet->getRowIterator($headerRow + 1);
-    
-        foreach ($rowIterator as $row) {
-            $rowIndex = $row->getRowIndex();
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(true); // Only real data cells
-    
-            $rowData = [];
-            foreach ($cellIterator as $cell) {
-                $columnIndex = Coordinate::columnIndexFromString($cell->getColumn()) - 1;
-                $key = $normalizedHeaders[$columnIndex] ?? "col_{$columnIndex}";
-                $rowData[$key] = $cell->getValue();
-            }
-    
-            // ✅ Skip row if all data is empty
-            if (collect($rowData)->filter()->isEmpty()) {
-                Log::debug("⏭️ Skipping empty row {$rowIndex}");
-                continue;
-            }
-    
-            // ✅ Debugging log for each row
-            Log::debug("📦 Processing row {$rowIndex}", $rowData);
-    
-            // ✅ Begin field checks
-            $errors = [];
-    
-            $sku = trim($rowData['part number'] ?? '');
-            if (!$sku) $errors[] = "Missing Part Number (SKU)";
-    
-            $subcatName = strtolower(trim($rowData['sub category'] ?? ''));
-            $manufName = strtolower(trim($rowData['manufacturer name'] ?? ''));
-    
-            if (!$subcatName) $errors[] = "Missing Subcategory";
-            if (!$manufName) $errors[] = "Missing Manufacturer";
-    
-            $mapKey = $subcatName . '||' . $manufName;
-            $mappedIds = $codeMap[$mapKey] ?? null;
-    
-            if ($subcatName && $manufName && !$mappedIds) {
-                $errors[] = "Mapping not found for key '{$mapKey}'";
-            }
-    
-            if (!empty($errors)) {
-                Log::warning("⚠️ Row {$rowIndex} skipped: " . implode('; ', $errors));
-                continue;
-            }
-    
-            // ✅ Build data for DB
-            $productData = [
-                'sku' => $sku,
-                'description' => trim($rowData['item description'] ?? ''),
-                'ManufacturerID' => $mappedIds['Manufacturer ID'],
-                'SubCategoryID' => $mappedIds['SubCategory ID'],
-                'standardISO' => trim($rowData['std reference (iso / din)'] ?? ''),
-                'grade' => trim($rowData['grade'] ?? ''),
-                'threadType' => trim($rowData['full thread or half thread'] ?? ''),
-                'standardType' => trim($rowData['unc / unf / bsf / bsw'] ?? ''),
-                'size' => trim($rowData['thread size'] ?? ''),
-                'color' => trim($rowData['colour'] ?? ''),
-                'length' => trim($rowData['length'] ?? ''),
-                'pitch' => $rowData['pitch'] ?? null,
-                'salePrice' => $rowData['list price'] ?? null,
-                'discount' => $rowData['discount'] ?? null,
-                'moq' => $rowData['moq'] ?? null,
-                'weight' => $rowData['weight'] ?? null,
-                'quantity' => $rowData['quantity'] ?? 0,
-                'basePrice' => $rowData['after discount'] ?? 0,
-            ];
-    
-            // ✅ Insert or Update
-            \App\Models\Product::updateOrCreate(['sku' => $sku], $productData);
-            Log::info("✅ Row {$rowIndex} imported successfully with SKU: {$sku}");
+        if (!empty($row[2]) && !empty($row[3])) {
+            $manufMap[strtolower(trim($row[2]))] = $row[3];
         }
-    
-        Log::info("✅ Excel import completed.");
-        return redirect()->back()->with('success', 'Excel import completed successfully.');
     }
+
+    // ✅ Read headers
+    $headerRow = 5;
+    $rawHeaders = $sheet->rangeToArray("A{$headerRow}:Z{$headerRow}")[0];
+    $normalizedHeaders = array_map(fn($h) => strtolower(trim($h)), $rawHeaders);
+    Log::info("📋 Headers from Excel: ", $normalizedHeaders);
+
+    // ✅ Process rows
+    $rowIterator = $sheet->getRowIterator($headerRow + 1);
+
+    foreach ($rowIterator as $row) {
+        $rowIndex = $row->getRowIndex();
+        $cellIterator = $row->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(true);
+
+        $rowData = [];
+        foreach ($cellIterator as $cell) {
+            $columnIndex = Coordinate::columnIndexFromString($cell->getColumn()) - 1;
+            $key = $normalizedHeaders[$columnIndex] ?? "col_{$columnIndex}";
+            $rowData[$key] = $cell->getValue();
+        }
+
+        if (collect($rowData)->filter()->isEmpty()) {
+            continue;
+        }
+
+        Log::debug("📦 Processing row {$rowIndex}", $rowData);
+
+        // Validation
+        $errors = [];
+        $sku = trim($rowData['part number'] ?? '');
+        if (!$sku) $errors[] = "Missing Part Number (SKU)";
+
+        $subcatName = strtolower(trim($rowData['subcategory'] ?? ''));
+        $manufName = strtolower(trim( $rowData['manufacturer'] ?? ''));
+
+        // Optional aliasing
+        $manufacturerAliases = [
+            'tvs' => 'tvs fasteners',
+            'dianaa' => 'dianaa fasteners',
+        ];
+        if (isset($manufacturerAliases[$manufName])) {
+            $manufName = $manufacturerAliases[$manufName];
+        }
+
+        // Lookup IDs from maps
+        $subcatId = $subcatMap[$subcatName] ?? null;
+        $manufId = $manufMap[$manufName] ?? null;
+
+        if (!$subcatName || !$subcatId) $errors[] = "Missing or unmapped Subcategory";
+        if (!$manufName || !$manufId) $errors[] = "Missing or unmapped Manufacturer";
+
+        if (!empty($errors)) {
+            Log::warning("⚠️ Row {$rowIndex} skipped: " . implode('; ', $errors));
+            continue;
+        }
+
+        // Final product data
+        $productData = [
+            'sku' => $sku,
+            'description' => trim($rowData['item description'] ?? ''),
+            'ManufacturerID' => $manufId,
+            'SubCategoryID' => $subcatId,
+            'standardISO' => trim($rowData['std reference (iso / din)'] ?? ''),
+            'grade' => trim($rowData['grade'] ?? ''),
+            'threadType' => trim($rowData['full thread or half thread'] ?? ''),
+            'standardType' => trim($rowData['unc / unf / bsf / bsw'] ?? ''),
+            'size' => trim($rowData['thread size'] ?? ''),
+            'color' => trim($rowData['colour'] ?? ''),
+            'length' => trim($rowData['length'] ?? ''),
+            'pitchType' => $rowData['pitch'] ?? null,
+            'salePrice' => $rowData['list price'] ?? null,
+            'discount' => $rowData['discount'] ?? null,
+            'moq' => $rowData['moq'] ?? null,
+            'weight' => $rowData['weight'] ?? null,
+            'quantity' => $rowData['quantity'] ?? 0,
+            'basePrice' => $rowData['after discount'] ?? 0,
+            'vendorPrice' => $rowData['vendor price'] ?? 0,
+        ];
+
+        \App\Models\Product::updateOrCreate(['sku' => $sku], $productData);
+        Log::info("✅ Row {$rowIndex} imported successfully with SKU: {$sku}");
+    }
+
+    Log::info("✅ Excel import completed.");
+    return redirect()->back()->with('success', 'Excel import completed successfully.');
+}
+
 
 
     public function edit($id)
