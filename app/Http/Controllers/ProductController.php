@@ -184,7 +184,10 @@ public function importExcel(Request $request)
         // Final product data
         $productData = [
             'sku' => $sku,
+            'slno' => trim($rowData['sl no.'] ?? ''),
             'description' => trim($rowData['item description'] ?? ''),
+            'chapterID' => trim($rowData['chapter id'] ?? ''),
+            'metric' => trim($rowData['metric or inches'] ?? ''),
             'ManufacturerID' => $manufId,
             'SubCategoryID' => $subcatId,
             'standardISO' => trim($rowData['std reference (iso / din)'] ?? ''),
@@ -194,7 +197,9 @@ public function importExcel(Request $request)
             'size' => trim($rowData['thread size'] ?? ''),
             'color' => trim($rowData['colour'] ?? ''),
             'length' => trim($rowData['length'] ?? ''),
-            'pitchType' => $rowData['pitch'] ?? null,
+            'pitch' => $rowData['pitch'] ?? 0.0,
+            'pitchType' => $rowData['pitch type'] ?? null,
+            'point' => $rowData['cone/cup/flat points'] ?? null,
             'salePrice' => $rowData['list price'] ?? null,
             'discount' => $rowData['discount'] ?? null,
             'moq' => $rowData['moq'] ?? null,
