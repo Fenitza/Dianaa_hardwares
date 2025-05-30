@@ -220,8 +220,12 @@ class ProductController extends Controller
             'pitchType' => $rowData['pitch type'] ?? null,
             'point' => $rowData['cone/cup/flat points'] ?? null,
             'salePrice' => $rowData['list price'] ?? null,
-            'discount' => isset($rowData['discount']) 
-                ? (float) str_replace('%', '', $rowData['discount']) 
+            'discount' => isset($rowData['discount'])
+                ? (
+                    is_numeric($rowData['discount']) && $rowData['discount'] < 1
+                        ? (float) $rowData['discount'] * 100
+                        : (float) str_replace('%', '', $rowData['discount'])
+                )
                 : null,
             'moq' => $rowData['moq'] ?? null,
             'weight' => $rowData['weight'] ?? null,
