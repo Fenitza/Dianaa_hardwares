@@ -14,7 +14,7 @@ class Product extends Model
         // 'name', 'description', 'sku', 'salePrice','vendorPrice', 'basePrice', 'quantity', 'product_image',
         // 'size', 'length', 'property_class', 'standard', 'material', 'ManufacturerID', 'SubCategoryID',
         // 'image_paths' , 'type', 'color'
-        'slno','sku','description','salePrice','vendorPrice', 'basePrice','discount','moq','quantity',
+        'slno','sku','description','salePrice','vendorPrice', 'basePrice','discount','vendorDiscount','moq','quantity',
         'chapterID','SubCategoryID','ManufacturerID','standardISO','grade','size','threadType','color','metric','type',
         'standardType','point','pitch','pitchType','length','weight','image_paths','product_image'
     ];

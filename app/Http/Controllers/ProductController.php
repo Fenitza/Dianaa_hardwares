@@ -251,9 +251,17 @@ public function importExcel(Request $request)
                         : (float) str_replace('%', '', $rowData['discount'])
                 )
                 : null,
-            'moq' => $rowData['moq'] ?? null,
-            'weight' => $rowData['weight'] ?? null,
+            'moq' => $rowData['moq'] ?? 0,
+            'weight' => $rowData['weight'] ?? 0,
             'quantity' => $rowData['quantity'] ?? 0,
+            'type' => $rowData['featured / best sellers / new arrivals'] ?? null,
+            'vendorDiscount' => isset($rowData['vendorDiscount'])
+                ? (
+                    is_numeric($rowData['vendorDiscount']) && $rowData['vendorDiscount'] < 1
+                        ? (float) $rowData['vendorDiscount'] * 100
+                        : (float) str_replace('%', '', $rowData['vendorDiscount'])
+                )
+                : null,
             'basePrice' => $rowData['after discount'] ?? 0,
             'vendorPrice' => $rowData['vendor price'] ?? 0,
             'image_paths' => json_encode($imagePathsJson),
@@ -289,8 +297,9 @@ public function importExcel(Request $request)
         'description' => 'required|string',
         'salePrice' => 'required|numeric',
         'vendorPrice' => 'required|numeric',
-        'basePrice' => 'required|numeric',
+        'basePrice' => 'nullable|numeric',
         'discount' => 'nullable|numeric',
+        'vendorDiscount' => 'nullable|numeric',
         'moq' => 'nullable|integer',
         'chapterID' => 'nullable|string',
         'SubCategoryID' => 'required|exists:sub_categories,SubCategoryID',
@@ -377,8 +386,9 @@ public function importExcel(Request $request)
         'description' => 'required|string',
         'salePrice' => 'required|numeric',
         'vendorPrice' => 'required|numeric',
-        'basePrice' => 'required|numeric',
+        'basePrice' => 'nullable|numeric',
         'discount' => 'nullable|numeric',
+        'vendorDiscount' => 'nullable|numeric',
         'moq' => 'nullable|integer',
         'chapterID' => 'nullable|string',
         // 'SubCategoryID' => 'required|exists:sub_categories,SubCategoryID',

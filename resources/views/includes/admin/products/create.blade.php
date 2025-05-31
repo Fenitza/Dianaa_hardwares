@@ -78,8 +78,13 @@
                         </div> -->
 
                         <div class="form-group">
-                            <label for="discount">Discount %</label>
+                            <label for="discount">Customer Discount %</label>
                             <input type="number" step="0.01" class="form-control" id="discount" name="discount">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vendorDiscount">Vendor Discount %</label>
+                            <input type="number" step="0.01" class="form-control" id="vendorDiscount" name="vendorDiscount">
                         </div>
 
                         <div class="form-group">
