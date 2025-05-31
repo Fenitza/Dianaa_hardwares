@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 \DB::enableQueryLog();
 
@@ -95,8 +96,10 @@ class ProductController extends Controller
     }
 
 
-    public function importExcel(Request $request)
+
+public function importExcel(Request $request)
 {
+    Log::info("🔧 ImportExcel route hit.");
     $request->validate([
         'excel_file' => 'required|file|mimes:xlsx,xls',
     ]);
@@ -104,102 +107,123 @@ class ProductController extends Controller
     ini_set('max_execution_time', 600);
     ini_set('memory_limit', '-1');
 
-    $filePath = $request->file('excel_file')->getRealPath();
-    $reader = IOFactory::createReaderForFile($filePath);
-    $reader->setReadDataOnly(true);
-    $spreadsheet = $reader->load($filePath);
+    $uploaded = $request->file('excel_file');
+    $storedPath = $uploaded->storeAs('temp', uniqid() . '.xlsx', 'local');
+    $fullPath = storage_path('app/' . $storedPath);
 
-    $sheet = $spreadsheet->getSheetByName('Sheet1');
+    if (!file_exists($fullPath)) {
+        Log::error("❌ File not found at: $fullPath");
+        return redirect()->back()->withErrors('Upload failed: file not found.');
+    }
+
+    try {
+        $reader = new Xlsx();
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($fullPath);
+    } catch (\Exception $e) {
+        Log::error("❌ Failed to load Excel: " . $e->getMessage());
+        return redirect()->back()->withErrors("Upload failed: Excel format error.");
+    }
+
+    $sheetNames = $spreadsheet->getSheetNames();
+    Log::info("📑 Sheet names available:", $sheetNames);
+
+    $dataSheet = $spreadsheet->getSheetByName('Data');
     $codesSheet = $spreadsheet->getSheetByName('Codes');
 
-    // ✅ Build maps from Codes sheet
-    $subcatMap = [];
-    $manufMap = [];
+    if (!$dataSheet || !$codesSheet) {
+        Log::error("❌ Required sheets not found.");
+        return redirect()->back()->withErrors("Data or Codes sheet not found.");
+    }
 
-    foreach ($codesSheet->toArray() as $row) {
-        if (!empty($row[0]) && !empty($row[1])) {
-            $subcatMap[strtolower(trim($row[0]))] = $row[1];
-        }
-        if (!empty($row[2]) && !empty($row[3])) {
-            $manufMap[strtolower(trim($row[2]))] = $row[3];
+    $dataRows = $dataSheet->toArray(null, true, true, true);
+    Log::info("🔎 Row keys in Data sheet: " . json_encode(array_keys($dataRows)));
+    Log::info("🧾 First 3 rows preview:", array_slice($dataRows, 0, 3));
+
+    $codesRows = $codesSheet->toArray(null, true, true, true);
+
+    // ✅ Detect header row dynamically
+    $headerRow = null;
+    $startIndex = null;
+
+    foreach ($dataRows as $rowNum => $row) {
+        if (!empty(array_filter($row))) {
+            $headerRow = array_map(fn($h) => strtolower(trim($h)), $row);
+            $startIndex = $rowNum + 1;
+            break;
         }
     }
 
-    // ✅ Read headers dynamically
-    $headerRow = 5;
-    $lastCol = $sheet->getHighestColumn(); // auto-detect highest column like "AE"
-    $rawHeaders = $sheet->rangeToArray("A{$headerRow}:{$lastCol}{$headerRow}")[0];
-    $normalizedHeaders = array_map(fn($h) => strtolower(trim($h)), $rawHeaders);
-    Log::info("📋 Headers from Excel", $normalizedHeaders);
+    if (!$headerRow || $startIndex === null || count($dataRows) <= $startIndex) {
+        Log::warning("❌ No valid data rows found after header.");
+        return redirect()->back()->withErrors("Excel file does not contain data rows after the header.");
+    }
 
-    $rowIterator = $sheet->getRowIterator($headerRow + 1);
+    Log::info("📋 Headers from Excel", $headerRow);
 
-    foreach ($rowIterator as $row) {
-        $rowIndex = $row->getRowIndex();
-        $cellIterator = $row->getCellIterator();
-        $cellIterator->setIterateOnlyExistingCells(true);
+    // ✅ Build lookup maps from Codes sheet
+    $subcatMap = [];
+    $manufMap = [];
+    foreach ($codesRows as $row) {
+        if (!empty($row['A']) && !empty($row['B'])) {
+            $subcatMap[strtolower(trim($row['A']))] = $row['B'];
+        }
+        if (!empty($row['C']) && !empty($row['D'])) {
+            $manufMap[strtolower(trim($row['C']))] = $row['D'];
+        }
+    }
 
+    // ✅ Iterate data rows
+    foreach ($dataRows as $i => $row) {
+        if ($i < $startIndex) continue;
+
+        $rowIndex = $i + 1;
         $rowData = [];
-        foreach ($cellIterator as $cell) {
-            $columnIndex = Coordinate::columnIndexFromString($cell->getColumn()) - 1;
-            $key = $normalizedHeaders[$columnIndex] ?? "col_{$columnIndex}";
-            $rowData[$key] = $cell->getValue();
+
+        foreach ($headerRow as $col => $fieldName) {
+            $rowData[$fieldName] = $row[$col] ?? null;
         }
 
-        // ✅ Skip blank rows
         if (empty(trim($rowData['part number'] ?? '')) &&
             empty(trim($rowData['subcategory'] ?? '')) &&
             empty(trim($rowData['manufacturer'] ?? ''))) {
             continue;
         }
 
-        Log::debug("📦 Row {$rowIndex}", $rowData);
-
-        // Validation
-        $errors = [];
         $sku = trim($rowData['part number'] ?? '');
-        if (!$sku) $errors[] = "Missing Part Number (SKU)";
-
         $subcatName = strtolower(trim($rowData['subcategory'] ?? ''));
         $manufName = strtolower(trim($rowData['manufacturer'] ?? ''));
 
-        // Alias
         $manufacturerAliases = ['tvs' => 'tvs', 'dianaa' => 'dianaa fasteners'];
-        if (isset($manufacturerAliases[$manufName])) {
-            $manufName = $manufacturerAliases[$manufName];
-        }
+        $manufName = $manufacturerAliases[$manufName] ?? $manufName;
 
         $subcatId = $subcatMap[$subcatName] ?? null;
         $manufId = $manufMap[$manufName] ?? null;
 
-        if (!$subcatId) $errors[] = "Missing or unmapped Subcategory";
-        if (!$manufId) $errors[] = "Missing or unmapped Manufacturer";
+        $errors = [];
+        if (!$sku) $errors[] = "Missing SKU";
+        if (!$subcatId) $errors[] = "Subcategory not mapped";
+        if (!$manufId) $errors[] = "Manufacturer not mapped";
 
         if (!empty($errors)) {
             Log::warning("⚠️ Row {$rowIndex} skipped: " . implode('; ', $errors));
             continue;
         }
 
-        // ✅ Handle image paths
+        // ✅ Image paths
         $imagePathsJson = [];
         $firstImage = null;
         $imageRaw = trim($rowData['image paths'] ?? '');
-
         if (!empty($imageRaw)) {
             $imageNames = array_map('trim', explode(',', $imageRaw));
-            foreach ($imageNames as $i => $imageName) {
+            foreach ($imageNames as $k => $imageName) {
                 if ($imageName !== '') {
-                    $key = 'image_' . ($i + 1);
+                    $key = 'image_' . ($k + 1);
                     $imagePathsJson[$key] = 'products/' . $imageName;
-
-                    if ($i === 0) {
-                        $firstImage = 'products/' . $imageName;
-                    }
+                    if ($k === 0) $firstImage = 'products/' . $imageName;
                 }
             }
         }
-
-        Log::debug("🖼 SKU {$sku} Images: ", $imagePathsJson);
 
         $productData = [
             'sku' => $sku,
@@ -236,13 +260,14 @@ class ProductController extends Controller
             'product_image' => $firstImage,
         ];
 
-        \App\Models\Product::updateOrCreate(['sku' => $sku], $productData);
+        Product::updateOrCreate(['sku' => $sku], $productData);
         Log::info("✅ Imported SKU: {$sku}");
     }
 
     Log::info("✅ Excel import completed.");
     return redirect()->back()->with('success', 'Excel import completed successfully.');
 }
+
 
 
 
