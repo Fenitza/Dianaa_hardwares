@@ -182,25 +182,60 @@ document.getElementById('pay-btn').addEventListener('click', function() {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        body: JSON.stringify({ amount: "{{ $total * 100 }}" })
+        body: JSON.stringify({ amount: {{ (int)($total * 100) }} }) // Convert to paise
     })
     .then(response => response.json())
     .then(data => {
         var options = {
-            "key": "{{ env('RAZORPAY_KEY') }}",
+            "key": "{{ config('services.razorpay.key') }}",
             "amount": data.amount,
             "currency": "INR",
             "name": "Dianaa Fasteners",
+            "description": "Order Payment",
             "order_id": data.id,
-            "handler": function (response){
-                alert("Payment Successful! Transaction ID: " + response.razorpay_payment_id);
-                window.location.href = "/checkout/success";
+            "handler": function (response) {
+                fetch('/razorpay-payment-success', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature,
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Payment Successful! Transaction ID: " + response.razorpay_payment_id);
+                        window.location.href = "/checkout/success";
+                    } else {
+                        alert("Payment process failed. Please retry.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Payment update failed:", err);
+                    alert("Payment process failed. Please retry.");
+                });
+            },
+            "prefill": {
+                "name": document.getElementById('name').value,
+                "email": document.getElementById('email').value,
+                "contact": document.getElementById('phone').value
+            },
+            "theme": {
+                "color": "#F6793F"
             }
         };
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
+        var rzp = new Razorpay(options);
+        rzp.open();
     })
-    .catch(error => console.error('Payment Error:', error));
+    .catch(error => {
+        console.error('Payment Error:', error);
+        alert("Failed to initiate payment.");
+    });
 });
 </script>
 @endsection

@@ -18,6 +18,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\RazorpayController;
 
 use App\Mail\BulkOrderMail;
 use Illuminate\Support\Facades\Mail;
@@ -112,6 +113,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/bulk-order', [OrderController::class, 'handleBulkOrder'])->name('bulk.order');
     Route::post('/create-razorpay-order', [OrderController::class, 'createOrder'])->name('create.order');
 
+    //Razorpay
+    Route::post('/create-razorpay-order', [RazorpayController::class, 'createOrder']);
 
 
     //Cart routes
