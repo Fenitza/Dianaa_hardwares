@@ -194,32 +194,33 @@ document.getElementById('pay-btn').addEventListener('click', function() {
             "description": "Order Payment",
             "order_id": data.id,
             "handler": function (response) {
-                fetch('/razorpay-payment-success', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_signature: response.razorpay_signature,
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Payment Successful! Transaction ID: " + response.razorpay_payment_id);
-                        window.location.href = "/checkout/success";
-                    } else {
-                        alert("Payment process failed. Please retry.");
-                    }
-                })
-                .catch(err => {
-                    console.error("Payment update failed:", err);
-                    alert("Payment process failed. Please retry.");
-                });
-            },
+    // Send payment details to server
+    fetch('/razorpay-payment-success', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("✅ Payment Successful! Transaction ID: " + response.razorpay_payment_id);
+            window.location.href = "/checkout/success";
+        } else {
+            alert("⚠️ Payment recorded but order not updated.");
+        }
+    })
+    .catch(error => {
+        console.error("Error saving payment:", error);
+        alert("❌ Payment success, but server update failed.");
+    });
+},
             "prefill": {
                 "name": document.getElementById('name').value,
                 "email": document.getElementById('email').value,
