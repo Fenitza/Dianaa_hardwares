@@ -172,9 +172,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
+                if (data.status === 'success') {
+                    // ✅ Save order_id in a global variable
+                    window._placedOrderId = data.order_id;
                 alert("✅ Order placed successfully.");
                 payButton.disabled = false; // ✅ Enable Pay button now
-            })
+            } else {
+        alert("❌ Order placement failed.");
+    }
+})
             .catch(error => {
                 console.error('Order Error:', error);
                 alert('❌ Order processing failed.');
@@ -185,6 +191,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 document.getElementById('pay-btn').addEventListener('click', function() {
+    const payload = {
+        amount: {{ (int)($total * 100) }},
+        order_id: window._placedOrderId
+    };
+
+    // 🔍 Log for debugging
+    console.log("Sending to /create-razorpay-order:", payload);
     fetch('/create-razorpay-order', {
         method: 'POST',
         headers: {
@@ -192,7 +205,7 @@ document.getElementById('pay-btn').addEventListener('click', function() {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
         body: JSON.stringify({ amount: {{ (int)($total * 100) }},
-                               order_id: "{{ session('order')->order_id }}", }) // Convert to paise
+                               order_id: window._placedOrderId, }) 
     })
     .then(response => response.json())
     .then(data => {
