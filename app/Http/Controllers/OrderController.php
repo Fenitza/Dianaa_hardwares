@@ -77,8 +77,9 @@ class OrderController extends Controller
     public function placeOrder(Request $request)
 {
     \Log::info('Received order data:', $request->all());
+
     try {
-        // Validate the incoming request data
+        // Validate request
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -88,67 +89,67 @@ class OrderController extends Controller
             'state' => 'required|string|max:255',
             'postal_code' => 'required|string|max:10',
             'country' => 'required|string|max:255',
+            'total' => 'required|numeric|min:0',
         ]);
-        \Log::info('Validation passed', $validatedData);
 
-        // Assuming user authentication is handled
         $user = Auth::user();
 
-        // Fetch user's cart items
-        $cartItems = CartItem::where('user_id', $user->id)->get();
+        // Eager-load product to avoid null error
+        $cartItems = \App\Models\CartItem::where('user_id', $user->id)
+            ->with('product')
+            ->get();
 
         if ($cartItems->isEmpty()) {
-            return response()->json(['status' => 'error', 'message' => 'Your cart is empty'], 400);
+            return response()->json(['status' => 'error', 'message' => 'Cart is empty'], 400);
         }
 
-        // Calculate the total amount
-        $totalAmount = $cartItems->sum(function($cartItem) {
-            return $cartItem->quantity * $cartItem->product->SalePrice;
-        });
+        // Calculate total
+        $totalAmount = $validatedData['total']; // Use frontend-confirmed total
 
-        // Generate a unique order ID
+        // Generate unique order ID
         $uniqueOrderId = strtoupper('ORD-' . dechex(time()) . '-' . dechex($user->id));
 
-        // Create the order
-        $order = new Order([
-            'order_id' => $uniqueOrderId, // Use the custom order ID here
+        // Create order
+        $order = new \App\Models\Order([
+            'order_id' => $uniqueOrderId,
             'user_id' => $user->id,
             'total_amount' => $totalAmount,
+            'payment_status' => 'pending',
             'billing_details' => json_encode($validatedData),
         ]);
-        $order->save();  // Save the order to generate an ID
-        \Log::info('Order created with custom ID: ' . $uniqueOrderId);
+        $order->save();
 
-        // Attach items to the order
-        foreach ($cartItems as $cartItem) {
+        // Save order items
+        foreach ($cartItems as $item) {
             $order->items()->create([
-                'order_id' => $order->order_id,  // Make sure this matches the column name in your table
-                'product_id' => $cartItem->product_id,
-                'quantity' => $cartItem->quantity,
-                'price' => $cartItem->product->SalePrice,
+                'order_id' => $order->order_id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => floatval($item->product->SalePrice ?? 0),
             ]);
         }
 
-        // Optionally, clear the cart after order placement
-        // $cartItems->each->delete();
+        // Store in session (for success page)
+        $order = \App\Models\Order::with(['items.product'])->find($order->id);
+        session(['order' => $order]);
 
-        // Store order in session and redirect to success page
-        $order = Order::with(['items.product'])->find($order->id);
-        if($order) {
-            session(['order' => $order]);
-        } else {
-            \Log::error('Order not found after creation, ID: ' . $order->id);
-            return response()->json(['status' => 'error', 'message' => 'Order not found after creation'], 404);
-        }
-        // Mail::to($user->email)->send(new OrderConfirmation($order));
-
-        return redirect()->route('checkout.success');
+        // ✅ Return JSON success response
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order placed successfully.',
+            'order_id' => $order->order_id
+        ]);
 
     } catch (\Exception $e) {
-        \Log::error("Error processing order: " . $e->getMessage());
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        \Log::error("Error in placeOrder: " . $e->getMessage());
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Order placement failed.',
+            'error' => $e->getMessage()
+        ], 500);
     }
 }
+
 
 
     public function updatePaymentStatus(Request $request)

@@ -112,7 +112,6 @@ Route::middleware(['auth'])->group(function () {
     //order
     Route::any('/place-order', [OrderController::class, 'placeOrder'])->name('place.order');
     Route::post('/bulk-order', [OrderController::class, 'handleBulkOrder'])->name('bulk.order');
-    Route::post('/create-razorpay-order', [OrderController::class, 'createOrder'])->name('create.order');
 
     //Razorpay
     Route::post('/create-razorpay-order', [RazorpayController::class, 'createOrder']);

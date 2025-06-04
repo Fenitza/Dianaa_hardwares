@@ -87,9 +87,7 @@
                 <div class="col-md-4">
                     <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> Print Order</button>
                 </div>
-                <div class="col-md-4">
-                    <button class="btn btn-secondary btn-block"><i class="fa fa-shopping-cart"></i> Continue Shopping</button>
-                </div>
+                
                 <div class="col-md-4">
                     <button class="btn btn-success btn-block"><i class="fa fa-redo"></i> Re-Order</button>
                 </div>
@@ -124,8 +122,9 @@
 .table tfoot td {
     font-weight: bold;
 }
-.btn {
+/* .btn {
     padding: 0.75rem 1.25rem;
     width: 100%;
-}
+} */
 </style>
+

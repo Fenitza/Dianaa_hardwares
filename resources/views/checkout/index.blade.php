@@ -107,10 +107,10 @@
                     <button type="button" class="btn btn-primary btn-sm w-100 mt-2" id="place-order-btn">
                         🛒 Place Order
                     </button>
-
-                    <button type="button" class="btn btn-success btn-sm w-100 mt-2" id="pay-btn">
+                    <button type="button" class="btn btn-success btn-sm w-100 mt-2" id="pay-btn" disabled>
                         💳 Pay Now ₹{{ number_format($total, 2) }}
                     </button>
+                    
                 </form>
             </section>
         </div>
@@ -129,17 +129,22 @@
         font-weight: 600;
         padding: 8px;
     }
+    #pay-btn:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    }
 </style>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const placeOrderButton = document.getElementById('place-order-btn');
+    const payButton = document.getElementById('pay-btn');
+
     if (placeOrderButton) {
         placeOrderButton.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
-            // Fetch all necessary input values
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -149,31 +154,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 state: document.getElementById('state').value,
                 postal_code: document.getElementById('postal_code').value,
                 country: document.getElementById('country').value,
+                total: {{ $total }}
             };
 
-            // Use the Fetch API to send the form data
             fetch('/place-order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Laravel CSRF token
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify(formData)
             })
             .then(response => {
-    if (response.ok) {
-        window.location.href = "/checkout/success";  // Directly redirect on the client side
-    } else {
-        throw new Error('Failed to place order');
-    }
-})
-.catch(error => {
-    console.error('Order Error:', error);
-    alert('Order processing failed. Please try again.');
-});
+                if (!response.ok) {
+                    throw new Error('Failed to place order');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("✅ Order placed successfully.");
+                payButton.disabled = false; // ✅ Enable Pay button now
+            })
+            .catch(error => {
+                console.error('Order Error:', error);
+                alert('❌ Order processing failed.');
+            });
         });
     }
 });
+
 
 document.getElementById('pay-btn').addEventListener('click', function() {
     fetch('/create-razorpay-order', {
@@ -182,7 +191,8 @@ document.getElementById('pay-btn').addEventListener('click', function() {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        body: JSON.stringify({ amount: {{ (int)($total * 100) }} }) // Convert to paise
+        body: JSON.stringify({ amount: {{ (int)($total * 100) }},
+                               order_id: "{{ session('order')->order_id }}", }) // Convert to paise
     })
     .then(response => response.json())
     .then(data => {
@@ -238,5 +248,6 @@ document.getElementById('pay-btn').addEventListener('click', function() {
         alert("Failed to initiate payment.");
     });
 });
+
 </script>
 @endsection
