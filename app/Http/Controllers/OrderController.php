@@ -172,11 +172,21 @@ class OrderController extends Controller
                            JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.postal_code"))
                        ) AS shipping_address'),
                        'orders.total_amount',
-                       'orders.payment_status'
+                       'orders.payment_status',
+                       'orders.created_at'
                    )
-                   ->where('orders.order_id', 'like', '%' . $search . '%') // Search functionality
-                   ->groupBy('orders.order_id', 'users.name', 'users.email', 'orders.total_amount', 'orders.payment_status', 'orders.billing_details')
+                   ->where('orders.order_id', 'like', '%' . $search . '%')
+                   ->groupBy(
+                       'orders.order_id',
+                       'users.name',
+                       'users.email',
+                       'orders.total_amount',
+                       'orders.payment_status',
+                       'orders.billing_details',
+                       'orders.created_at'
+                   )
                    ->simplePaginate($perPage);
+
 
     return view('includes.admin.orders.index', compact('orders'));
 }
@@ -254,7 +264,7 @@ public function userShow($order_id)
                 ->where('order_id', $order_id)
                 ->firstOrFail();
 
-    return view('user.orders.show', compact('order'));
+    return view('includes.user.orders.show', compact('order'));
 }
 
 // place bulk order

@@ -44,7 +44,7 @@
                 <th>Order ID</th>
                 <th>User Name</th>
                 <th>Email</th>
-                <!-- <th>Products Details</th> -->
+                <th>Order Date</th>
                 <th>Shipping Address</th>
                 <th>Total Amount</th>
                 <th>Payment Status</th>
@@ -58,7 +58,7 @@
                 <td>{{ $order->order_id }}</td>
                 <td>{{ $order->user_name }}</td>
                 <td>{{ $order->email }}</td>
-                <!-- <td>{!! $order->product_details !!}</td> -->
+                <td>{{ $order->created_at }}</td>
                 <td>{!! $order->shipping_address !!}</td>
                 <td>{{ $order->total_amount }}</td>
                 <td>{{ $order->payment_status }}</td>
