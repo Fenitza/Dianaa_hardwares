@@ -22,7 +22,7 @@
                                  style="width: 60px; height: 60px;">
                         </div>
                         <div>
-                            <p class="fw-semibold text-dark mb-1">{{ $item->product->Name }}</p>
+                            <p class="fw-semibold text-dark mb-1">{{ $item->product->Description }}</p>
                             <p class="text-muted small mb-0">
                                 ₹{{ number_format($item->price, 2) }} x {{ $item->quantity }}
                             </p>
@@ -31,14 +31,14 @@
                 @endforeach
 
                 <hr>
-                <div class="d-flex justify-content-between small">
+                <!-- <div class="d-flex justify-content-between small">
                     <span class="fw-semibold text-secondary">Subtotal:</span>
                     <span class="text-dark">₹{{ number_format($subtotal, 2) }}</span>
                 </div>
                 <div class="d-flex justify-content-between small">
                     <span class="fw-semibold text-secondary">Shipping:</span>
                     <span class="text-dark">₹{{ number_format($shippingCost, 2) }}</span>
-                </div>
+                </div> -->
                 <div class="d-flex justify-content-between fs-5 fw-bold text-primary mt-2">
                     <span>Total:</span>
                     <span>₹{{ number_format($total, 2) }}</span>

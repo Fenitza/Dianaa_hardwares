@@ -152,23 +152,6 @@ class OrderController extends Controller
 
 
 
-    public function updatePaymentStatus(Request $request)
-    {
-        $order = Order::where('order_id', $request->order_id)->first();
-        if ($order) {
-            $order->update([
-                'payment_status' => 'paid',
-                'transaction_id' => $request->transaction_id
-            ]);
-
-            // Clear cart after payment
-            CartItem::where('user_id', Auth::id())->delete();
-
-            return response()->json(['status' => 'success', 'message' => 'Order confirmed!']);
-        }
-        return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
-    }
-
     public function showOrders(Request $request)
 {
     $search = $request->input('search', '');
@@ -195,8 +178,31 @@ class OrderController extends Controller
                    ->groupBy('orders.order_id', 'users.name', 'users.email', 'orders.total_amount', 'orders.payment_status', 'orders.billing_details')
                    ->simplePaginate($perPage);
 
-    return view('includes.admin.orders', compact('orders'));
+    return view('includes.admin.orders.index', compact('orders'));
 }
+public function show($id)
+{
+    $order = Order::with(['items.product.manufacturer'])
+              ->where('order_id', $id)
+              ->firstOrFail();
+    $billingDetails = json_decode($order->billing_details);
+
+    return view('includes.admin.orders.show', compact('order', 'billingDetails'));
+}
+
+public function updateTracking(Request $request, $id)
+{
+    $request->validate([
+        'tracking_id' => 'nullable|string|max:255'
+    ]);
+
+    $order = Order::findOrFail($id);
+    $order->tracking_id = $request->tracking_id;
+    $order->save();
+
+    return redirect()->back()->with('success', 'Tracking ID updated successfully.');
+}
+
 
 public function orderUser(Request $request)
 {
@@ -220,14 +226,35 @@ public function orderUser(Request $request)
                            JSON_UNQUOTE(JSON_EXTRACT(orders.billing_details, "$.postal_code"))
                        ) AS shipping_address'),
                        'orders.total_amount',
-                       'orders.payment_status'
+                       'orders.payment_status',
+                       'orders.created_at' // ✅ Include order date
                    )
-                   ->where('orders.user_id', '=', $userId) // Filter orders by user ID
-                   ->where('orders.order_id', 'like', '%' . $search . '%') // Search functionality
-                   ->groupBy('orders.order_id', 'users.name', 'users.email', 'orders.total_amount', 'orders.payment_status', 'orders.billing_details')
+                   ->where('orders.user_id', $userId)
+                   ->where('orders.order_id', 'like', '%' . $search . '%')
+                   ->groupBy(
+                       'orders.order_id',
+                       'users.name',
+                       'users.email',
+                       'orders.total_amount',
+                       'orders.payment_status',
+                       'orders.billing_details',
+                       'orders.created_at' // ✅ Group by created_at too
+                   )
                    ->simplePaginate($perPage);
 
-    return view('includes.user.orders', compact('orders'));
+    return view('includes.user.orders.index', compact('orders'));
+}
+
+public function userShow($order_id)
+{
+    $user = Auth::user();
+
+    $order = Order::with(['items.product.manufacturer'])
+                ->where('user_id', $user->id)
+                ->where('order_id', $order_id)
+                ->firstOrFail();
+
+    return view('user.orders.show', compact('order'));
 }
 
 // place bulk order

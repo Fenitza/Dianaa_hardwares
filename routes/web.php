@@ -174,7 +174,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::delete('/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.delete');
 
     //orders
-    Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders');
+    Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::put('/admin/orders/{id}/tracking', [OrderController::class, 'updateTracking'])->name('admin.orders.updateTracking');
+
     
 });
 
@@ -182,7 +185,9 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/profile', [UserController::class, 'account'])->name('user.profile');
     Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
 
-    Route::get('/orders', [OrderController::class, 'orderUser'])->name('user.orders');
+    Route::get('/orders', [OrderController::class, 'orderUser'])->name('user.orders.index');
+    Route::get('/user/orders/{order_id}', [OrderController::class, 'userShow'])->name('user.orders.show');
+
     // Route::post('/logout', [LoginController::class, 'logout'])->name('user.logout');
 });
 

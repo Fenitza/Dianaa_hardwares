@@ -17,7 +17,7 @@
         <ul>
             
                 <li><a href="{{ route('user.profile') }}"><i class="fas fa-user-circle"></i> Profile</a></li>
-                <li><a href="{{ route('user.orders') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="{{ route('user.orders.index') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
                 <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a></li>

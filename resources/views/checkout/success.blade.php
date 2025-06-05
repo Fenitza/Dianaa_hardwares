@@ -53,14 +53,14 @@
                             <tbody>
                                 @foreach ($order->items as $item)
                                 <tr>
-                                    <td>{{ $item->product->Name }}</td>
+                                    <td>{{ $item->product->Description }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>₹ {{ number_format($item->price, 2) }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <tr>
+                                <!-- <tr>
                                     <td>Subtotal</td>
                                     <td colspan="2" class="text-right">₹ {{ number_format($order->total_amount, 2) }}</td>
                                 </tr>
@@ -71,7 +71,7 @@
                                 <tr>
                                     <td>Tax</td>
                                     <td colspan="2" class="text-right">₹ {{ number_format($order->tax, 2) }}</td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td><strong>Grand Total</strong></td>
                                     <td colspan="2" class="text-right"><strong>₹ {{ number_format($order->total_amount, 2) }}</strong></td>
@@ -82,16 +82,20 @@
                 </div>
             </div>
 
-            <!-- Buttons -->
+            <!-- Buttons
             <div class="row mt-4">
                 <div class="col-md-4">
                     <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> Print Order</button>
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-secondary btn-block"><i class="fa fa-shopping-cart"></i> Continue Shopping</button>
                 </div>
                 
                 <div class="col-md-4">
                     <button class="btn btn-success btn-block"><i class="fa fa-redo"></i> Re-Order</button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

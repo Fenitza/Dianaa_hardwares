@@ -18,7 +18,7 @@
         <h3 class="page-title">Manage Orders</h3>
 
     <div class="tools">
-        <form action="{{ route('admin.orders') }}" method="GET" class="form-inline">
+        <form action="{{ route('admin.orders.index') }}" method="GET" class="form-inline">
             <div class="form-group">
                 <label for="search" class="mr-sm-2">Search:</label>
                 <input type="text" id="search" name="search" class="form-control" placeholder="Search by order ID" value="{{ request('search') }}">
@@ -44,10 +44,11 @@
                 <th>Order ID</th>
                 <th>User Name</th>
                 <th>Email</th>
-                <th>Products Details</th>
+                <!-- <th>Products Details</th> -->
                 <th>Shipping Address</th>
                 <th>Total Amount</th>
                 <th>Payment Status</th>
+                <th>Action</th>
                 
             </tr>
         </thead>
@@ -57,10 +58,15 @@
                 <td>{{ $order->order_id }}</td>
                 <td>{{ $order->user_name }}</td>
                 <td>{{ $order->email }}</td>
-                <td>{!! $order->product_details !!}</td>
+                <!-- <td>{!! $order->product_details !!}</td> -->
                 <td>{!! $order->shipping_address !!}</td>
                 <td>{{ $order->total_amount }}</td>
                 <td>{{ $order->payment_status }}</td>
+                <td>
+                    <a href="{{ route('admin.orders.show', $order->order_id) }}" class="btn btn-sm btn-outline-info">
+                        View
+                    </a>
+                </td>
                 
             </tr>
             @endforeach

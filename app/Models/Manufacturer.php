@@ -16,6 +16,6 @@ class Manufacturer extends Model
     // If you have relationships like products made by the manufacturer
     public function products()
     {
-        return $this->hasMany(Product::class, 'ManufacturerID');
+        return $this->hasMany(Product::class, 'ManufacturerID', 'id');
     }
 }
