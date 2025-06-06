@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class SubCategoryController extends Controller
 {
+
     public function show(Request $request, $subCategoryId) {
         \Log::info('Received subCategoryId: ', ['subCategoryId' => $subCategoryId]);
     \Log::info('Request Data: ', $request->all());
@@ -45,53 +46,7 @@ class SubCategoryController extends Controller
         \Log::info('Filtering products by ManufacturerID:', ['brand_id' => $brandId]);
     }
 
-    // Apply material filter if present
-    if ($request->has('material')) {
-        $materials = $request->query('material');
-        $materials = is_array($materials) ? $materials : explode(',', $materials);
-        $productsQuery->whereIn('Material', $materials);
-        \Log::info('Applying material filter with values:', $materials);
-    }
-
-    // Apply size filter if present
-    if ($request->has('size')) {
-        $sizes = $request->query('size');
-        $sizes = is_array($sizes) ? $sizes : explode(',', $sizes);
-        $productsQuery->whereIn('Size', $sizes);
-        \Log::info('Applying size filter with values:', $sizes);
-    }
-
-    // Apply length filter if present
-    if ($request->has('length')) {
-        $lengths = $request->query('length');
-        $lengths = is_array($lengths) ? $lengths : explode(',', $lengths);
-        $productsQuery->whereIn('Length', $lengths);
-        \Log::info('Applying length filter with values:', $lengths);
-    }
-
-    // Apply standard filter if present
-    if ($request->has('standard')) {
-        $standards = $request->query('standard');
-        $standards = is_array($standards) ? $standards : explode(',', $standards);
-        $productsQuery->whereIn('Standard', $standards);
-        \Log::info('Applying standard filter with values:', $standards);
-    }
-
-    // Apply color filter if present
-    if ($request->has('color')) {
-        $colors = $request->query('color');
-        $colors = is_array($colors) ? $colors : explode(',', $colors);
-        $productsQuery->whereIn('Color', $colors);
-        \Log::info('Applying color filter with values:', $colors);
-    }
-
-    // Apply property class filter if present
-    if ($request->has('propertyClass')) {
-        $propertyClasses = $request->query('propertyClass');
-        $propertyClasses = is_array($propertyClasses) ? $propertyClasses : explode(',', $propertyClasses);
-        $productsQuery->whereIn('Property_Class', $propertyClasses);
-        \Log::info('Applying property class filter with values:', $propertyClasses);
-    }
+    
 
     // Execute the query with filters applied
     // $products = $productsQuery->get(); // Use get() for debugging, replace with paginate() if needed
@@ -122,6 +77,36 @@ class SubCategoryController extends Controller
     });
 
     return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
+}
+
+public function getFilters(Request $request)
+{
+    $subCategoryId = $request->query('subcategory_id');
+
+    if (!$subCategoryId) {
+        return response()->json(['error' => 'Subcategory ID is required'], 400);
+    }
+
+    $products = Product::where('SubCategoryID', $subCategoryId)->get();
+
+    return response()->json([
+        'brand' => $products->pluck('ManufacturerID')->unique()->filter()->values()->map(function ($id) {
+            $manufacturer = Manufacturer::where('ManufacturerID', $id)->first();
+            return ['displayName' => $manufacturer ? $manufacturer->Name : "ID: $id"];
+        }),
+
+        'size' => $products->pluck('size')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'length' => $products->pluck('length')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'grade' => $products->pluck('grade')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'color' => $products->pluck('color')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'pitch' => $products->pluck('pitch')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'weight' => $products->pluck('weight')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'type' => $products->pluck('type')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // FT/HT
+        'metric' => $products->pluck('metric')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // MM/Inches
+        'threadType' => $products->pluck('threadType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // UNC/UNF...
+        'point' => $products->pluck('point')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // Cone/Cup/Flat
+        'pitchType' => $products->pluck('pitchType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+    ]);
 }
 
 

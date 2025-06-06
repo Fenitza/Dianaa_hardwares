@@ -14,7 +14,7 @@
                 <p><b>Dianaa Fasteners Part No.(SKU): </b><span style="color: blue;">{{ $product->SKU }}</span></p>
                 <h4>{{ $product->Name }}</h4>
                 <p>{{ $product->Description }}</p>
-                <p><b>Manufacturer: </b>{{ $product->Manufacturer }}</p>
+                <p><b>Manufacturer: </b>{{ $product->manufacturer->Name }}</p>
                 <p><b>Online Price:</b> ₹{{ number_format($product->SalePrice, 2) }}</p>
             </div>
         </div>
