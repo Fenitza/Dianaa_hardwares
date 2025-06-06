@@ -226,6 +226,7 @@ public function orderUser(Request $request)
                    ->leftJoin('products', 'order_items.product_id', '=', 'products.ProductID')
                    ->select(
                        'orders.order_id',
+                       'orders.tracking_id', // ✅ include tracking ID
                        'users.name as user_name',
                        'users.email',
                        DB::raw('GROUP_CONCAT(DISTINCT CONCAT(order_items.quantity, "x", products.name, "<br>", " (SKU: ", products.sku, ")") SEPARATOR "<br><br>" ) as product_details'),
@@ -237,23 +238,25 @@ public function orderUser(Request $request)
                        ) AS shipping_address'),
                        'orders.total_amount',
                        'orders.payment_status',
-                       'orders.created_at' // ✅ Include order date
+                       'orders.created_at'
                    )
                    ->where('orders.user_id', $userId)
                    ->where('orders.order_id', 'like', '%' . $search . '%')
                    ->groupBy(
                        'orders.order_id',
+                       'orders.tracking_id', // ✅ group by this too
                        'users.name',
                        'users.email',
                        'orders.total_amount',
                        'orders.payment_status',
                        'orders.billing_details',
-                       'orders.created_at' // ✅ Group by created_at too
+                       'orders.created_at'
                    )
                    ->simplePaginate($perPage);
 
     return view('includes.user.orders.index', compact('orders'));
 }
+
 
 public function userShow($order_id)
 {
