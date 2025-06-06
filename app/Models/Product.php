@@ -47,4 +47,9 @@ public function getImagePathsAttribute($value)
     return json_decode($value, true);
 }
 
+public function colorVariants()
+{
+    return $this->hasMany(ProductColorVariant::class, 'product_id', 'ProductID');
+}
+
 }

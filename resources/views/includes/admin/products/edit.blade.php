@@ -161,9 +161,24 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="color">Colour</label>
-                            <input type="text" class="form-control" id="color" name="color" value="{{ $product->Color }}">
+                    <label>Color & Sale Price Variants</label>
+                    <div id="color-options-wrapper">
+                        @foreach ($product->colorVariants as $index => $variant)
+                        <div class="row mb-2 color-option">
+                            <div class="col-md-5">
+                                <input type="text" name="color_variants[{{ $index }}][color]" class="form-control" placeholder="Color" value="{{ $variant->color }}" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" step="0.01" name="color_variants[{{ $index }}][sale_price]" class="form-control" placeholder="Sale Price" value="{{ $variant->sale_price }}" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger remove-variant">×</button>
+                            </div>
                         </div>
+                        @endforeach
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary mt-2" id="add-color-option">+ Add Color Option</button>
+                </div>
 
                         <div class="form-group">
                             <label for="metric">Metric / Inches</label>
@@ -212,4 +227,43 @@
         margin-right: 10px;
     }
 </style>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let colorIndex = {{ $product->colorVariants->count() }};
+
+    const addBtn = document.getElementById('add-color-option');
+    const wrapper = document.getElementById('color-options-wrapper');
+
+    if (addBtn && wrapper) {
+        addBtn.addEventListener('click', function () {
+            const row = document.createElement('div');
+            row.className = 'row mb-2 color-option';
+            row.innerHTML = `
+                <div class="col-md-5">
+                    <input type="text" name="color_variants[${colorIndex}][color]" class="form-control" placeholder="Color" required>
+                </div>
+                <div class="col-md-5">
+                    <input type="number" step="0.01" name="color_variants[${colorIndex}][sale_price]" class="form-control" placeholder="Sale Price" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-variant">×</button>
+                </div>
+            `;
+            wrapper.appendChild(row);
+            colorIndex++;
+        });
+
+        // Event delegation to remove variant rows
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-variant')) {
+                e.target.closest('.color-option').remove();
+            }
+        });
+    }
+});
+</script>
+@endpush
+
 @endsection

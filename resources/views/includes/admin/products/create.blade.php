@@ -147,9 +147,22 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="color">Colour</label>
-                            <input type="text" class="form-control" id="color" name="color">
-                        </div>
+    <label>Color & Sale Price Variants</label>
+    <div id="color-options-wrapper">
+        <div class="row mb-2 color-option">
+            <div class="col-md-5">
+                <input type="text" name="color_variants[0][color]" class="form-control" placeholder="Color (e.g. Red)" required>
+            </div>
+            <div class="col-md-5">
+                <input type="number" step="0.01" name="color_variants[0][sale_price]" class="form-control" placeholder="Sale Price" required>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger remove-variant">×</button>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-secondary mt-2" id="add-color-option">+ Add Color Option</button>
+</div>
 
                         <div class="form-group">
                             <label for="metric">Metric / Inches</label>
@@ -188,5 +201,42 @@
     </form>
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let colorIndex = 1;
+
+    const addBtn = document.getElementById('add-color-option');
+    const wrapper = document.getElementById('color-options-wrapper');
+
+    if (addBtn && wrapper) {
+        addBtn.addEventListener('click', function () {
+            const row = document.createElement('div');
+            row.className = 'row mb-2 color-option';
+            row.innerHTML = `
+                <div class="col-md-5">
+                    <input type="text" name="color_variants[${colorIndex}][color]" class="form-control" placeholder="Color (e.g. Blue)" required>
+                </div>
+                <div class="col-md-5">
+                    <input type="number" step="0.01" name="color_variants[${colorIndex}][sale_price]" class="form-control" placeholder="Sale Price" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-variant">×</button>
+                </div>
+            `;
+            wrapper.appendChild(row);
+            colorIndex++;
+        });
+
+        // Handle remove button clicks
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-variant')) {
+                e.target.closest('.color-option').remove();
+            }
+        });
+    }
+});
+</script>
+@endpush
 
 @endsection

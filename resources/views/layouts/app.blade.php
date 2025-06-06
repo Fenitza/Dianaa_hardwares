@@ -14,6 +14,7 @@
 
 
 </head>
+@stack('scripts')
 <body>
     @include('layouts.header')
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\ProductColorVariant;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -53,11 +54,12 @@ class ProductController extends Controller
     }
 
     public function showByProducts($ProductID)
-    {
-        $product = Product::findOrFail($ProductID);
-        $product->image_paths = json_decode($product->image_paths, true) ?? [];
-        return view('pages.product_details', compact('product'));
-    }
+{
+    $product = Product::with(['colorVariants'])->findOrFail($ProductID); // include color variants
+    $product->image_paths = json_decode($product->image_paths, true) ?? [];
+
+    return view('pages.product_details', compact('product'));
+}
 
     public function showByManufacturer($manufacturerN)
 {
@@ -279,15 +281,16 @@ public function importExcel(Request $request)
 
 
 
-    public function edit($id)
-    {
-        $manufacturers = Manufacturer::all(); // Assuming you have a Manufacturer model
-        $subcategories = SubCategory::all(); // Assuming you have a Category model
-        $product = Product::findOrFail($id);
-        return view('includes.admin.products.edit', compact('product','manufacturers', 'subcategories'));
-    }
+public function edit($id)
+{
+    $manufacturers = Manufacturer::all();
+    $subcategories = SubCategory::all();
+    $product = Product::with('colorVariants')->findOrFail($id); // include variants
 
-    public function update(Request $request, $id)
+    return view('includes.admin.products.edit', compact('product', 'manufacturers', 'subcategories'));
+}
+
+public function update(Request $request, $id)
 {
     $product = Product::findOrFail($id);
 
@@ -308,7 +311,6 @@ public function importExcel(Request $request)
         'grade' => 'nullable|string',
         'size' => 'nullable|string',
         'threadType' => 'nullable|string',
-        'color' => 'nullable|string',
         'metric' => 'nullable|string',
         'type' => 'required|string',
         'standardType' => 'nullable|string',
@@ -319,66 +321,69 @@ public function importExcel(Request $request)
         'weight' => 'nullable|numeric',
         'quantity' => 'required|integer',
         'image_path.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'color_variants' => 'required|array',
+        'color_variants.*.color' => 'required|string',
+        'color_variants.*.sale_price' => 'required|numeric',
         'ManufacturerID' => 'required|integer',
         'SubCategoryID' => 'required|integer',
     ];
 
-    // Run validation
     $validator = Validator::make($request->all(), $rules);
-
-    // Check for validation failure
     if ($validator->fails()) {
         return response()->json(['errors' => $validator->errors()], 400);
     }
 
-    // Get validated data
     $data = $validator->validated();
+    Log::debug('Received update data:', $data);
 
-    // Log received data
-    \Log::debug('Received update data:', $data);
-
-    // Update the product with validated data
-    $product->update($data);
-
-    // Process the uploaded files, update only if new files are provided
-    if ($request->hasFile('image_path')) {
-        $imagePaths = [];
-        foreach ($request->file('image_path') as $index => $file) {
-            // Store the new image and collect their paths
-            $path = $file->store('products', 'public');
-            $imagePaths['image_' . ($index + 1)] = $path;
-
-            \Log::debug('Updated image path:', ['key' => 'image_' . ($index + 1), 'path' => $path]);
-        }
-
-        $product->image_paths = json_encode($imagePaths);
-        \Log::debug('Updated Image Paths:', ['paths' => $product->image_paths]);
-
-        // Update main product image if it exists
-        if (isset($imagePaths['image_1'])) {
-            $product->product_image = $imagePaths['image_1'];
-            \Log::debug('Main Product Image Path:', ['product_image' => $product->product_image]);
-        }
-    }
-
-    // Attempt to save the updates to the database
+    DB::beginTransaction();
     try {
+        $product->update($data);
+
+        // Handle images if re-uploaded
+        if ($request->hasFile('image_path')) {
+            $imagePaths = [];
+            foreach ($request->file('image_path') as $index => $file) {
+                $path = $file->store('products', 'public');
+                $imagePaths['image_' . ($index + 1)] = $path;
+                Log::debug('Updated image path:', ['key' => 'image_' . ($index + 1), 'path' => $path]);
+            }
+
+            $product->image_paths = json_encode($imagePaths);
+
+            if (isset($imagePaths['image_1'])) {
+                $product->product_image = $imagePaths['image_1'];
+            }
+        }
+
         $product->save();
-        \Log::info('Product saved successfully', ['id' => $product->ProductID]);
+        Log::info('Product base info updated', ['id' => $product->ProductID]);
+
+        // ✅ Handle Color Variants
+        ProductColorVariant::where('product_id', $product->ProductID)->delete(); // remove old variants
+
+        foreach ($data['color_variants'] as $variant) {
+            ProductColorVariant::create([
+                'product_id' => $product->ProductID,
+                'color' => $variant['color'],
+                'sale_price' => $variant['sale_price'],
+            ]);
+        }
+
+        DB::commit();
+        return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
+
     } catch (\Exception $e) {
-        \Log::error('Failed to save product', [
+        DB::rollBack();
+        Log::error('Failed to update product', [
             'error' => $e->getMessage(),
             'data' => $data
         ]);
-        return redirect()->back()->withErrors('Failed to save product.');
+        return redirect()->back()->withErrors('Failed to update product.');
     }
-
-    // Redirect with a success message
-    return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
 }
 
-
-    public function store(Request $request)
+public function store(Request $request)
 {
     $rules = [
         'slno' => 'required|string|max:255',
@@ -391,13 +396,13 @@ public function importExcel(Request $request)
         'vendorDiscount' => 'nullable|numeric',
         'moq' => 'nullable|integer',
         'chapterID' => 'nullable|string',
-        // 'SubCategoryID' => 'required|exists:sub_categories,SubCategoryID',
-        // 'ManufacturerID' => 'required|exists:manufacturers,ManufacturerID',
         'standardISO' => 'nullable|string',
         'grade' => 'nullable|string',
         'size' => 'nullable|string',
         'threadType' => 'nullable|string',
-        'color' => 'nullable|string',
+        'color_variants' => 'required|array',
+        'color_variants.*.color' => 'required|string',
+        'color_variants.*.sale_price' => 'required|numeric',
         'metric' => 'nullable|string',
         'type' => 'required|string',
         'standardType' => 'nullable|string',
@@ -411,60 +416,70 @@ public function importExcel(Request $request)
         'ManufacturerID' => 'required|integer',
         'SubCategoryID' => 'required|integer',
     ];
-    // Run validation
+
     $validator = Validator::make($request->all(), $rules);
 
-    // Check for validation failure
     if ($validator->fails()) {
         return response()->json(['errors' => $validator->errors()], 400);
     }
 
-    // Get validated data
     $data = $validator->validated();
-    
-    \Log::debug('Received data:', $data);
+    Log::debug('Received data:', $data);
 
+    DB::beginTransaction();
 
-    // Create a new product instance and assign validated data
-    $product = new Product($data);
-
-    // Process the uploaded files
-    if ($request->hasFile('image_path')) {
-        $imagePaths = [];
-        foreach ($request->file('image_path') as $index => $file) {
-            // Store the image and collect their paths
-            $path = $file->store('products', 'public');
-            $imagePaths['image_' . ($index + 1)] = $path;
-
-            \Log::debug('Stored image path:', ['key' => 'image_' . ($index + 1), 'path' => $path]);
-        }
-
-        $product->image_paths = json_encode($imagePaths);
-        \Log::debug('Encoded Image Paths:', ['paths' => $product->image_paths]);
-
-        // Store image_1 as the main product image if it exists
-        if (isset($imagePaths['image_1'])) {
-            $product->product_image = $imagePaths['image_1'];  // Directly store the path without replacing characters
-            \Log::debug('Main Product Image Path:', ['product_image' => $product->product_image]);
-        }
-
-        \Log::debug('Encoded Image Paths:', ['paths' => $product->image_paths]);
-    }
-    // Attempt to save the product to the database
     try {
+        $product = new Product($data);
+
+        // Handle images
+        if ($request->hasFile('image_path')) {
+            $imagePaths = [];
+
+            foreach ($request->file('image_path') as $index => $file) {
+                $path = $file->store('products', 'public');
+                $imagePaths['image_' . ($index + 1)] = $path;
+                Log::debug('Stored image path:', ['key' => 'image_' . ($index + 1), 'path' => $path]);
+            }
+
+            $product->image_paths = json_encode($imagePaths);
+
+            if (isset($imagePaths['image_1'])) {
+                $product->product_image = $imagePaths['image_1'];
+                Log::debug('Main Product Image Path:', ['product_image' => $product->product_image]);
+            }
+        }
+
         $product->save();
-        \Log::info('Product saved successfully', ['id' => $product->ProductID]);
+        Log::info('Product saved successfully', ['id' => $product->ProductID]);
+
+        // Save color variants to product_color_variants table
+        foreach ($data['color_variants'] as $variant) {
+            ProductColorVariant::create([
+                'product_id' => $product->ProductID,
+                'color' => $variant['color'],
+                'sale_price' => $variant['sale_price'],
+            ]);
+
+            Log::info('Color variant added', [
+                'product_id' => $product->ProductID,
+                'color' => $variant['color'],
+                'sale_price' => $variant['sale_price'],
+            ]);
+        }
+
+        DB::commit();
+        return redirect()->route('admin.products')->with('success', 'Product added successfully!');
+
     } catch (\Exception $e) {
-        \Log::error('Failed to save product', [
+        DB::rollBack();
+        Log::error('Failed to save product', [
             'error' => $e->getMessage(),
             'data' => $data
         ]);
         return redirect()->back()->withErrors('Failed to save product.');
     }
-
-    // Redirect with a success message
-    return redirect()->route('admin.products')->with('success', 'Product added successfully!');
 }
+
 
     public function destroy($id)
     {
