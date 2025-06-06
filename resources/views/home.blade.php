@@ -91,7 +91,7 @@
             <div class="brand-card" style="background-image: url('{{ asset('storage/' . $manufacturer->Image) }}');">
                 <div class="brand-overlay">
                     <h4 class="brand-name">{{ $manufacturer->Name }}</h4>
-                    <a href="{{ route('products_main', ['brand' => $manufacturer->Name]) }}" class="shop-now-btn">SHOP NOW</a>
+                    <a href="{{ route('products.byBrandCategories', ['brand_id' => $manufacturer->ManufacturerID]) }}" class="shop-now-btn">SHOP NOW</a>
                 </div>
             </div>
         </div>
@@ -352,9 +352,9 @@ function toggleSubcategories(subcatId) {
                 container.innerHTML += `
                 <a href="/subcategories/product/${product.ProductID}" class="card-link">
                     <div class="card mb-3">
-                        <img src="/storage/${product.product_image}" class="card-img-top" alt="${product.name}">
-                        <div class="card-body">
-                            <h6 class="card-title">${product.Name}</h6>
+                        <img src="/storage/${product.product_image}" class="card-img-top" alt="${product.Description}">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">${product.Description}</h6>
                             <p class="card-text"><small class="text-muted">₹${product.SalePrice}</small></p>
                         </div>
                     </div>

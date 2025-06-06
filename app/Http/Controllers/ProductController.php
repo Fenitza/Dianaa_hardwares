@@ -52,6 +52,33 @@ class ProductController extends Controller
         $categories = Category::with('subcategories')->get();
         return view('pages.products', compact('categories', 'category'));
     }
+    public function brandCategories($brand_id)
+{
+    // Fetch categories where at least one subcategory has products from the given ManufacturerID
+    $categories = Category::with(['subcategories' => function ($subQuery) use ($brand_id) {
+        $subQuery->whereHas('products', function ($productQuery) use ($brand_id) {
+            $productQuery->where('ManufacturerID', $brand_id);
+        });
+    }])
+    ->whereHas('subcategories.products', function ($query) use ($brand_id) {
+        $query->where('ManufacturerID', $brand_id);
+    })
+    ->get()
+    // Ensure empty subcategory collections are excluded (in case of empty eager loading)
+    ->filter(function ($category) {
+        return $category->subcategories->isNotEmpty();
+    })
+    ->values();
+
+    $manufacturer = Manufacturer::find($brand_id);
+
+    return view('pages.products_main', [
+        'categories' => $categories,
+        'manufacturer' => $manufacturer,
+        'brand_id' => $brand_id
+    ]);
+}
+
 
     public function showByProducts($ProductID)
 {

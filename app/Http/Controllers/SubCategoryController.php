@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 \DB::enableQueryLog();
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB; 
 use Illuminate\Support\Facades\Log;
 
 class SubCategoryController extends Controller
@@ -39,11 +39,10 @@ class SubCategoryController extends Controller
 
     // Apply material filter if present
     // Apply brand filter if present
-    if ($request->has('brand')) {
-        $brands = $request->query('brand');
-        $brands = is_array($brands) ? $brands : explode(',', $brands);
-        $productsQuery->whereIn('Manufacturer', $brands);
-        \Log::info('Applying brand filter with values:', $brands);
+    if ($request->has('brand_id')) {
+        $brandId = $request->query('brand_id');
+        $productsQuery->where('ManufacturerID', $brandId);
+        \Log::info('Filtering products by ManufacturerID:', ['brand_id' => $brandId]);
     }
 
     // Apply material filter if present

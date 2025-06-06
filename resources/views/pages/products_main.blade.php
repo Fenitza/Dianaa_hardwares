@@ -15,11 +15,11 @@
                 <img src="{{ asset('storage/' . $category->category_image) }}" alt="{{ $category->Name }}" class="product-img img-fluid" style="height: 100px;">
                 <div class="card-body">
                     <p class="categ-card-title">{{ $category->Name }}</p>
-                </div>
+                </div> 
                 <div class="category-overlay">
                     <ul class="subcategory-links">
                         @foreach ($category->subcategories->take(3) as $subcategory)
-                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'brand' => request()->brand]) }}">{{ $subcategory->Name }}</a></li>
+                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'brand_id' => request('brand_id')]) }}">{{ $subcategory->Name }}</a></li>
                         @endforeach
                         <li><a href="{{ route('products', ['category' => $category->CategoryID, 'brand' => request()->brand]) }}" class="view-all-link">View All</a></li>
                     </ul>
