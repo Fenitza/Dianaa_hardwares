@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
+use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
@@ -103,9 +104,9 @@ public function getFilters(Request $request)
         'weight' => $products->pluck('weight')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'type' => $products->pluck('type')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // FT/HT
         'metric' => $products->pluck('metric')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // MM/Inches
-        'threadType' => $products->pluck('threadType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // UNC/UNF...
+        'threadtype' => $products->pluck('threadType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // UNC/UNF...
         'point' => $products->pluck('point')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // Cone/Cup/Flat
-        'pitchType' => $products->pluck('pitchType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'pitchtype' => $products->pluck('pitchType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
     ]);
 }
 

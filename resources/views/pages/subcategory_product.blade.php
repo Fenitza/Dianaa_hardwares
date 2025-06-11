@@ -4,41 +4,41 @@
 <div class="container my-4" style="max-width: 1400px;">
     <div class="row">
         <input type="hidden" id="subcategory-id" value="{{ $subcategory->SubCategoryID }}">
-        <!-- Filter Column -->
+        <!-- Filter Form -->
         <div class="col-md-3" id="filter-sidebar">
-            <div class="row">
-                <!-- Filter Form -->
-                <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
+        <div class="row">
+        <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
                     <div class="filter-section">
                         <h6>Filters</h6>
 
-                        @foreach ([
-                            'brand' => 'Brand/Manufacturer',
-                            'size' => 'Thread Size',
-                            'length' => 'Length',
-                            'grade' => 'Grade',
-                            'color' => 'Colour',
-                            'pitch' => 'Pitch',
-                            'weight' => 'Weight',
-                            'type' => 'FT/HT',
-                            'metric' => 'MM or Inches',
-                            'threadType' => 'UNC / UNF / BSF / BSW',
-                            'point' => 'Cone/Cup/Flat Points',
-                            'pitchType' => 'Pitch Type'
-                        ] as $field => $label)
-                            <div class="filter-category">
-                                <button type="button" class="collapsible">{{ $label }}</button>
-                                <div class="content" id="{{ $field }}-container"></div>
-                            </div>
-                        @endforeach
+                        @foreach ([ 
+    'brand' => 'Brand/Manufacturer',
+    'size' => 'Thread Size',
+    'length' => 'Length',
+    'grade' => 'Grade',
+    'color' => 'Colour',
+    'pitch' => 'Pitch',
+    'weight' => 'Weight',
+    'type' => 'FT/HT',
+    'metric' => 'MM or Inches',
+    'threadtype' => 'UNC / UNF / BSF / BSW',
+    'point' => 'Cone/Cup/Flat Points',
+    'pitchtype' => 'Pitch Type'
+] as $field => $label)
+    <div class="filter-category ">
+        <button type="button" class="collapsible btn btn-outline-dark w-100 ">{{ $label }}</button>
+        <div class="content p-2 border" id="{{ strtolower($field) }}-container"></div>
+    </div>
+@endforeach
 
-                        <div class="filter-controls col-md-12 justify-content-center">
+
+                        <div class="filter-controls col-md-12 mt-3">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-success" id="filter-apply">Apply Filters</button>
+                                <div class="col-md-6 mb-2">
+                                    <button type="submit" class="btn btn-success w-100" id="filter-apply">Apply Filters</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+                                    <button type="button" class="btn btn-secondary w-100" onclick="clearFilters()">Clear Filters</button>
                                 </div>
                             </div>
                         </div>
@@ -99,10 +99,66 @@
     </div>
 </div>
 
+/* Filter section container */
+.filter-section {
+    font-size: 14px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* Collapsible filter buttons */
+.filter-section .collapsible {
+    font-size: 13px;
+    font-weight: 500;
+    width: 100%;
+    background-color: #2a2f78;
+    color: white;
+    border: none;
+    text-align: left;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-section .collapsible:hover {
+    background-color: #1d235a;
+}
+
+/* Active state */
+.filter-section .collapsible.active {
+    background-color: #a6ce39 !important;
+    color: black;
+}
+
+/* Collapsible content */
+.filter-section .content {
+    display: none;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+/* Checkbox styling */
+.filter-section .form-check {
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.filter-section .form-check-input {
+    margin-right: 6px;
+}
+
 <!-- Scripts -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         fetchFilters();
+        initCollapsibles();
 
         document.getElementById('sortProducts').addEventListener('change', function() {
             let url = new URL(window.location.href);
@@ -116,22 +172,38 @@
         fetch(`/filters?subcategory_id=${subCategoryId}`)
             .then(response => response.json())
             .then(data => {
-                Object.keys(data).forEach(key => populateFilters(data[key], `${key}-container`));
-            });
+                console.log("✅ Filter data:", data);
+                Object.keys(data).forEach(key => {
+                    const id = `${key.toLowerCase()}-container`;
+                    populateFilters(data[key], id);
+                });
+            })
+            .catch(error => console.error("❌ Error fetching filters:", error));
     }
 
     function populateFilters(items, containerId) {
         const container = document.getElementById(containerId);
+        if (!container) {
+            console.warn(`⚠️ Container not found: #${containerId}`);
+            return;
+        }
+
         container.innerHTML = '';
         items.forEach(item => {
             const div = document.createElement('div');
-            const label = document.createElement('label');
+            div.className = 'form-check';
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.value = item.displayName;
+            checkbox.className = 'form-check-input';
             checkbox.name = containerId.replace('-container', '') + '[]';
+            checkbox.value = item.displayName;
+
+            const label = document.createElement('label');
+            label.className = 'form-check-label';
             label.appendChild(checkbox);
-            label.append(' ' + item.displayName);
+            label.append(" " + item.displayName);
+
             div.appendChild(label);
             container.appendChild(div);
         });
@@ -141,6 +213,17 @@
         const url = new URL(window.location.href);
         url.search = '';
         window.location.href = url.href;
+    }
+
+    function initCollapsibles() {
+        const collapsibles = document.getElementsByClassName("collapsible");
+        for (let i = 0; i < collapsibles.length; i++) {
+            collapsibles[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                content.style.display = content.style.display === "block" ? "none" : "block";
+            });
+        }
     }
 </script>
 @endsection
