@@ -54,10 +54,11 @@ Route::get('/products/brands/{brand_id}/categories', [ProductController::class, 
 Route::get('/products/{category?}', [ProductController::class, 'show'])->name('products.show');//2nd categories
 Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'showByProducts'])->name('product.details');
 Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');//grid page
-Route::post('/subcategories/{subCategoryId}/filter', [SubCategoryController::class,'filter'])->name('subcategory.filter');
+Route::get('/subcategory/{subCategoryId}', [SubCategoryController::class, 'applyFilters'])->name('subcategory_product');
+
 Route::get('/filters', [SubCategoryController::class, 'getFilters'])->name('subcategory_filters');
 // Route::get('/filters', [ProductController::class, 'fetchFilters'])->name('product.filter');
-Route::any('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
+// Route::any('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
  
 //Home Products
 Route::get('/', [HomeController::class , 'index'])->name('home');

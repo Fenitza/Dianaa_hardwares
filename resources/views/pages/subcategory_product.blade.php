@@ -1,47 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-4" style="max-width: 1400px;">
+<div class="container my-3" style="max-width: 1400px;">
     <div class="row">
         <input type="hidden" id="subcategory-id" value="{{ $subcategory->SubCategoryID }}">
         <!-- Filter Form -->
         <div class="col-md-3" id="filter-sidebar">
-        <div class="row">
-        <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
+            <div class="row">
+                <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
                     <div class="filter-section">
                         <h6>Filters</h6>
 
-                        @foreach ([ 
-    'brand' => 'Brand/Manufacturer',
-    'size' => 'Thread Size',
-    'length' => 'Length',
-    'grade' => 'Grade',
-    'color' => 'Colour',
-    'pitch' => 'Pitch',
-    'weight' => 'Weight',
-    'type' => 'FT/HT',
-    'metric' => 'MM or Inches',
-    'threadtype' => 'UNC / UNF / BSF / BSW',
-    'point' => 'Cone/Cup/Flat Points',
-    'pitchtype' => 'Pitch Type'
-] as $field => $label)
-    <div class="filter-category ">
-        <button type="button" class="collapsible btn btn-outline-dark w-100 ">{{ $label }}</button>
-        <div class="content p-2 border" id="{{ strtolower($field) }}-container"></div>
-    </div>
-@endforeach
-
-
-                        <div class="filter-controls col-md-12 mt-3">
-                            <div class="row">
-                                <div class="col-md-6 mb-2">
-                                    <button type="submit" class="btn btn-success w-100" id="filter-apply">Apply Filters</button>
+                            @foreach ([ 
+                                'brand' => 'Brand/Manufacturer',
+                                'size' => 'Thread Size',
+                                'length' => 'Length',
+                                'grade' => 'Grade',
+                                'color' => 'Colour',
+                                'pitch' => 'Pitch',
+                                'weight' => 'Weight',
+                                'type' => 'FT/HT',
+                                'metric' => 'MM or Inches',
+                                'threadtype' => 'UNC / UNF / BSF / BSW',
+                                'point' => 'Cone/Cup/Flat Points',
+                                'pitchtype' => 'Pitch Type'
+                                ] as $field => $label)
+                                <div class="filter-category ">
+                                    <button type="button" class="collapsible btn btn-outline-dark w-100 ">{{ $label }}</button>
+                                    <div class="content p-2 border" id="{{ strtolower($field) }}-container"></div>
                                 </div>
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-secondary w-100" onclick="clearFilters()">Clear Filters</button>
+                            @endforeach
+
+
+                            <div class="filter-controls">
+                            <div class="row g-4">
+                                <div class="col-6">
+                                    <button type="submit" class="btn w-100" id="filter-apply">Apply Filters</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn w-100" onclick="clearFilters()">Clear Filters</button>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -98,7 +99,7 @@
         </div>
     </div>
 </div>
-
+<style>
 /* Filter section container */
 .filter-section {
     font-size: 14px;
@@ -154,6 +155,38 @@
     margin-right: 6px;
 }
 
+
+.filter-controls .btn {
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+/* Apply Button */
+#filter-apply {
+    background-color: #b3d334;
+    border: none;
+    color: #000;
+}
+
+#filter-apply:hover {
+    background-color: #a1c425;
+}
+
+/* Clear Button */
+.filter-controls .btn-secondary {
+    background-color: #5c6670;
+    color: white;
+    border: none;
+}
+
+.filter-controls .btn-secondary:hover {
+    background-color: #495057;
+}
+
+</style>
+
 <!-- Scripts -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -182,32 +215,42 @@
     }
 
     function populateFilters(items, containerId) {
-        const container = document.getElementById(containerId);
-        if (!container) {
-            console.warn(`⚠️ Container not found: #${containerId}`);
-            return;
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const filterKey = containerId.replace('-container', '');
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedValues = urlParams.getAll(filterKey + '[]');
+
+    container.innerHTML = '';
+    items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'form-check';
+
+        const checkbox = document.createElement('input');
+        const value = item.value ?? item.displayName;
+        checkbox.type = 'checkbox';
+        checkbox.className = 'form-check-input';
+        checkbox.name = `${filterKey}[]`;
+        checkbox.value = value;
+        if (selectedValues.includes(value)) {
+            checkbox.checked = true;
         }
 
-        container.innerHTML = '';
-        items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'form-check';
+        if (selectedValues.includes(item.displayName)) {
+            checkbox.checked = true;
+        }
 
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'form-check-input';
-            checkbox.name = containerId.replace('-container', '') + '[]';
-            checkbox.value = item.displayName;
+        const label = document.createElement('label');
+        label.className = 'form-check-label';
+        label.appendChild(checkbox);
+        label.append(" " + item.displayName);
 
-            const label = document.createElement('label');
-            label.className = 'form-check-label';
-            label.appendChild(checkbox);
-            label.append(" " + item.displayName);
+        div.appendChild(label);
+        container.appendChild(div);
+    });
+}
 
-            div.appendChild(label);
-            container.appendChild(div);
-        });
-    }
 
     function clearFilters() {
         const url = new URL(window.location.href);

@@ -92,9 +92,12 @@ public function getFilters(Request $request)
 
     return response()->json([
         'brand' => $products->pluck('ManufacturerID')->unique()->filter()->values()->map(function ($id) {
-            $manufacturer = Manufacturer::where('ManufacturerID', $id)->first();
-            return ['displayName' => $manufacturer ? $manufacturer->Name : "ID: $id"];
-        }),
+    $manufacturer = Manufacturer::where('ManufacturerID', $id)->first();
+    return $manufacturer
+        ? ['value' => $manufacturer->ManufacturerID, 'displayName' => $manufacturer->Name]
+        : ['value' => $id, 'displayName' => "Unknown ID: $id"];
+}),
+
 
         'size' => $products->pluck('size')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'length' => $products->pluck('length')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
@@ -108,6 +111,69 @@ public function getFilters(Request $request)
         'point' => $products->pluck('point')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // Cone/Cup/Flat
         'pitchtype' => $products->pluck('pitchType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
     ]);
+}
+
+public function applyFilters(Request $request, $subCategoryId)
+{
+    // Step 1: Base Query
+    $productsQuery = Product::where('SubCategoryID', $subCategoryId);
+
+    // Step 2: Filter Mapping
+    $filterFields = [
+        'brand' => 'ManufacturerID',
+        'size' => 'Size',
+        'length' => 'Length',
+        'grade' => 'Grade',
+        'color' => 'Color',
+        'pitch' => 'Pitch',
+        'weight' => 'Weight',
+        'type' => 'Type',
+        'metric' => 'Metric',
+        'threadtype' => 'ThreadType',
+        'point' => 'Point',
+        'pitchtype' => 'PitchType',
+    ];
+
+    foreach ($filterFields as $key => $column) {
+        if ($request->has($key)) {
+            $values = $request->input($key);
+            if (is_array($values) && !empty($values)) {
+                $productsQuery->whereIn($column, $values);
+            }
+        }
+    }
+
+    // Step 3: Sorting
+    $sortOrder = $request->query('sort', 'best_match');
+    switch ($sortOrder) {
+        case 'price_low_high':
+            $productsQuery->orderBy('SalePrice', 'asc');
+            break;
+        case 'price_high_low':
+            $productsQuery->orderBy('SalePrice', 'desc');
+            break;
+        default:
+            $productsQuery->orderBy('Name', 'asc');
+            break;
+    }
+
+    // Step 4: Pagination
+    $perPage = $request->query('perPage', 12);
+    $products = $productsQuery->paginate($perPage)->appends($request->query());
+
+    // Step 5: SubCategory Info
+    $subcategory = SubCategory::findOrFail($subCategoryId);
+
+    // Step 6: View Type
+    $viewType = $request->query('view', 'grid');
+    $viewName = 'partials.product_' . $viewType;
+
+    if (!view()->exists($viewName)) {
+        return redirect()->back()->with('error', 'Invalid view type specified');
+    }
+
+    // Step 7: Return Blade View
+    return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
 }
 
 
