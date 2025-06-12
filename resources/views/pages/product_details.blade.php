@@ -159,6 +159,35 @@
                     data-user-email="{{ auth()->user()->email }}"
                     data-user-phone="{{ auth()->user()->phone_number }}"
                     data-bs-target="#bulkOrderModal">Request Bulk Order</button>
+                    <!-- Bulk Order Modal -->
+            <div class="modal fade" id="bulkOrderModal" tabindex="-1" aria-labelledby="bulkOrderModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="bulkOrderModalLabel">Bulk Order Request</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="bulkOrderForm" data-product-id="{{ $product->ProductID }}"
+                                data-user-name="{{ auth()->user()->name }}"
+                                data-user-email="{{ auth()->user()->email }}"
+                                data-user-phone="{{ auth()->user()->phone_number }}">
+                                <div class="mb-3">
+                                    <label for="bulkQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="bulkQuantity" name="quantity" min="1" value="{{$product->moq}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Additional Message</label>
+                                    <textarea class="form-control" id="message" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @else
                 <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3">Sign in to add to cart</a>
                 <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-secondary mb-3">Sign in to request bulk order</a>

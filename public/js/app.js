@@ -169,9 +169,10 @@ function emptyCart() {
 }
 
 // Checkout Button Redirect
-
+document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('checkout').addEventListener('click', function() {
     window.location.href = '/checkout'; // Redirect to the checkout page
+});
 });
 
 //bulkOrderForm

@@ -269,7 +269,7 @@ public function userShow($order_id)
 
     return view('includes.user.orders.show', compact('order'));
 }
-
+ 
 // place bulk order
 public function handleBulkOrder(Request $request)
 {

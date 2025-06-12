@@ -35,6 +35,14 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 
+
+Route::get('/test-mail', function () {
+    Mail::raw('Test email from Laravel', function ($message) {
+        $message->to('fms.cool16@gmail.com')->subject('Laravel Mail Test');
+    });
+
+    return 'Mail sent!';
+});
 //Main pages
 Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');
