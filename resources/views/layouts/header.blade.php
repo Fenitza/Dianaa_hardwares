@@ -73,9 +73,9 @@
                 <!-- Navigation links row -->
                 <div class="header-cart-login col-12 text-end mb-2" style="padding-top: 10px;">
                     <nav>
-                        <a href="{{ route('services') }}"><i class="bi bi-tools"></i> Services & Solution</a> |
-                        <a href="{{ route('careers') }}"><i class="bi bi-briefcase"></i> Careers</a> |
-                        <a href="{{ route('contact') }}"><i class="bi bi-envelope"></i> Contact</a> |
+                        <a href="{{ route('services') }}"><i class="bi bi-tools"></i> Services & Solution</a>|
+                        <a href="{{ route('careers') }}"><i class="bi bi-briefcase"></i> Careers</a>|
+                        <a href="{{ route('contact') }}"><i class="bi bi-envelope"></i> Contact</a>|
                         <a href="{{ route('about_us') }}"><i class="bi bi-info-circle"></i> About Us</a>
                     </nav>
                 </div>
@@ -96,31 +96,30 @@
                         <!-- Right-side links -->
                         <div class="header-cart-login col-6 text-end">
                             <a href="{{ route('products_main') }}" class="me-2 text-decoration-none">
-                                <i class="bi bi-grid-3x3-gap-fill"></i> Products
-                            </a> |
+                                <i class="bi bi-grid-3x3-gap-fill"></i> Products</a>|
 
                              @if(Auth::check())
                                     @if(Auth::user()->role === 'admin')
                                         <!-- Admin specific link -->
-                                        <a href="{{ route('admin.products') }}">{{ Auth::user()->name }}</a> | 
+                                        <a href="{{ route('admin.products') }}">{{ Auth::user()->name }}</a>| 
                                     @else
                                         <!-- Standard user link -->
-                                        <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a> | 
+                                        <a href="{{ route('user.profile') }}">{{ Auth::user()->name }}</a>| 
                                     @endif
                                 <a href="{{ route('logout') }}" class=" text-decoration-none"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout 
-                                </a> |
+                                </a>|
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
                             @else
                                 <a href="{{ route('login') }}" class="me-2  text-decoration-none">
                                     <i class="bi bi-box-arrow-in-right"></i> Login
-                                </a> |
+                                </a>|
                             @endif
                             <a href="{{ route('cart') }}" class=" text-decoration-none">
-                                <i class="fa fa-shopping-cart"></i> Cart (
+                                <i class="fa fa-shopping-cart"></i> Cart(
                                 @if(Auth::check())
                                     <span id="cart-count">{{ session('cartCount', 0) }}</span>
                                 @else

@@ -163,12 +163,11 @@
             <div class="modal fade" id="bulkOrderModal" tabindex="-1" aria-labelledby="bulkOrderModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="bulkOrderModalLabel">Bulk Order Request</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bulkOrderModalLabel">Bulk Order Request</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
                         <div class="modal-body">
                             <form id="bulkOrderForm" data-product-id="{{ $product->ProductID }}"
                                 data-user-name="{{ auth()->user()->name }}"
@@ -238,6 +237,94 @@
     background-color: #f9f9f9;
     padding: 10px;
 }
+/* Modal dialog size and spacing */
+.modal-dialog {
+    max-width: 450px;
+    margin: 2rem auto;
+}
+
+/* Modal card-style layout */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Modal header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    white-space: nowrap;
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+    max-width: 90%;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.modal-header .close {
+    font-size: 1.5rem;
+    color: #999;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.modal-header .close:hover {
+    color: #000;
+}
+.btn-close {
+  width: 1rem !important;
+  height: 1rem !important;
+  font-size: 0.8rem !important;
+  background-size: 1rem !important;
+}
+
+/* Input field style */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+/* Submit button style */
+.btn-primary {
+    width: 100%;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-weight: 600;
+    font-size: 1rem;
+    background: linear-gradient(to right, #007bff, #0056b3);
+    border: none;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #0056b3, #003f7f);
+    box-shadow: 0 4px 14px rgba(0, 91, 187, 0.3);
+}
+
 </style>
 
 
