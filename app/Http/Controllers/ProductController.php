@@ -272,7 +272,7 @@ public function importExcel(Request $request)
             'pitch' => $rowData['pitch'] ?? 0.0,
             'pitchType' => $rowData['pitch type'] ?? null,
             'point' => $rowData['cone/cup/flat points'] ?? null,
-            'salePrice' => $rowData['list price'] ?? null,
+            // 'salePrice' => $rowData['list price'] ?? null,
             'discount' => isset($rowData['discount'])
                 ? (
                     is_numeric($rowData['discount']) && $rowData['discount'] < 1
@@ -297,7 +297,38 @@ public function importExcel(Request $request)
             'product_image' => $firstImage,
         ];
 
-        Product::updateOrCreate(['sku' => $sku], $productData);
+        $product = Product::updateOrCreate(['sku' => $sku], $productData);
+
+        // Clear existing variants for updated SKU
+        ProductColorVariant::where('product_id', $product->ProductID)->delete();
+
+        // Handle color variants
+        $colorRaw = trim($rowData['colour variants'] ?? '');
+        $priceRaw = trim($rowData['sale prices'] ?? '');
+
+        $colors = array_map('trim', explode(',', $colorRaw));
+        $prices = array_map('trim', explode(',', $priceRaw));
+
+        if (count($colors) && count($colors) === count($prices)) {
+            foreach ($colors as $index => $color) {
+                $price = is_numeric($prices[$index]) ? (float) $prices[$index] : null;
+                if ($color && $price !== null) {
+                    ProductColorVariant::create([
+                        'product_id' => $product->ProductID,
+                        'color' => $color,
+                        'sale_price' => $price,
+                    ]);
+                    Log::info("✅ Color variant added", [
+                        'product_id' => $product->ProductID,
+                        'color' => $color,
+                        'sale_price' => $price,
+                    ]);
+                }
+            }
+        } else {
+            Log::warning("⚠️ Mismatch or missing color variant data for SKU: {$sku}");
+        }
+
         Log::info("✅ Imported SKU: {$sku}");
     }
 
@@ -325,7 +356,7 @@ public function update(Request $request, $id)
         'slno' => 'required|string|max:255',
         'sku' => 'required|string|max:50|unique:products,sku,' . $id . ',ProductID',
         'description' => 'required|string',
-        'salePrice' => 'required|numeric',
+        'salePrice' => 'nullable|numeric',
         'vendorPrice' => 'required|numeric',
         'basePrice' => 'nullable|numeric',
         'discount' => 'nullable|numeric',
@@ -414,22 +445,21 @@ public function store(Request $request)
 {
     $rules = [
         'slno' => 'required|string|max:255',
-        'sku' => 'required|string|max:50|unique:products,sku',
+        'sku' => 'required|string|max:50|unique:products,sku,' . $id . ',ProductID',
         'description' => 'required|string',
-        'salePrice' => 'required|numeric',
+        'salePrice' => 'nullable|numeric',
         'vendorPrice' => 'required|numeric',
         'basePrice' => 'nullable|numeric',
         'discount' => 'nullable|numeric',
         'vendorDiscount' => 'nullable|numeric',
         'moq' => 'nullable|integer',
         'chapterID' => 'nullable|string',
+        'SubCategoryID' => 'required|exists:sub_categories,SubCategoryID',
+        'ManufacturerID' => 'required|exists:manufacturers,ManufacturerID',
         'standardISO' => 'nullable|string',
         'grade' => 'nullable|string',
         'size' => 'nullable|string',
         'threadType' => 'nullable|string',
-        'color_variants' => 'required|array',
-        'color_variants.*.color' => 'required|string',
-        'color_variants.*.sale_price' => 'required|numeric',
         'metric' => 'nullable|string',
         'type' => 'required|string',
         'standardType' => 'nullable|string',
@@ -440,6 +470,9 @@ public function store(Request $request)
         'weight' => 'nullable|numeric',
         'quantity' => 'required|integer',
         'image_path.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'color_variants' => 'required|array',
+        'color_variants.*.color' => 'required|string',
+        'color_variants.*.sale_price' => 'required|numeric',
         'ManufacturerID' => 'required|integer',
         'SubCategoryID' => 'required|integer',
     ];

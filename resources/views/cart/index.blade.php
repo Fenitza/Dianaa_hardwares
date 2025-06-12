@@ -32,8 +32,8 @@
                 </td>
                 <td>
                     @if ($item->product)
-                        <a href="{{ route('product.details', ['ProductID' => $item->product->ProductID]) }}">{{ $item->product->Name }}</a><br>
-                        <small>Manufacturer: {{ $item->product->Manufacturer ?? 'Not available' }}</small><br>
+                        <a href="{{ route('product.details', ['ProductID' => $item->product->ProductID]) }}">{{ $item->product->Description }}</a><br>
+                        <small>Manufacturer: {{ $item->product->manufacturer->Name ?? 'Not available' }}</small><br>
                         <small>SKU: {{ $item->product->SKU ?? 'N/A' }}</small><br>
                         <small>Shipping: Leaves warehouse in 3-7 days</small>
                     @else

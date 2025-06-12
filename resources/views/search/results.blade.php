@@ -12,7 +12,7 @@
                         <li class="list-item">
                             <a href="{{ url('/subcategories', $subcategory->SubCategoryID) }}">{{ $subcategory->Name }}</a>
                         </li>
-                    @endforeach
+                    @endforeach 
                 </ul>
             </div>
         @endif
@@ -23,7 +23,7 @@
                 <ul class="list-unstyled results-list">
                     @foreach($products as $product)
                         <li class="list-item">
-                            <a href="{{ route('product.details', ['ProductID' => $product->ProductID]) }}">{{ $product->Name }}</a>
+                            <a href="{{ route('product.details', ['ProductID' => $product->ProductID]) }}">{{ $product->Description }}</a>
                         </li>
                     @endforeach
                 </ul>

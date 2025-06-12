@@ -11,8 +11,12 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         $query = $request->input('q');
+
         $products = Product::with(['subcategory', 'manufacturer'])
-            ->where('name', 'LIKE', "%{$query}%")
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%")
+                  ->orWhere('description', 'LIKE', "%{$query}%");
+            })
             ->get();
 
         $subcategories = SubCategory::where('name', 'LIKE', "%{$query}%")->get();
