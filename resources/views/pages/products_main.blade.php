@@ -19,7 +19,10 @@
                 <div class="category-overlay">
                     <ul class="subcategory-links">
                         @foreach ($category->subcategories->take(3) as $subcategory)
-                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'brand_id' => request('brand_id')]) }}">{{ $subcategory->Name }}</a></li>
+                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}?brand%5B%5D={{ $brand_id }}" class="card-link-category">
+    {{ $subcategory->Name }}
+</a>
+</li>
                         @endforeach
                         <li><a href="{{ route('products', ['category' => $category->CategoryID, 'brand' => request()->brand]) }}" class="view-all-link">View All</a></li>
                     </ul>

@@ -284,7 +284,7 @@
   height: 1rem !important;
   font-size: 0.8rem !important;
   background-size: 1rem !important;
-}
+} 
 
 /* Input field style */
 .form-label {

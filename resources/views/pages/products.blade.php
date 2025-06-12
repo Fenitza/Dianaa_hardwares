@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> 
                 </div>
                 @endforeach
             </div>

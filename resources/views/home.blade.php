@@ -98,7 +98,7 @@
         @endforeach
     </div>
 </div>
-
+ 
 <!-- Product table with type -->
  <div class="container product-table-container mt-4">
     <div class="row">

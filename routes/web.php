@@ -57,7 +57,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 //All Products
-Route::get('/products/category', [ProductController::class, 'category'])->name('products_main');//All Products
+Route::get('/products/category', [ProductController::class, 'category'])->name('products_main');//All Products 
 Route::get('/products/brands/{brand_id}/categories', [ProductController::class, 'brandCategories'])->name('products.byBrandCategories');
 Route::get('/products/{category?}', [ProductController::class, 'show'])->name('products.show');//2nd categories
 Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'showByProducts'])->name('product.details');

@@ -272,7 +272,7 @@ public function importExcel(Request $request)
             'pitch' => $rowData['pitch'] ?? 0.0,
             'pitchType' => $rowData['pitch type'] ?? null,
             'point' => $rowData['cone/cup/flat points'] ?? null,
-            // 'salePrice' => $rowData['list price'] ?? null,
+            // 'salePrice' => $rowData['list price'] ?? null, 
             'discount' => isset($rowData['discount'])
                 ? (
                     is_numeric($rowData['discount']) && $rowData['discount'] < 1
