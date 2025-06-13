@@ -99,13 +99,16 @@ public function getFilters(Request $request)
 }),
 
 
-        'size' => $products->pluck('size')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
-        'length' => $products->pluck('length')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'size' => $products->pluck('Size')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'length' => $products->pluck('Length')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'grade' => $products->pluck('grade')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'color' => $products->pluck('color')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        // 'color' => ProductColorVariant::whereIn('product_id', $products->pluck('ProductID'))
+        //     ->pluck('color')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'pitch' => $products->pluck('pitch')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'weight' => $products->pluck('weight')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
-        'type' => $products->pluck('type')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // FT/HT
+        'type' => $products->pluck('Type')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        'standardType' => $products->pluck('standardType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'metric' => $products->pluck('metric')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // MM/Inches
         'threadtype' => $products->pluck('threadType')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // UNC/UNF...
         'point' => $products->pluck('point')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]), // Cone/Cup/Flat
@@ -180,7 +183,7 @@ public function applyFilters(Request $request, $subCategoryId)
         return redirect()->back()->with('error', 'Invalid view type specified');
     }
 
-    // Optional: Log final query (for debugging)
+    // Optional: Log final query (for debugging) 
     \Log::info('Final query', [
         'sql' => $productsQuery->toSql(),
         'bindings' => $productsQuery->getBindings()

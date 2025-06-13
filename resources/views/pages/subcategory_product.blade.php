@@ -25,9 +25,10 @@
                                 'color' => 'Colour',
                                 'pitch' => 'Pitch',
                                 'weight' => 'Weight',
-                                'type' => 'FT/HT',
+                                'type' => 'Type',
+                                'standardType' => 'UNC / UNF / BSF / BSW',
                                 'metric' => 'MM or Inches',
-                                'threadtype' => 'UNC / UNF / BSF / BSW',
+                                'threadtype' => 'Thread type',
                                 'point' => 'Cone/Cup/Flat Points',
                                 'pitchtype' => 'Pitch Type'
                                 ] as $field => $label)
