@@ -7,8 +7,14 @@
         <!-- Filter Form -->
         <div class="col-md-3" id="filter-sidebar">
             <div class="row">
-                <form id="filter-form" method="GET" action="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}">
-                    <div class="filter-section">
+            @php
+    $query = ['brand' => request()->input('brand', [])];
+@endphp
+
+<a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}?{{ http_build_query($query) }}">
+</a>
+
+                <div class="filter-section">
                         <h6>Filters</h6>
 
                             @foreach ([ 

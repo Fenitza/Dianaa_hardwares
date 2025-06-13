@@ -275,6 +275,31 @@ items.forEach(item => {
 });
 }
 
+document.getElementById('filter-apply').addEventListener('click', function () {
+    const subcategoryId = document.getElementById('subcategory-id').value;
+    const baseUrl = `/subcategory/${subcategoryId}`;
+    const filters = {};
+
+    // Collect all checked checkboxes
+    document.querySelectorAll('#filter-sidebar input[type=checkbox]:checked').forEach(input => {
+        const name = input.name; // e.g., "grade[]"
+        const value = input.value;
+
+        const key = name.replace('[]', '');
+        if (!filters[key]) filters[key] = [];
+        filters[key].push(value);
+    });
+
+    // Build query string
+    const params = new URLSearchParams();
+    for (const key in filters) {
+        filters[key].forEach(val => params.append(`${key}[]`, val));
+    }
+
+    // Redirect with new filter query
+    window.location.href = `${baseUrl}?${params.toString()}`;
+});
+
 
 function clearFilters() {
     const url = new URL(window.location.href);

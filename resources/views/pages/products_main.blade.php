@@ -19,10 +19,17 @@
                 <div class="category-overlay">
                     <ul class="subcategory-links">
                         @foreach ($category->subcategories->take(3) as $subcategory)
-                        <li><a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}?brand%5B%5D={{ $brand_id }}" class="card-link-category">
+                        <li>@php
+    $brands = request()->input('brand', []);
+    $query = ['brand' => (array) $brands];
+    $queryString = http_build_query($query);
+@endphp
+
+<a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}{{ $queryString ? '?' . $queryString : '' }}" class="card-link-category">
     {{ $subcategory->Name }}
 </a>
-</li>
+
+                        </li>
                         @endforeach
                         <li><a href="{{ route('products', ['category' => $category->CategoryID, 'brand' => request()->brand]) }}" class="view-all-link">View All</a></li>
                     </ul>

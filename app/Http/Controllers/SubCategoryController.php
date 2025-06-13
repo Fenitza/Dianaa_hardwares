@@ -137,7 +137,15 @@ public function applyFilters(Request $request, $subCategoryId)
     foreach ($filterFields as $key => $column) {
         if ($request->has($key)) {
             $values = $request->input($key);
-            if (is_array($values) && !empty($values)) {
+
+            // Log input
+            \Log::info("Filter applied", [
+                'key' => $key,
+                'values' => $values
+            ]);
+
+            if (!empty($values)) {
+                $values = is_array($values) ? $values : explode(',', $values);
                 $productsQuery->whereIn($column, $values);
             }
         }
@@ -172,9 +180,16 @@ public function applyFilters(Request $request, $subCategoryId)
         return redirect()->back()->with('error', 'Invalid view type specified');
     }
 
-    // Step 7: Return Blade View
+    // Optional: Log final query (for debugging)
+    \Log::info('Final query', [
+        'sql' => $productsQuery->toSql(),
+        'bindings' => $productsQuery->getBindings()
+    ]);
+
+    // Step 7: Return View
     return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
 }
+
 
 
 public function getProducts(Request $request, $id = null)
@@ -209,7 +224,7 @@ public function getProducts(Request $request, $id = null)
     if ($type) {
         $productsQuery->where('type', $type);
     }
-
+ 
     $products = $productsQuery->take(6)->get();
 
     return response()->json($products);

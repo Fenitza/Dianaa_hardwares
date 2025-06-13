@@ -91,7 +91,7 @@
             <div class="brand-card" style="background-image: url('{{ asset('storage/' . $manufacturer->Image) }}');">
                 <div class="brand-overlay">
                     <h4 class="brand-name">{{ $manufacturer->Name }}</h4>
-                    <a href="{{ route('products.byBrandCategories', ['brand_id' => $manufacturer->ManufacturerID]) }}" class="shop-now-btn">SHOP NOW</a>
+                    <a href="{{ route('products.byBrandCategories', ['brand_id' => $manufacturer->ManufacturerID]) }}?brand={{ $manufacturer->ManufacturerID }}" class="shop-now-btn">SHOP NOW</a>
                 </div>
             </div>
         </div>
