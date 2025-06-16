@@ -20,9 +20,11 @@ use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Auth\VerificationController;
 
 use App\Mail\BulkOrderMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,12 +39,34 @@ use Illuminate\Support\Facades\Mail;
 
 
 Route::get('/test-mail', function () {
-    Mail::raw('Test email from Laravel', function ($message) {
-        $message->to('fms.cool16@gmail.com')->subject('Laravel Mail Test');
+    Mail::raw('Test email from Laravel app', function ($message) {
+        $message->to('fms.cool16@gmail.com')
+                ->subject('Test Email')
+                ->from(config('mail.from.address'), config('mail.from.name'));
     });
 
-    return 'Mail sent!';
+    return 'Email Sent!';
 });
+
+Auth::routes(['verify' => true]);
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+});
+
+
+Route::get('/email/verify', [VerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/resend', [VerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// Show form
+Route::get('/register/complete', [RegisterController::class, 'showCompleteForm'])
+    ->middleware(['auth', 'verified'])->name('register.complete');
+
+// Save password and finish registration
+Route::post('/register/complete', [RegisterController::class, 'completeRegistration'])
+    ->middleware(['auth', 'verified'])->name('register.complete.submit');
 //Main pages
 Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');

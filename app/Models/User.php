@@ -8,7 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -20,7 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'phone_number', 'billing_address', 'billing_city',
         'billing_state', 'billing_postal_code', 'billing_country',
-        'password', 'role', 'remember_token' // Assuming you are using a 'role' column for simple role checks
+        'password', 'role', 'remember_token','email_verified_at' // Assuming you are using a 'role' column for simple role checks
     ];
 
     /**

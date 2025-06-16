@@ -8,7 +8,11 @@ use App\Models\Manufacturer;
 
 class HomeController extends Controller
 {
+    
     public function index() {
+        // if (is_null(Auth::user()->password)) {
+        //     return redirect()->route('register.complete');
+        // }
         // Fetch all products with manufacturer details included
         $products = Product::with('manufacturer')->get();
 

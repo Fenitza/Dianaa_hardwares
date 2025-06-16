@@ -22,7 +22,7 @@
                                 'size' => 'Thread Size',
                                 'length' => 'Length',
                                 'grade' => 'Grade',
-                                'color' => 'Colour',
+                                
                                 'pitch' => 'Pitch',
                                 'weight' => 'Weight',
                                 'type' => 'Type',

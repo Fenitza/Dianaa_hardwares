@@ -102,7 +102,7 @@ public function getFilters(Request $request)
         'size' => $products->pluck('Size')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'length' => $products->pluck('Length')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'grade' => $products->pluck('grade')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
-        'color' => $products->pluck('color')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
+        // 'color' => $products->pluck('color')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         // 'color' => ProductColorVariant::whereIn('product_id', $products->pluck('ProductID'))
         //     ->pluck('color')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
         'pitch' => $products->pluck('pitch')->unique()->filter()->values()->map(fn($v) => ['displayName' => $v]),
@@ -127,7 +127,7 @@ public function applyFilters(Request $request, $subCategoryId)
         'size' => 'Size',
         'length' => 'Length',
         'grade' => 'Grade',
-        'color' => 'Color',
+        
         'pitch' => 'Pitch',
         'weight' => 'Weight',
         'type' => 'Type',
