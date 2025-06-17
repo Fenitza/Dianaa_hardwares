@@ -78,6 +78,7 @@ Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/careers', [CareersController::class, 'index'])->name('careers');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 //All Products
