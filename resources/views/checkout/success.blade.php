@@ -1,6 +1,6 @@
 {{-- resources/views/checkout/success.blade.php --}}
 @extends('layouts.app')
-
+<title>Thank you for your order-Dianaa Fasteners</title>
 @section('content')
 <div class="container mt-5">
     <div class="card shadow">

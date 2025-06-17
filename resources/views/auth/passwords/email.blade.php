@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>E mail-Dianaa Fasteners</title>
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

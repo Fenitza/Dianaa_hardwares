@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Cart-Dianaa Fasteners</title>
 @section('content')
 <div class="container" id="cart-container">
     <div class="cart-header" id="cart-header">

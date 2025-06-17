@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Checkout-Dianaa Fasteners</title>
 @section('content')
 <div class="container my-4">
     <h2 class="text-primary text-center fw-bold mb-3">🛒 Checkout</h2>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>{{$product->Description}}-Dianaa Fasteners</title>
 @section('content')
 <!-- Spacer Block -->
 <div class="custom-spacer"></div>

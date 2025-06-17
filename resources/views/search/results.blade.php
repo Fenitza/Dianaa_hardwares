@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Search-Dianaa Fasteners</title>
 @section('content')
 <div class="container mt-3">
     <h1 class="search-title">Search Results for '{{ request('q') }}'</h1>

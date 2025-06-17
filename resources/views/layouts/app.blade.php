@@ -43,7 +43,7 @@
     </div>
     </div>
 
-    @include('layouts.footer')
+    @include('layouts.footer') 
 
 <script src="{{ asset('js/app.js') }}" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

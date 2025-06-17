@@ -1,5 +1,6 @@
 {{-- resources/views/home.blade.php --}}
 @extends('layouts.app')
+<title>Dianaa Fasteners - Leading Provider of Engineering and Fasteners Solutions</title>
 
 @section('content')
 

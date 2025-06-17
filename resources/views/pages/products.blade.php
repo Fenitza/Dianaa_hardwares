@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>All Product Categories-Dianaa Fasteners</title>
 @section('content')
 <div class="products-container">
     <!-- Product Tabs -->

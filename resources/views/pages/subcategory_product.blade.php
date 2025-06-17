@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>{{$subcategory->Name}}-Dianaa Fasteners</title>
 @section('content')
 <div class="container my-3" style="max-width: 1400px;">
     <div class="row">

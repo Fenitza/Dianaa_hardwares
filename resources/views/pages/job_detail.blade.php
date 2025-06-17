@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Job Detail-Dianaa Fasteners</title>
 @section('content')
 <div class="container py-5">
     <h2>{{ $job->title }}</h2>

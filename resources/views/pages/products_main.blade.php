@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Product Categories-Dianaa Fasteners</title>
 @section('content')
 
  <!-- Spacer Block -->

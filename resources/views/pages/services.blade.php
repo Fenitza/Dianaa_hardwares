@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Services-Dianaa Fasteners</title>
 @section('content')
     <!-- Hero Section -->
     <section class="hero-section-about" style="background-image: url('{{ asset('images/banners/services.png') }}'); background-size: cover; background-position: center; height: 300px;">

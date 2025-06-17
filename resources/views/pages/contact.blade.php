@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Contact-Dianaa Fasteners</title>
 @section('content')
     
 
