@@ -22,6 +22,8 @@
         <li><a href="{{ route('admin.orders.index') }}"><i class="fas fa-shopping-cart"></i> Orders</a></li>
         <li><a href="{{ route('admin.products') }}"><i class="fas fa-box-open"></i> Products</a></li>
         <li><a href="{{ route('admin.subcategories') }}"><i class="fas fa-layer-group"></i> SubCategories</a></li>
+        <li><a href="{{ route('admin.careers.index') }}"><i class="fas fa-briefcase"></i> Careers</a></li>
+
         <!-- More sidebar items with icons -->
         </ul>
 

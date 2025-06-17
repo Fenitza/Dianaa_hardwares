@@ -76,7 +76,9 @@ Route::get('/account', [UserController::class, 'account'])->name('account');
 
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
-Route::get('/careers', [CareersController::class, 'index'])->name('careers');
+Route::get('/careers', [CareersController::class, 'showCareersPage'])->name('careers');
+Route::get('/careers/{id}', [CareersController::class, 'show'])->name('careers.show');
+Route::post('/careers/{id}/apply', [CareersController::class, 'apply'])->name('careers.apply');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
@@ -214,6 +216,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
     Route::put('/admin/orders/{id}/tracking', [OrderController::class, 'updateTracking'])->name('admin.orders.updateTracking');
+
+    //careers
+    Route::get('careers', [CareersController::class, 'admin'])->name('admin.careers.index');
+    Route::get('careers/create', [CareersController::class, 'create'])->name('admin.careers.create');
+    Route::post('careers', [CareersController::class, 'store'])->name('admin.careers.store');
+    Route::get('careers/{id}/edit', [CareersController::class, 'edit'])->name('admin.careers.edit');
+    Route::put('careers/{id}', [CareersController::class, 'update'])->name('admin.careers.update');
+    Route::delete('careers/{id}', [CareersController::class, 'destroy'])->name('admin.careers.destroy');
 
     
 });

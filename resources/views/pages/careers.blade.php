@@ -11,24 +11,24 @@
 
     <!-- Main Content Section -->
     <div class="container py-5">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Open Positions</h2>
-                <div class="job-listings">
-                    <!-- Static Job Listing Example -->
-                    <div class="job">
-                        <h3>Software Engineer</h3>
-                        <p>Seeking an experienced software engineer to develop cutting-edge solutions. Must have 5+ years in software development.</p>
-                        <a href="#" class="btn btn-primary">Learn More</a>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Open Positions</h2>
+            <div class="job-listings">
+                @forelse($jobs as $job)
+                    <div class="job mb-4">
+                        <h3>{{ $job->title }}</h3>
+                        <p>{{ Str::limit($job->description, 200) }}</p>
+                        <p><strong>Location:</strong> {{ $job->location ?? 'Not specified' }}</p>
+                        <a href="{{ route('careers.show', $job->id) }}" class="btn btn-primary">Learn More</a>
                     </div>
-                    <div class="job">
-                        <h3>Product Manager</h3>
-                        <p>Dynamic product manager to lead teams and manage product lifecycle. Required: 3+ years of product management experience.</p>
-                        <a href="#" class="btn btn-primary">Learn More</a>
-                    </div>
-                </div>
+                @empty
+                    <p>No job openings currently available.</p>
+                @endforelse
             </div>
         </div>
+    </div>
+
 
         <div class="row mt-5" id="work-with-us">
     <div class="col-md-6 work-with-us-text">
