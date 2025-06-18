@@ -11,6 +11,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmailLink;
 
 class RegisterController extends Controller
 {
@@ -31,6 +34,21 @@ class RegisterController extends Controller
             // 'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
+    public function verify(Request $request)
+{
+    // Check if the link is valid
+    if (! $request->hasValidSignature()) {
+        abort(403, 'Invalid or expired verification link.');
+    }
+
+    // Show password set form
+    return view('user.complete_registration', [
+        'name' => $request->name,
+        'email' => $request->email,
+        'role' => $request->role,
+    ]);
+}
+
 
     protected function create(array $data)
     {
@@ -53,31 +71,29 @@ class RegisterController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validate the request
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            // 'password' => 'required|string|min:8|confirmed',
-        ]);
+{
+    // Validate request
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+    ]);
 
-        // Create user
-        $user = $this->create([
+    // Generate signed verification URL with user data as query
+    $verificationUrl = URL::temporarySignedRoute(
+        'register.verify',
+        now()->addMinutes(60),
+        [
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            // 'password' => $validatedData['password'],
             'role' => $request->role,
-        ]);
+        ]
+    );
 
-        // Dispatch email verification event
-        event(new Registered($user));
+    // Send verification email
+    Mail::to($validatedData['email'])->send(new VerifyEmailLink($verificationUrl));
 
-        // DO NOT log in the user yet, force them to verify email first
-        Auth::login($user);  
-
-        // Redirect to verification notice page
-        return redirect()->route('verification.notice')->with('success', 'Verification link sent. Please check your email.');
-    }
+    return redirect()->back()->with('success', 'Verification link sent to email. Please verify to complete registration.');
+}
     public function showCompleteForm()
 {
     $user = Auth::user();
@@ -92,16 +108,26 @@ class RegisterController extends Controller
 
 public function completeRegistration(Request $request)
 {
-    $request->validate([
+
+    $validated = $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'role' => 'nullable',
         'password' => 'required|string|min:8|confirmed',
     ]);
 
-    $user = Auth::user();
-    $user->update([
-        'password' => Hash::make($request->password),
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'role' => $validated['role'],
+        'password' => bcrypt($validated['password']),
+        'email_verified_at' => now(),
     ]);
 
-    return redirect('/home')->with('success', 'Registration completed!');
+    Auth::login($user);
+
+    return redirect()->route('home')->with('success', 'Registration complete. Welcome!');
 }
 
-}
+
+} 

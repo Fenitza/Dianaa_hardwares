@@ -14,14 +14,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\VerificationController;
-
 use App\Mail\BulkOrderMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -54,19 +53,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
+Route::get('/register/verify', [RegisterController::class, 'verify'])->name('register.verify')->middleware('signed');
 
 Route::get('/email/verify', [VerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
     ->middleware(['auth', 'signed'])->name('verification.verify');
 Route::post('/email/resend', [VerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-// Show form
-Route::get('/register/complete', [RegisterController::class, 'showCompleteForm'])
-    ->middleware(['auth', 'verified'])->name('register.complete');
+// Show password set form via email link
+Route::get('/register/complete', [RegisterController::class, 'completeRegistrationForm'])->name('register.complete.form');
 
-// Save password and finish registration
-Route::post('/register/complete', [RegisterController::class, 'completeRegistration'])
-    ->middleware(['auth', 'verified'])->name('register.complete.submit');
+// Submit password and create user (no auth/verified middleware!)
+Route::post('/register/complete', [RegisterController::class, 'completeRegistration'])->name('register.complete');
 //Main pages
 Route::get('/', function () {return view('home');});
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -74,7 +72,7 @@ Route::get('/account', [UserController::class, 'account'])->name('account');
 
 
 
-Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
+Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us'); 
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/careers', [CareersController::class, 'showCareersPage'])->name('careers');
 Route::get('/careers/{id}', [CareersController::class, 'show'])->name('careers.show');
@@ -125,6 +123,8 @@ Route::get('password/reset',[ForgotPasswordController::class,'showLinkRequestFor
 Route::post('password/email',[ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}',[ResetPasswordController::class,'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class,'reset'])->name('password.update');
+
+
 
 
 ///careers

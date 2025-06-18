@@ -15,6 +15,8 @@
             <p>
                 Before proceeding, please check your email for a verification link.
                 If you did not receive the email, click the button below to request another.
+
+</br>   Please do not close this browser or use incognito/private mode. Click the verification link in the same browser to complete registration.
             </p>
 
             <form method="POST" action="{{ route('verification.send') }}">
@@ -24,4 +26,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection 

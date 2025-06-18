@@ -97,6 +97,8 @@
                     <tr><td><strong>Direct Ship</strong></td><td>Shipping in 5-7 days</td></tr>
                 </tbody>
             </table>
+            <input type="hidden" name="selected_color" id="selectedColor">
+            <input type="hidden" name="selected_price" id="selectedPrice">
 
             @php
     $defaultVariant = $product->colorVariants->first();
@@ -110,7 +112,12 @@
     <label for="colorSelect" class="form-label" style="font-size: 0.85rem;"><strong>Select Color:</strong></label>
     <select id="colorSelect" class="form-select" style="font-size: 0.85rem; padding: 4px 8px;">
         @foreach($product->colorVariants as $variant)
-            <option value="{{ $variant->sale_price }}">{{ $variant->color }}</option>
+        <option 
+            value="{{ $variant->sale_price }}" 
+            data-color="{{ $variant->color }}" 
+            data-saleprice="{{ $variant->sale_price }}">
+            {{ $variant->color }}
+        </option>
         @endforeach
     </select>
 </div>
@@ -332,24 +339,74 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const colorSelect = document.getElementById('colorSelect');
-    const originalPrice = document.getElementById('originalPrice');
-    const youSave = document.getElementById('youSave');
-    const onlinePrice = document.getElementById('onlinePrice');
-    const discount = {{ $product->discount ?? 0 }};
+    document.addEventListener('DOMContentLoaded', function () {
+        const colorSelect = document.getElementById('colorSelect');
+        const selectedColorInput = document.getElementById('selectedColor');
+        const selectedPriceInput = document.getElementById('selectedPrice');
+        const discount = {{ $discount ?? 0 }};
 
-    if (colorSelect && originalPrice && youSave && onlinePrice) {
-        colorSelect.addEventListener('change', function () {
-            const sale = parseFloat(this.value);
-            const base = sale - (sale * discount / 100);
-            const save = sale - base;
+        // Function to update displayed price & hidden inputs
+        function updatePrices() {
+            const selectedOption = colorSelect.options[colorSelect.selectedIndex];
+            const salePrice = parseFloat(selectedOption.getAttribute('data-saleprice')) || 0;
+            const color = selectedOption.getAttribute('data-color') || '';
 
-            originalPrice.textContent = '₹' + sale.toFixed(2);
-            youSave.textContent = save.toFixed(2);
-            onlinePrice.textContent = '₹' + base.toFixed(2);
+            const basePrice = salePrice - (salePrice * discount / 100);
+            const savings = salePrice - basePrice;
+
+            document.getElementById('originalPrice').innerText = `₹${salePrice.toFixed(2)}`;
+            document.getElementById('youSave').innerText = `₹${savings.toFixed(2)}`;
+            document.getElementById('onlinePrice').innerText = `₹${basePrice.toFixed(2)}`;
+
+            // Update hidden inputs
+            selectedColorInput.value = color;
+            selectedPriceInput.value = basePrice.toFixed(2);
+        }
+
+        // Initialize on page load
+        updatePrices();
+        colorSelect.addEventListener('change', updatePrices);
+
+        // Add to cart AJAX
+        document.querySelector('.btn-add-to-cart').addEventListener('click', function () {
+            const productId = this.getAttribute('data-product-id');
+            const cartAddUrl = this.getAttribute('data-cart-add-url');
+            const quantity = document.getElementById('quantity').value;
+            const selectedColor = selectedColorInput.value;
+            const selectedPrice = selectedPriceInput.value;
+
+            // Optional: debug log
+            console.log({
+                product_id: productId,
+                quantity: quantity,
+                selected_color: selectedColor,
+                selected_price: selectedPrice
+            });
+
+            fetch(cartAddUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: quantity,
+                    selected_color: selectedColor,
+                    selected_price: selectedPrice
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || 'Added to cart');
+            })
+            .catch(error => {
+                console.error('Add to cart error:', error);
+                alert('Something went wrong');
+            });
         });
-    }
-});
+    });
+    //zoom
 document.addEventListener('DOMContentLoaded', function () {
     const zoomModal = document.getElementById('zoomModal');
     const zoomedImage = document.getElementById('zoomedImage');
@@ -360,6 +417,9 @@ document.addEventListener('DOMContentLoaded', function () {
         zoomedImage.setAttribute('src', src);
     });
 });
+
+    
+
 
 </script>
 @endpush

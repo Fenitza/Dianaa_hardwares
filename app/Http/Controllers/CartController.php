@@ -25,12 +25,15 @@ class CartController extends Controller
     public function addToCart(Request $request)
 {
     try {
-        \Log::info('Received request to add to cart', ['product_id' => $request->product_id]);
+        \Log::info('Received request to add to cart', [
+            'product_id' => $request->product_id,
+            'selected_price' => $request->selected_price,
+            'selected_color' => $request->selected_color
+        ]);
 
-        $product = Product::where('ProductID', $request->product_id)->first(); // Use correct column name
+        $product = Product::where('ProductID', $request->product_id)->first();
 
         if (!$product) {
-            \Log::error('Product not found in database', ['product_id' => $request->product_id]);
             return response()->json(['status' => 'error', 'message' => 'Product not found'], 404);
         }
 
@@ -41,29 +44,33 @@ class CartController extends Controller
             ]);
         }
 
-        // Fetch the user's role
-        $userRole = Auth::user()->role; // Assuming 'role' is the correct column name for user roles
-        // Determine the price based on the user's role
-        $price = $userRole === 'vendor' ? $product->VendorPrice : $product->SalePrice;
+        $price = floatval($request->selected_price);
+        $selectedColor = $request->selected_color;
 
         $cartItem = CartItem::where('user_id', Auth::id())
-                            ->where('product_id', $product->ProductID)
-                            ->first();
+            ->where('product_id', $product->ProductID)
+            ->first();
 
         if ($cartItem) {
             $cartItem->quantity += $request->quantity;
-            $cartItem->price = $price;  // Update price depending on user role
+            $cartItem->price = $price;
+
+            $attributes = json_decode($cartItem->attributes, true);
+            $attributes['color'] = $selectedColor;
+            $cartItem->attributes = json_encode($attributes);
+
             $cartItem->save();
         } else {
             CartItem::create([
                 'user_id' => Auth::id(),
                 'product_id' => $product->ProductID,
                 'quantity' => $request->quantity,
-                'price' => $price,  // Set price depending on user role
+                'price' => $price,
                 'attributes' => json_encode([
                     'image' => $product->product_image,
                     'manufacturer' => $product->Manufacturer,
-                    'sku' => $product->SKU
+                    'sku' => $product->SKU,
+                    'color' => $selectedColor
                 ])
             ]);
         }
@@ -74,6 +81,7 @@ class CartController extends Controller
         return response()->json(['status' => 'error', 'message' => 'Server error'], 500);
     }
 }
+
 
     public function updateItem(Request $request, $itemId)
     {

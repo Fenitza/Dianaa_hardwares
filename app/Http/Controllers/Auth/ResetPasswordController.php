@@ -37,4 +37,12 @@ class ResetPasswordController extends Controller
             'password.min' => 'The password must be at least 8 characters.',
         ];
     }
+
+    public function showResetForm(Request $request, $token = null)
+{
+    return view('user.reset_password')->with([
+        'token' => $token,
+        'email' => $request->email,
+    ]);
+}
 }

@@ -126,6 +126,7 @@ class OrderController extends Controller
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
                 'price' => floatval($item->product->SalePrice ?? 0),
+                'price' => floatval($item->productColorVariant->sale_price),
             ]);
         }
 
