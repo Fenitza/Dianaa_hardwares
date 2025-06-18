@@ -101,11 +101,24 @@ public function updateItem(Request $request, $itemId)
     return response()->json(['success' => true, 'message' => 'Cart item updated successfully']);
 }
 
-    public function removeItem($itemId)
-    {
-        $result = CartItem::where('user_id', Auth::id())->where('id', $itemId)->delete();
-        return response()->json(['success' => $result, 'message' => $result ? 'Item removed' : 'Item not found']);
-    }
+public function removeItem($itemId)
+{
+    $userId = Auth::id();
+
+    // Delete item
+    $result = CartItem::where('user_id', $userId)->where('id', $itemId)->delete();
+
+    // Recalculate cart count
+    $cartCount = CartItem::where('user_id', $userId)->sum('quantity');
+    session(['cartCount' => $cartCount]);
+
+    return response()->json([
+        'success' => $result,
+        'message' => $result ? 'Item removed' : 'Item not found',
+        'cartCount' => $cartCount
+    ]);
+}
+
 
     public function emptyCart()
     {

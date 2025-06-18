@@ -30,7 +30,7 @@
                         <td>{{ $product->Material }}</td>
                         <td>{{ $product->SKU }}</td>
                         <td>{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</td>
-                        <td>${{ number_format($product->SalePrice, 2) }}</td>
+                        <td>₹{{ number_format($product->colorVariants->first()->online_price ?? $product->SalePrice, 2) }}</td>
                         
                     </tr>
                     

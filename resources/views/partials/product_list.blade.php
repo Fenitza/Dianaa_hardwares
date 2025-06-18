@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-2">
             <strong>Online Price:</strong><br>
-            ${{ number_format($product->SalePrice, 2) }}
+            ₹{{ number_format($product->colorVariants->first()->online_price ?? $product->SalePrice, 2) }}
         </div>
         <div class="col-md-2">
             <span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">
