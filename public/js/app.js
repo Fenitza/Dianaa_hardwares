@@ -8,16 +8,32 @@ document.addEventListener('DOMContentLoaded', function() {
             const productId = this.getAttribute('data-product-id');
             const cartAddUrl = this.getAttribute('data-cart-add-url');
             const quantity = document.getElementById('quantity') ? document.getElementById('quantity').value : 1;
-
-            console.log("Sending Product ID:", productId); // Debugging line
-
+    
+            // NEW: Get selected color & price (if present)
+            const selectedColorInput = document.getElementById('selectedColor');
+            const selectedPriceInput = document.getElementById('selectedPrice');
+            const selectedColor = selectedColorInput ? selectedColorInput.value : null;
+            const selectedPrice = selectedPriceInput ? selectedPriceInput.value : null;
+    
+            console.log("Sending to Cart:", {
+                product_id: productId,
+                quantity: quantity,
+                selected_color: selectedColor,
+                selected_price: selectedPrice
+            });
+    
             fetch(cartAddUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ product_id: productId, quantity: quantity })
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: quantity,
+                    selected_color: selectedColor,
+                    selected_price: selectedPrice
+                })
             })
             .then(response => response.json())
             .then(data => {
@@ -25,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.status === 'success') {
                     alert('Item added to cart!');
                     fetchCartCount(); // Refresh cart count
-                    
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -170,9 +185,12 @@ function emptyCart() {
 
 // Checkout Button Redirect
 document.addEventListener('DOMContentLoaded', function () {
-document.getElementById('checkout').addEventListener('click', function() {
-    window.location.href = '/checkout'; // Redirect to the checkout page
-});
+    const checkoutBtn = document.getElementById('checkout');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+            window.location.href = '/checkout';
+        });
+    }
 });
 
 //bulkOrderForm

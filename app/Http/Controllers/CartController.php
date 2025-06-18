@@ -14,9 +14,9 @@ class CartController extends Controller
         $cartItems = CartItem::with('product')
                               ->where('user_id', Auth::id())
                               ->get();
-        $total = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
+                              $total = $cartItems->sum(function ($item) {
+                                return $item->selected_price * $item->quantity;
+                            });
 
         return view('cart.index', compact('cartItems', 'total'));
     }
@@ -24,63 +24,39 @@ class CartController extends Controller
     // Add a product to the cart
     public function addToCart(Request $request)
 {
-    try {
-        \Log::info('Received request to add to cart', [
+    $request->validate([
+        'product_id' => 'required|exists:products,ProductID',
+        'quantity' => 'required|integer|min:1',
+        'selected_color' => 'nullable|string',
+        'selected_price' => 'required|numeric|min:0',
+    ]);
+
+    $userId = auth()->id(); // or $request->user()->id
+
+    // Check if same item with color already exists
+    $existingItem = CartItem::where('user_id', $userId)
+        ->where('product_id', $request->product_id)
+        ->where('selected_color', $request->selected_color)
+        ->first();
+
+    if ($existingItem) {
+        // Update quantity if already exists
+        $existingItem->quantity += $request->quantity;
+        $existingItem->save();
+    } else {
+        // Create new cart item
+        CartItem::create([
+            'user_id' => $userId,
             'product_id' => $request->product_id,
+            'quantity' => $request->quantity,
+            'selected_color' => $request->selected_color,
             'selected_price' => $request->selected_price,
-            'selected_color' => $request->selected_color
         ]);
-
-        $product = Product::where('ProductID', $request->product_id)->first();
-
-        if (!$product) {
-            return response()->json(['status' => 'error', 'message' => 'Product not found'], 404);
-        }
-
-        if ($product->Quantity < $request->quantity) {
-            return response()->json([
-                'status' => 'error',
-                'message' => "Requested quantity is not available. Only {$product->Quantity} left in stock."
-            ]);
-        }
-
-        $price = floatval($request->selected_price);
-        $selectedColor = $request->selected_color;
-
-        $cartItem = CartItem::where('user_id', Auth::id())
-            ->where('product_id', $product->ProductID)
-            ->first();
-
-        if ($cartItem) {
-            $cartItem->quantity += $request->quantity;
-            $cartItem->price = $price;
-
-            $attributes = json_decode($cartItem->attributes, true);
-            $attributes['color'] = $selectedColor;
-            $cartItem->attributes = json_encode($attributes);
-
-            $cartItem->save();
-        } else {
-            CartItem::create([
-                'user_id' => Auth::id(),
-                'product_id' => $product->ProductID,
-                'quantity' => $request->quantity,
-                'price' => $price,
-                'attributes' => json_encode([
-                    'image' => $product->product_image,
-                    'manufacturer' => $product->Manufacturer,
-                    'sku' => $product->SKU,
-                    'color' => $selectedColor
-                ])
-            ]);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Product added to cart']);
-    } catch (\Exception $e) {
-        \Log::error('Add to cart error', ['message' => $e->getMessage()]);
-        return response()->json(['status' => 'error', 'message' => 'Server error'], 500);
     }
+
+    return response()->json(['message' => 'Product added to cart successfully']);
 }
+
 
 
     public function updateItem(Request $request, $itemId)

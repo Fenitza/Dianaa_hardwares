@@ -126,7 +126,7 @@ Route::post('password/reset', [ResetPasswordController::class,'reset'])->name('p
 
 
 
-
+ 
 ///careers
 // Route::get('/careers', CareersController::class,'showCareersPage');
 

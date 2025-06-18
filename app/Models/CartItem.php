@@ -10,11 +10,13 @@ class CartItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',    // Ensures you can safely mass assign the user_id
+        'user_id',
         'product_id',
         'quantity',
-        'price'
+        'selected_color',
+        'selected_price',
     ];
+    
 
     /**
      * Get the product associated with the cart item.
