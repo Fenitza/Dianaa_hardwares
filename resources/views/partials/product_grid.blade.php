@@ -15,7 +15,7 @@
                 <h4>{{ $product->Name }}</h4>
                 <p>{{ $product->Description }}</p>
                 <p><b>Manufacturer: </b>{{ $product->manufacturer->Name }}</p>
-                <p><b>Online Price:</b> ₹{{ number_format($product->SalePrice, 2) }}</p>
+                <p><b>Online Price:</b> ₹{{ number_format($product->colorVariants->first()->online_price ?? $product->SalePrice, 2) }}</p>
             </div>
         </div>
         <div class="product-actions" style="margin-top: 10px;">

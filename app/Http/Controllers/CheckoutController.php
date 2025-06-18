@@ -16,14 +16,14 @@ class CheckoutController extends Controller
             return redirect('/cart')->with('error', 'Your cart is empty.');
         }
 
-        $subtotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
-        $shippingCost = 50;
-        $total = $subtotal + $shippingCost;
+        $subtotal = $cartItems->sum(fn($item) => $item->selected_price * $item->quantity);
+        
+        $total = $subtotal ;
 
         // Fetch user details
         $user = Auth::user();
 
-        return view('checkout.index', compact('cartItems', 'subtotal', 'shippingCost', 'total', 'user'));
+        return view('checkout.index', compact('cartItems', 'subtotal', 'total', 'user'));
     }
 
     public function updateBillingDetails(Request $request)

@@ -308,6 +308,8 @@ public function importExcel(Request $request)
 
         $colors = array_map('trim', explode(',', $colorRaw));
         $prices = array_map('trim', explode(',', $priceRaw));
+        $discount= trim($rowData['discount'] ?? '');
+
 
         if (count($colors) && count($colors) === count($prices)) {
             foreach ($colors as $index => $color) {
@@ -317,11 +319,13 @@ public function importExcel(Request $request)
                         'product_id' => $product->ProductID,
                         'color' => $color,
                         'sale_price' => $price,
+                        'discount_percent' => $discount,
                     ]);
                     Log::info("✅ Color variant added", [
                         'product_id' => $product->ProductID,
                         'color' => $color,
                         'sale_price' => $price,
+                        'discount_price' => $discount,
                     ]);
                 }
             }
