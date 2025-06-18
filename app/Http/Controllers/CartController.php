@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
@@ -45,7 +47,7 @@ class CartController extends Controller
         $existingItem->save();
     } else {
         // Create new cart item
-        CartItem::create([
+        CartItem::updateOrCreate([
             'user_id' => $userId,
             'product_id' => $request->product_id,
             'quantity' => $request->quantity,
@@ -59,18 +61,45 @@ class CartController extends Controller
 
 
 
-    public function updateItem(Request $request, $itemId)
-    {
-        $cartItem = CartItem::where('user_id', Auth::id())->where('id', $itemId)->first();
-        if (!$cartItem) {
-            return response()->json(['success' => false, 'message' => 'Item not found']);
-        }
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:1',
+    ]);
 
-        $cartItem->quantity = $request->quantity;
-        $cartItem->save();
+    $cartItem = CartItem::where('user_id', Auth::id())
+                        ->where('id', $id)
+                        ->first();
 
-        return response()->json(['success' => true, 'message' => 'Cart item updated successfully']);
+    if (!$cartItem) {
+        return response()->json(['success' => false, 'message' => 'Cart item not found']);
     }
+
+    $cartItem->quantity = $request->quantity;
+    $cartItem->save();
+
+    \Log::info('Cart item updated:', [
+        'user_id' => Auth::id(),
+        'item_id' => $id,
+        'new_quantity' => $request->quantity
+    ]);
+
+    return response()->json(['success' => true, 'message' => 'Cart item updated successfully']);
+}
+
+public function updateItem(Request $request, $itemId)
+{
+        $cartItem = CartItem::where('user_id', Auth::id())->where('id', $itemId)->first();
+
+    if (!$cartItem) {
+            return response()->json(['success' => false, 'message' => 'Item not found']);
+    }
+
+    $cartItem->quantity = $request->quantity;
+    $cartItem->save();
+
+    return response()->json(['success' => true, 'message' => 'Cart item updated successfully']);
+}
 
     public function removeItem($itemId)
     {
@@ -88,12 +117,16 @@ class CartController extends Controller
 {
     try {
         $userId = Auth::id();
+        \Log::info('Cart count requested by user:', ['user_id' => $userId]);
+
         if (!$userId) {
             session(['cartCount' => 0]);
             return response()->json(['cartCount' => 0]);
         }
 
         $count = CartItem::where('user_id', $userId)->sum('quantity');
+        \Log::info('Cart count result:', ['user_id' => $userId, 'count' => $count]);
+
         session(['cartCount' => $count]);
         return response()->json(['cartCount' => $count]);
     } catch (\Exception $e) {
@@ -101,5 +134,6 @@ class CartController extends Controller
         return response()->json(['cartCount' => 0]);
     }
 }
+
 
 }

@@ -3,51 +3,51 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchCartCount();
     }
     // Add to Cart Functionality
-    document.querySelectorAll('.btn-add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
-            const cartAddUrl = this.getAttribute('data-cart-add-url');
-            const quantity = document.getElementById('quantity') ? document.getElementById('quantity').value : 1;
+    // document.querySelectorAll('.btn-add-to-cart').forEach(button => {
+    //     button.addEventListener('click', function() {
+    //         const productId = this.getAttribute('data-product-id');
+    //         const cartAddUrl = this.getAttribute('data-cart-add-url');
+    //         const quantity = document.getElementById('quantity') ? document.getElementById('quantity').value : 1;
     
-            // NEW: Get selected color & price (if present)
-            const selectedColorInput = document.getElementById('selectedColor');
-            const selectedPriceInput = document.getElementById('selectedPrice');
-            const selectedColor = selectedColorInput ? selectedColorInput.value : null;
-            const selectedPrice = selectedPriceInput ? selectedPriceInput.value : null;
+    //         // NEW: Get selected color & price (if present)
+    //         const selectedColorInput = document.getElementById('selectedColor');
+    //         const selectedPriceInput = document.getElementById('selectedPrice');
+    //         const selectedColor = selectedColorInput ? selectedColorInput.value : null;
+    //         const selectedPrice = selectedPriceInput ? selectedPriceInput.value : null;
     
-            console.log("Sending to Cart:", {
-                product_id: productId,
-                quantity: quantity,
-                selected_color: selectedColor,
-                selected_price: selectedPrice
-            });
+    //         console.log("Sending to Cart:", {
+    //             product_id: productId,
+    //             quantity: quantity,
+    //             selected_color: selectedColor,
+    //             selected_price: selectedPrice
+    //         });
     
-            fetch(cartAddUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    quantity: quantity,
-                    selected_color: selectedColor,
-                    selected_price: selectedPrice
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Response from Server:", data);
-                if (data.status === 'success') {
-                    alert('Item added to cart!');
-                    fetchCartCount(); // Refresh cart count
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error adding item to cart:', error));
-        });
-    });
+    //         fetch(cartAddUrl, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //             },
+    //             body: JSON.stringify({
+    //                 product_id: productId,
+    //                 quantity: quantity,
+    //                 selected_color: selectedColor,
+    //                 selected_price: selectedPrice
+    //             })
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log("Response from Server:", data);
+    //             if (data.status === 'success') {
+    //                 alert('Item added to cart!');
+    //                 fetchCartCount(); // Refresh cart count
+    //             } else {
+    //                 alert('Error: ' + data.message);
+    //             }
+    //         })
+    //         .catch(error => console.error('Error adding item to cart:', error));
+    //     });
+    // });
 
     // Update Quantity in Cart
     document.querySelectorAll('.cart-table input[type="number"]').forEach(input => {
@@ -89,9 +89,9 @@ function fetchCartCount() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Cart count response:', data); // Add this
         if(data && data.cartCount !== undefined) {
-            updateCartCount(data.cartCount); // Update count from server response
-           
+            updateCartCount(data.cartCount);
         } else {
             console.error('Invalid response for cart count:', data);
         }
@@ -101,16 +101,15 @@ function fetchCartCount() {
 
 
 
+
 // Update Cart Count in UI
 function updateCartCount(count) {
     const cartCountElement = document.getElementById('cart-count');
     if (cartCountElement) {
         cartCountElement.textContent = count;
-        localStorage.setItem('cartCount', count); // Optionally update local storage
-        fetchCartCount(); // Refresh cart count
-        
+        localStorage.setItem('cartCount', count);
     } else {
-        console.error('Cart count element not found');
+        console.warn('❗ #cart-count element not found in DOM — UI not updated');
     }
 }
 
@@ -128,13 +127,15 @@ function updateQuantity(itemId, newQuantity) {
     .then(data => {
         if (data.success) {
             alert('Quantity updated');
-            updateCartCount(newQuantity);
+           
             fetchCartCount(); // Refresh cart count
+           
             
          } 
         // else {
         //     alert('Failed to update quantity: ' + data.message);
         // }
+        location.reload();
     })
     .catch(error => console.error('Error updating quantity:', error));
 }
@@ -152,12 +153,19 @@ function removeItem(itemId) {
     .then(data => {
         if (data.success) {
             alert('Item removed from cart');
-            location.reload(); // Reload page to update cart
+
+            // ✅ Refresh the cart count
+            fetchCartCount();
+
+            // ✅ Optionally reload the cart table
+            location.reload();
         } else {
             alert('Failed to remove item: ' + data.message);
         }
     })
-    .catch(error => console.error('Error removing item:', error));
+    .catch(error => {
+        console.error('Error removing item:', error);
+    });
 }
 
 // Empty Cart Functionality
@@ -172,17 +180,21 @@ function emptyCart() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Cart emptied');
-            updateCartCount(0); // Update cart count to 0 in the UI
-            localStorage.setItem('cartCount', 0);
-            
+            alert('Cart emptied successfully');
+
+            // ✅ Update the cart count in header
+            fetchCartCount();
+
+            // ✅ Reload to clear the cart table view
+            location.reload();
         } else {
             alert('Failed to empty cart: ' + data.message);
         }
     })
-    .catch(error => console.error('Error emptying cart:', error));
+    .catch(error => {
+        console.error('Error emptying cart:', error);
+    });
 }
-
 // Checkout Button Redirect
 document.addEventListener('DOMContentLoaded', function () {
     const checkoutBtn = document.getElementById('checkout');

@@ -147,7 +147,7 @@
 
 <div class="quantity mb-3">
     <label for="quantity"><strong>Quantity:</strong></label>
-    <input type="number" id="quantity" name="quantity" min="1" value="{{ $product->moq }}" class="form-control w-auto">
+    <input type="number" id="quantity" name="quantity" min="{{ $product->moq }}" value="{{ $product->moq }}" class="form-control w-auto">
 </div>
 
 @if (auth()->check())
@@ -390,6 +390,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             alert(data.message || 'Added to cart');
+            fetchCartCount();
         })
         .catch(error => {
             console.error('Add to cart error:', error);

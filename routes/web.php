@@ -162,6 +162,7 @@ Route::middleware(['auth'])->group(function () {
     //Cart routes
     Route::any('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+    Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::patch('/cart/update/{itemId}', [CartController::class, 'updateItem'])->name('cart.update');
     Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');

@@ -46,7 +46,7 @@
                     @endif
                 </td>
                 <td>
-                    <input type="number" value="{{ $item->quantity }}" min="1" style="width: 50px;" onchange="updateQuantity({{ $item->id }}, this.value)">
+                    <input type="number" id="quantity" value="{{ $item->quantity }}" min="1" style="width: 50px;" onchange="updateQuantity({{ $item->id }}, this.value)">
                     <button class="btn btn-danger btn-sm mt-1" onclick="removeItem({{ $item->id }})">
                         <i class="fa fa-trash"></i>
                     </button>
