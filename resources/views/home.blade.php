@@ -5,37 +5,37 @@
 @section('content')
 
 <!-- Hero Image Carousel -->
-<div class="col-md-12 p-0 m-0">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color: #a79a9a;">
-        
-        <!-- The slideshow/images -->
-        <div class="carousel-inner" role="listbox">
-            <div class="carousel-item active">
-                <img src="/images/banners/slider1.webp" alt="Slider Image 1" class="d-block w-100 carousel-image">
-            </div>
-            <div class="carousel-item">
-                <img src="/images/banners/slider2.webp" alt="Slider Image 2" class="d-block w-100 carousel-image">
-            </div>
-        </div>
+<div class="col-md-12">
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color:#a79a9a;">
+    
 
-        <!-- Left and right controls/icons -->
-        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </a>
+    <!-- The slideshow/images -->
+    <div class="carousel-inner" role="listbox">
+    <div class="carousel-item active">
+        <img src="/images/banners/slider1.webp" alt="Slider Image 1" style="width:100%; height:auto; object-fit: fill;">
     </div>
+    <div class="carousel-item">
+        <img src="/images/banners/slider2.webp" alt="Slider Image 2" style="width:100%; height:auto; object-fit: fill;">
+    </div>
+</div>
 
-    <!-- Indicators/dots -->
+    <!-- Left and right controls/icons -->
+    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </a>
+</div>
+<!-- Indicators/dots -->
     <ol class="carousel-indicators">
         <li data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></li>
         <li data-bs-target="#heroCarousel" data-bs-slide-to="1"></li>
+        
     </ol>
 </div>
-
 
 <div class="company-details">
     <div class="row">

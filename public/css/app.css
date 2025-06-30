@@ -297,6 +297,7 @@ header {
     }
 }
 
+
 /* Basic styling for the carousel container */
 #heroCarousel {
     
@@ -304,6 +305,7 @@ header {
     /* Ensures the carousel takes the full width */
     margin: auto;
     /* Center align the carousel if needed */
+    
 }
 
 /* Styling for carousel items */
