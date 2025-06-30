@@ -41,7 +41,7 @@
             <p>Ph No: +91 95662  75630</p>
             <p>Email: mkt1@dhw.co.in</p>
             <div class="social-media-links">
-                <a href="https://www.facebook.com/DianaaHardwares" target="_blank">|
+                <a href="https://www.facebook.com/DianaaHardwares" target="_blank">
                     <i class="fab fa-facebook"></i> 
                 </a>
                 <a href="https://www.linkedin.com/in/dianaa-fasteners-1214bbb333/" target="_blank">

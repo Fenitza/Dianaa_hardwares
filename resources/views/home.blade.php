@@ -37,68 +37,61 @@
     </ol>
 </div>
 
-<div class="company-details">
-    <div class="row">
-        <div class="col-lg-6 col-md-12 col-sm-12">
-             <div class="company-text">
-        
-        <h2>Dianaa Fasteners <span class="intro"><h4>Leading Provider of Engineering and Fasteners Solutions</h4></span></h2>
-            <p>Dianaa Fasteners is established as a key player in the fastener industry, aiming to provide quality products and services. Starting out with only ability, enthusiasm, and a clear vision of destination,our team has earned every single reputation and award.</p>
-    </div>
-    </div>
-    <div class="col-lg-6 col-md-12 d-none d-md-block">
-    <div class="services">
-        <div class="service-item">
-            <i class="fas fa-hammer fa-3x"></i>
-            <p>Construction</p>
-        </div>
-        <div class="service-item">
-            <i class="fas fa-paint-roller fa-3x"></i>
-            <p>Renovations</p>
-        </div>
-        <div class="service-item">
-            <i class="fas fa-seedling fa-3x"></i>
-            <p>Green Building</p>
-        </div>
-    </div>
-    </div>
-    </div>
-</div>
-</div>
-
-<!-- <div class="container my-4">
-    Company Details Section
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="company-detail">
-                
-                <p>Dianaa Fasteners is established as a key player in the fastener industry, 
-                <br> aiming to provide quality products and services.
-                <br> Starting out with only ability, enthusiasm, and a clear vision of destination,
-                <br> our team has earned every single reputation and award.</p>
+<div class="company-details-align-center py-5 px-4 mx-auto" style="max-width: 1200px;">
+    <div class="row align-items-center">
+        <!-- Text Section -->
+        <div class="col-lg-6 col-md-12 col-sm-12 mb-4">
+            <div class="company-text text-center text-md-start">
+                <h2 style="font-weight: bold; color: #000;">Dianaa Fasteners</h2>
+                <h4 style="color: #4a4a4a; margin-bottom: 1rem;">Leading Provider of Engineering and Fasteners Solutions</h4>
+                <p style="color: #555;">
+                    Dianaa Fasteners is established as a key player in the fastener industry, aiming to provide quality products and services.
+                    Starting out with only ability, enthusiasm, and a clear vision of destination, our team has earned every single reputation and award.
+                </p>
             </div>
         </div>
+
+        <!-- Services Section (Always visible, in row for all screens) -->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="services d-flex justify-content-center flex-row flex-wrap gap-3">
+    <div class="service-item text-center p-3 shadow-sm rounded d-flex flex-column align-items-center justify-content-center" style="min-width: 100px; height: 180px;">
+        <i class="fas fa-hammer fa-3x" style="color: #ff7f50; margin-bottom: 0.5rem;"></i>
+        <p style="color: #000; margin: 0;">Construction</p>
     </div>
-</div> -->
+    <div class="service-item text-center p-3 shadow-sm rounded d-flex flex-column align-items-center justify-content-center" style="min-width: 100px; height: 180px;">
+        <i class="fas fa-paint-roller fa-3x" style="color: #32cd32; margin-bottom: 0.5rem;"></i>
+        <p style="color: #000; margin: 0;">Renovations</p>
+    </div>
+    <div class="service-item text-center p-3 shadow-sm rounded d-flex flex-column align-items-center justify-content-center" style="min-width: 100px; height: 180px;">
+        <i class="fas fa-seedling fa-3x" style="color: #1e90ff; margin-bottom: 0.5rem;"></i>
+        <p style="color: #000; margin: 0;">Green Building</p>
+    </div>
+</div>
+
+        </div>
+    </div>
+</div>
+
 
 
 
 <!-- Featured Brands -->
-<div id="featured-brands">
-    <h2 class="section-title">Featured Brands</h2>
+<div id="featured-brands" class="py-5">
+    <h2 class="section-title text-center mb-4">Featured Brands</h2>
     <div class="row justify-content-center">
         @foreach($manufacturers as $manufacturer)
-        <div class="col-md-3 col-sm-6 text-center mb-4">
-            <div class="brand-card" style="background-image: url('{{ asset('storage/' . $manufacturer->Image) }}');">
-                <div class="brand-overlay">
-                    <h4 class="brand-name">{{ $manufacturer->Name }}</h4>
-                    <a href="{{ route('products.byBrandCategories', ['brand_id' => $manufacturer->ManufacturerID]) }}?brand={{ $manufacturer->ManufacturerID }}" class="shop-now-btn">SHOP NOW</a>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mb-4">
+            <div class="brand-card mx-auto" style="background-image: url('{{ asset('storage/' . $manufacturer->Image) }}'); max-width: 250px; min-height: 150px; background-size: contain; background-repeat: no-repeat; background-position: center;">
+                <div class="brand-overlay d-flex flex-column justify-content-center align-items-center h-100">
+                    <h4 class="brand-name mb-2">{{ $manufacturer->Name }}</h4>
+                    <a href="{{ route('products.byBrandCategories', ['brand_id' => $manufacturer->ManufacturerID]) }}?brand={{ $manufacturer->ManufacturerID }}" class="shop-now-btn  btn-sm">SHOP NOW</a>
                 </div>
             </div>
         </div>
         @endforeach
     </div>
 </div>
+
  
 <div class="container product-table-container mt-4">
   <div class="row">

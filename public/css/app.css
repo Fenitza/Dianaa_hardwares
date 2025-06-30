@@ -212,88 +212,84 @@ header {
 
 
 /* Footer Styling */
+/* Basic Footer Styling */
 .site-footer {
-    background-color: #2a2e6a; /* Navy blue background */
-    color: white;
+    background-color: #2a2e6a;
+    color: #fff;
     padding: 40px 20px;
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    font-family: Arial, sans-serif;
 }
 
 .footer-container {
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
+    justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
 }
 
 .footer-column {
-    flex: 1 1 200px; /* Flexibility with minimum width */
-    margin: 15px;
-    min-width: 200px;
+    flex: 1 1 200px;
+    /* Flexible base, minimum width 200px */
+    margin: 20px;
 }
 
 .footer-column h4 {
-    color: white; /* Mustard yellow for headers */
-    margin-bottom: 10px;
-    text-decoration: underline;
-    font-size: 16px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    border-bottom: 2px solid #555;
+    padding-bottom: 5px;
 }
 
 .footer-column ul {
     list-style: none;
     padding: 0;
-    font-size: 14px;
 }
-.footer-column p {
-    list-style: none;
-    padding: 0;
-    font-size: 14px;
+
+.footer-column ul li {
+    margin-bottom: 10px;
 }
 
 .footer-column ul li a {
-    color: white;
+    color: #ccc;
     text-decoration: none;
-    transition: color 0.3s ease;
 }
 
 .footer-column ul li a:hover {
-    color: #A5CD36; /* Lime green on hover */
+    color: #fff;
+    text-decoration: underline;
 }
 
-.social-media-links i {
-    font-size: 26px;
-    margin-right: 10px;
-    color: #F0D422; /* Mustard yellow for payment icons */
+.footer-column p {
+    font-size: 14px;
+    line-height: 1.5;
 }
 
-.store-info p, .store-info a {
-    color: white; /* Ensure visibility */
+.social-media-links a {
+    color: #ccc;
+    font-size: 20px;
+    margin-right: 15px;
+    text-decoration: none;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+.social-media-links a:hover {
+    color: #fff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
     .footer-container {
         flex-direction: column;
         align-items: center;
-    }
-
-    .footer-column {
-        flex-basis: 100%; /* Full width on small screens */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 20px 0;
-    }
-
-    .footer-column ul {
         text-align: center;
     }
 
-    .payment-methods {
-        margin-top: 30px; /* Additional space for icons */
+    .footer-column {
+        margin: 15px 0;
+    }
+
+    .social-media-links {
+        margin-top: 15px;
     }
 }
 
@@ -369,7 +365,9 @@ header {
     align-items: flex-start;
     padding: 30px 100px;
     background-color: #f8f8f8de;
-    /* Light gray background */
+
+    /* Light gray back
+    ground */
     
 }
 
@@ -637,37 +635,56 @@ h3 {
 /* General Section Title Styling */
 .section-title {
     font-size: 1em;
-    /* Adjust the font size as needed */
     color: #2d2e6a;
     text-transform: uppercase;
     text-align: center;
     margin: 20px auto;
-    /* Centered margin for vertical spacing and auto for horizontal centering */
     padding: 10px 0;
-    /* Padding for optical balance */
     position: relative;
-    /* Needed for pseudo-elements */
     display: inline-block;
-    /* Changes display to allow the use of text-width */
     width: auto;
-    /* Auto width to shrink-wrap the content */
 }
 
-/* Using margin instead of absolute positioning */
 .section-title::before,
 .section-title::after {
     content: "";
     display: inline-block;
     width: 50px;
-    /* Fixed width for the dividers */
     height: 1px;
-    /* Thin line divider */
     background-color: #ccc;
-    /* Light grey divider color */
     vertical-align: middle;
-    /* Aligns with the middle of the text */
     margin: 0 20px;
-    /* Space between the text and the dividers */
+}
+
+/* For tablets and smaller: shrink the lines */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.5rem;
+        padding: 0 10px;
+        display: block;
+        /* Makes heading full width if needed */
+    }
+
+    .section-title::before,
+    .section-title::after {
+        width: 30px;
+        /* Make the lines shorter */
+        margin: 0 10px;
+        /* Reduce spacing between text and lines */
+    }
+}
+
+/* For very small screens: optionally hide the lines */
+@media (max-width: 576px) {
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .section-title::before,
+    .section-title::after {
+        display: none;
+        /* Hide the lines on small mobiles */
+    }
 }
 
 /* Ensuring that both titles have the same class applied */
@@ -684,6 +701,27 @@ h3 {
     /* Control the width of the entire card container */
     margin: 0 auto;
     /* This will center the container */
+}
+@media (max-width: 768px) {
+    #featured-brands .section-title {
+        font-size: 1.5rem;
+        /* Reduce font size for smaller screens */
+        text-align: center;
+        /* Ensure center alignment */
+        padding: 0 10px;
+        /* Add some side padding */
+        display: block;
+        /* Prevent overflow with inline styles */
+        border-bottom: none;
+        /* Optional: Remove underline if it looks crowded */
+    }
+}
+
+@media (max-width: 576px) {
+    #featured-brands .section-title {
+        font-size: 1.25rem;
+        /* Further reduce font size for very small screens */
+    }
 }
 
 /* Adjust the card size and the background image */
