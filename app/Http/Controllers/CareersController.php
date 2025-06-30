@@ -44,7 +44,7 @@ public function apply(Request $request, $id)
 
     // Send email
     Mail::raw("Job Application for: {$job->title}\n\nFrom: {$validated['name']}\nEmail: {$validated['email']}\nQualification: {$validated['qualification']}\nPhone: {$validated['phone']}\n\nMessage:\n{$validated['message']}", function ($message) use ($validated) {
-        $message->to('dianaafasteners@gmail.com') // 🔁 change to your receiving email
+        $message->to('dianaafastners.official@gmail.com') // 🔁 change to your receiving email
                 ->subject('New Job Application');
     });
 
@@ -132,11 +132,11 @@ public function apply(Request $request, $id)
         // Send Email
         Mail::send('emails.job_mail', $data, function ($message) use ($data) {
             $message->to([
-                // 'hr@dhw.co.in',
-                // 'benedict@dhw.co.in',
-                // 'nirmal@dhw.co.in',
-                // 'dianaadigital2024@gmail.com'
-                'fms.cool16@gmail.com'
+                'hr@dhw.co.in',
+                'benedict@dhw.co.in',
+                'nirmal@dhw.co.in',
+                'dianaadigital2024@gmail.com'
+                
             ])
             ->subject('New Job Application from ' . $data['first_name'] . ' ' . $data['last_name'])
             ->attach($data['resumePath']);
