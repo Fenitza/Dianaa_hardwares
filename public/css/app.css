@@ -210,6 +210,24 @@ header {
     }
 }
 
+/* Padding for all screens */
+.responsive-container {
+    padding: 0 15px;
+    /* Adds left and right padding */
+}
+
+/* Increase padding on medium and larger screens for better spacing */
+@media (min-width: 768px) {
+    .responsive-container {
+        padding: 0 30px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .responsive-container {
+        padding: 0 60px;
+    }
+}
 
 /* Footer Styling */
 /* Basic Footer Styling */

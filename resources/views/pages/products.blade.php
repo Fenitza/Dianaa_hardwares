@@ -1,7 +1,7 @@
 @extends('layouts.app')
 <title>All Product Categories-Dianaa Fasteners</title>
 @section('content')
-<div class="products-container">
+<div class="products-container" class="responsive-container">
     <!-- Product Tabs -->
     <ul class="nav nav-tabs" id="categoryTabs">
         @foreach($categories as $index => $category)

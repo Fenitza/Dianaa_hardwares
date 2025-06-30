@@ -1,70 +1,72 @@
 @extends('layouts.app')
-<title>{{$subcategory->Name}}-Dianaa Fasteners</title>
+<title>{{$subcategory->Name}} - Dianaa Fasteners</title>
+
 @section('content')
 <div class="container my-3" style="max-width: 1400px;">
     <div class="row">
         <input type="hidden" id="subcategory-id" value="{{ $subcategory->SubCategoryID }}">
-        <!-- Filter Form -->
-        <div class="col-md-3" id="filter-sidebar">
-            <div class="row">
-            @php
-    $query = ['brand' => request()->input('brand', [])];
-@endphp
 
-<a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}?{{ http_build_query($query) }}">
-</a>
+        <!-- Mobile Filter Toggle -->
+        <div class="col-12 d-md-none mb-3">
+            <button class="btn btn-outline-dark w-100" type="button" data-bs-toggle="collapse" data-bs-target="#filter-sidebar" aria-expanded="false" aria-controls="filter-sidebar">
+                Toggle Filters
+            </button>
+        </div>
+
+        <!-- Filter Form -->
+        <div class="col-12 col-md-3 collapse d-md-block mb-3" id="filter-sidebar">
+            <div class="row">
+                @php
+                    $query = ['brand' => request()->input('brand', [])];
+                @endphp
+
+                <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}?{{ http_build_query($query) }}"></a>
 
                 <div class="filter-section">
-                        <h6>Filters</h6>
+                    <h6>Filters</h6>
+                    @foreach ([ 
+                        'brand' => 'Brand/Manufacturer',
+                        'size' => 'Thread Size',
+                        'length' => 'Length',
+                        'grade' => 'Grade',
+                        'pitch' => 'Pitch',
+                        'weight' => 'Weight',
+                        'type' => 'Type',
+                        'standardType' => 'UNC / UNF / BSF / BSW',
+                        'metric' => 'MM or Inches',
+                        'threadtype' => 'Thread type',
+                        'point' => 'Cone/Cup/Flat Points',
+                        'pitchtype' => 'Pitch Type'
+                        ] as $field => $label)
+                        <div class="filter-category">
+                            <button type="button" class="collapsible btn btn-outline-dark w-100">{{ $label }}</button>
+                            <div class="content p-2 border" id="{{ strtolower($field) }}-container"></div>
+                        </div>
+                    @endforeach
 
-                            @foreach ([ 
-                                'brand' => 'Brand/Manufacturer',
-                                'size' => 'Thread Size',
-                                'length' => 'Length',
-                                'grade' => 'Grade',
-                                
-                                'pitch' => 'Pitch',
-                                'weight' => 'Weight',
-                                'type' => 'Type',
-                                'standardType' => 'UNC / UNF / BSF / BSW',
-                                'metric' => 'MM or Inches',
-                                'threadtype' => 'Thread type',
-                                'point' => 'Cone/Cup/Flat Points',
-                                'pitchtype' => 'Pitch Type'
-                                ] as $field => $label)
-                                <div class="filter-category ">
-                                    <button type="button" class="collapsible btn btn-outline-dark w-100 ">{{ $label }}</button>
-                                    <div class="content p-2 border" id="{{ strtolower($field) }}-container"></div>
-                                </div>
-                            @endforeach
-
-
-                            <div class="filter-controls">
-                            <div class="row g-4">
-                                <div class="col-6">
-                                    <button type="submit" class="btn w-100" id="filter-apply">Apply Filters</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="button" class="btn w-100" onclick="clearFilters()">Clear Filters</button>
-                                </div>
+                    <div class="filter-controls mt-3">
+                        <div class="row g-4">
+                            <div class="col-6">
+                                <button type="submit" class="btn w-100" id="filter-apply">Apply Filters</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn w-100" onclick="clearFilters()">Clear Filters</button>
                             </div>
                         </div>
-
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
         <!-- Product Grid Column -->
-        <div class="col-md-9">
+        <div class="col-12 col-md-9">
             <div class="row align-items-center">
-                <div class="col-md-12">
+                <div class="col-12 mb-3">
                     <strong>{{ $subcategory->Name }}</strong><br>
                     {{ $subcategory->Description }}
                 </div>
-                
 
-                <div class="col-md-12">
+                <div class="col-12 mb-3">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-6">
                             <span style="color: grey; font-size: 14px;">({{ $products->total() }} Items)</span>
@@ -74,7 +76,7 @@
                                 <option value="48" {{ request()->query('perPage') == '48' ? 'selected' : '' }}>48 Per Page</option>
                             </select>
                         </div>
-                        <div class="col-md-6 text-right">
+                        <div class="col-md-6 text-md-right mt-2 mt-md-0">
                             Sort by:
                             <select class="custom-select d-inline w-auto" id="sortProducts">
                                 <option value="best_match" {{ request()->query('sort') == 'best_match' ? 'selected' : '' }}>Best Match</option>
@@ -99,7 +101,7 @@
                     @include('partials.product_catalog', ['products' => $products])
                 @endif
 
-                <div class="col-md-12 text-md-right d-flex align-items-center justify-content-center">
+                <div class="col-12 text-center mt-4">
                     {{ $products->links('pagination.custom') }}
                 </div>
             </div>
@@ -191,6 +193,20 @@
 .filter-controls .btn-secondary:hover {
     background-color: #495057;
 }
+@media (max-width: 768px) {
+        .filter-section {
+            margin-bottom: 15px;
+        }
+
+        .view-links {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .filter-controls .btn {
+            padding: 8px 10px;
+        }
+    }
 
 </style>
 

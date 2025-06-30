@@ -6,7 +6,7 @@
 <div class="custom-spacer" style="height: 20px;"></div>
 
 <!-- Product Categories -->
-<div id="product-categories">
+<div id="product-categories" class="responsive-container">
     <h2 class="section-title">Product Categories</h2>
     <div class="row justify-content-center">
         @foreach ($categories as $category)
