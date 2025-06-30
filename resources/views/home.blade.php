@@ -5,37 +5,37 @@
 @section('content')
 
 <!-- Hero Image Carousel -->
-<div class="col-md-12">
-<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color:#a79a9a;">
-    
+<div class="col-md-12 p-0 m-0">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color: #a79a9a;">
+        
+        <!-- The slideshow/images -->
+        <div class="carousel-inner" role="listbox">
+            <div class="carousel-item active">
+                <img src="/images/banners/slider1.webp" alt="Slider Image 1" class="d-block w-100 carousel-image">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/banners/slider2.webp" alt="Slider Image 2" class="d-block w-100 carousel-image">
+            </div>
+        </div>
 
-    <!-- The slideshow/images -->
-    <div class="carousel-inner" role="listbox">
-    <div class="carousel-item active">
-        <img src="/images/banners/slider1.webp" alt="Slider Image 1" style="width:100%; height:auto;">
+        <!-- Left and right controls/icons -->
+        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </a>
     </div>
-    <div class="carousel-item">
-        <img src="/images/banners/slider2.webp" alt="Slider Image 2" style="width:100%; height:auto;">
-    </div>
-</div>
 
-    <!-- Left and right controls/icons -->
-    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </a>
-</div>
-<!-- Indicators/dots -->
+    <!-- Indicators/dots -->
     <ol class="carousel-indicators">
         <li data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></li>
         <li data-bs-target="#heroCarousel" data-bs-slide-to="1"></li>
-        
     </ol>
 </div>
+
 
 <div class="company-details">
     <div class="row">
@@ -100,89 +100,88 @@
     </div>
 </div>
  
-<!-- Product table with type -->
- <div class="container product-table-container mt-4">
-    <div class="row">
-        <!-- Small/Medium Screens: Accordion for Categories -->
-        <div class="col-12 d-block d-md-none mb-3">
-            <div class="accordion" id="categoryAccordion">
-                @foreach ($categories as $category)
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-{{ $category->CategoryID }}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse-{{ $category->CategoryID }}" aria-expanded="false"
-                                    aria-controls="collapse-{{ $category->CategoryID }}">
-                                {{ $category->Name }}
-                            </button>
-                        </h2>
-                        <div id="collapse-{{ $category->CategoryID }}" class="accordion-collapse collapse"
-                             aria-labelledby="heading-{{ $category->CategoryID }}" data-bs-parent="#categoryAccordion">
-                            <div class="accordion-body p-2">
-                                <ul class="list-unstyled">
-                                    @foreach ($category->subcategories as $subcategory)
-                                        <li class="mb-1">
-                                            <a href="javascript:void(0);"
-                                               onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})"
-                                               class="subcategory-link text-decoration-none">
-                                                {{ $subcategory->Name }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+<div class="container product-table-container mt-4">
+  <div class="row">
 
-        <!-- Large Screens: Sidebar for Categories -->
-        <div class="col-md-3 d-none d-md-block category-sidebar">
-            @foreach ($categories as $category)
-                <div class="category-item mb-2">
-                    <button class="category-toggle text-start"
-                            onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
-                        {{ $category->Name }}
-                    </button>
-                    <ul class="subcategory-list list-unstyled ps-3 pt-2" id="subcat-{{ $category->CategoryID }}" style="display: none;">
-                        @foreach ($category->subcategories as $subcategory)
-                            <li class="subcategory-item mb-1">
-                                <a href="javascript:void(0);"
-                                   onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})"
-                                   class="subcategory-link text-decoration-none d-block">
-                                    {{ $subcategory->Name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Product Display Tabs -->
-        <div class="col-md-9">
-            <ul class="nav table-nav-tabs">
-                <li class="table-nav-item">
-                    <a class="table-nav-link active"  onclick="loadProducts(currentSubcategoryId, 'Featured')">Featured</a>
-                </li>
-                <li class="table-nav-item">
-                    <a class="table-nav-link"  onclick="loadProducts(currentSubcategoryId, 'New Arrivals')">New Arrival</a>
-                </li>
-                <li class="table-nav-item">
-                    <a class="table-nav-link"  onclick="loadProducts(currentSubcategoryId, 'Best Sellers')">Best Sellers</a>
-                </li>
-            </ul>
-            <!-- Product Display -->
-            <div id="products-display" class="mt-3">
-               
-                        <div id="default-message" class="text-center">
-                            <p class="text-muted">Select a category here to view products</p>
-                            <i class="fas fa-hand-point-left fa-2x text-primary"></i>
-                        </div>
-                  
+    <!-- Accordion for Small Screens -->
+    <div class="col-12 d-block d-md-none mb-3">
+      <div class="accordion" id="categoryAccordion">
+        @foreach ($categories as $category)
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{ $category->CategoryID }}">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#collapse-{{ $category->CategoryID }}" aria-expanded="false"
+                      aria-controls="collapse-{{ $category->CategoryID }}">
+                {{ $category->Name }}
+              </button>
+            </h2>
+            <div id="collapse-{{ $category->CategoryID }}" class="accordion-collapse collapse"
+                 aria-labelledby="heading-{{ $category->CategoryID }}" data-bs-parent="#categoryAccordion">
+              <div class="accordion-body p-2">
+                <ul class="list-unstyled">
+                  @foreach ($category->subcategories as $subcategory)
+                    <li class="mb-1">
+                      <a href="javascript:void(0);"
+                         onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})"
+                         class="subcategory-link text-decoration-none">
+                        {{ $subcategory->Name }}
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+              </div>
             </div>
-        </div>
+          </div>
+        @endforeach
+      </div>
     </div>
+
+    <!-- Sidebar for Large Screens -->
+    <div class="col-md-3 d-none d-md-block category-sidebar">
+      @foreach ($categories as $category)
+        <div class="category-item mb-2">
+          <button class="category-toggle text-start"
+                  onclick="toggleSubcategories('subcat-{{ $category->CategoryID }}')">
+            {{ $category->Name }}
+          </button>
+          <ul class="subcategory-list list-unstyled ps-3 pt-2" id="subcat-{{ $category->CategoryID }}" style="display: none;">
+            @foreach ($category->subcategories as $subcategory)
+              <li class="subcategory-item mb-1">
+                <a href="javascript:void(0);"
+                   onclick="selectSubcategory(this, {{ $subcategory->SubCategoryID }})"
+                   class="subcategory-link text-decoration-none d-block">
+                  {{ $subcategory->Name }}
+                </a>
+              </li>
+            @endforeach
+          </ul>
+        </div>
+      @endforeach
+    </div>
+
+    <!-- Product Display + Tabs -->
+    <div class="col-12 col-md-9">
+      <ul class="nav table-nav-tabs">
+        <li class="table-nav-item">
+          <a class="table-nav-link active" onclick="loadProducts(currentSubcategoryId, 'Featured')">Featured</a>
+        </li>
+        <li class="table-nav-item">
+          <a class="table-nav-link" onclick="loadProducts(currentSubcategoryId, 'New Arrivals')">New Arrival</a>
+        </li>
+        <li class="table-nav-item">
+          <a class="table-nav-link" onclick="loadProducts(currentSubcategoryId, 'Best Sellers')">Best Sellers</a>
+        </li>
+      </ul>
+
+      <div id="products-display" class="mt-3">
+        <div id="default-message" class="text-center">
+          <p class="text-muted">Select a category here to view products</p>
+          <i class="fas fa-hand-point-left fa-2x text-primary"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- Product Categories -->

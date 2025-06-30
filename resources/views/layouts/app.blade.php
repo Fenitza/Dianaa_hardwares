@@ -43,6 +43,28 @@
         <span>14-Day Money Back<br>If you are unable</span>
     </div>
     </div>
+    <style>
+.product-service-offers {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to the next line */
+    justify-content: center; /* Optional: centers items horizontally */
+    gap: 10px; /* Adds space between items */
+}
+
+.product-service-item {
+    flex: 1 1 150px; /* Flex grow/shrink with minimum width */
+    min-width: 120px; /* Prevents items from getting too small */
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .product-service-item {
+        flex: 1 1 100%; /* On very small screens, items take full width */
+    }
+}
+</style>
 
     @include('layouts.footer') 
 

@@ -96,7 +96,66 @@ header {
         background: transparent;
     }
 }
+@media (max-width: 360px) {
+    .header-icons {
+        gap: 2px !important;
+    }
 
+    .header-icons .btn {
+        padding: 2px 4px !important;
+    }
+
+    .header-icons i {
+        font-size: 13px !important;
+    }
+}
+.header-icons .icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    /* Adjust icon size */
+    background-color: transparent;
+    /* or desired bg */
+    border: none;
+    /* if using buttons */
+    margin: 0 4px;
+    /* small space between icons */
+    padding: 0;
+}
+
+/* On very small screens */
+@media (max-width: 360px) {
+    .header-icons .icon-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        margin: 0 2px;
+    }
+}.header-icons .icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px; /* Adjust icon size */
+    background-color: transparent; /* or desired bg */
+    border: none; /* if using buttons */
+    margin: 0 4px; /* small space between icons */
+    padding: 0;
+}
+
+/* On very small screens */
+@media (max-width: 360px) {
+    .header-icons .icon-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        margin: 0 2px;
+    }
+}
 /* Dropdown panel */
 #navbarToggleExternalContent {
     background-color: #1d237e;
@@ -990,6 +1049,10 @@ h3 {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 767.98px) {
+    .product-table-container>.row {
+        flex-direction: column;
+    } }
 .card {
     display: flex;
     flex-direction: column;
