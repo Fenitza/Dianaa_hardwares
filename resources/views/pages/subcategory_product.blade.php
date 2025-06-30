@@ -85,7 +85,7 @@
                             </select>
                             <div class="view-links d-inline">
                                 <a href="{{ request()->fullUrlWithQuery(['view' => 'catalog']) }}" class="view-link">Catalog View |</a>
-                                <a href="{{ request()->fullUrlWithQuery(['view' => 'list']) }}" class="view-link">List View |</a>
+                                <a href="{{ request()->fullUrlWithQuery(['view' => 'list']) }}" class="view-link d-none d-md-inline">List View |</a>
                                 <a href="{{ request()->fullUrlWithQuery(['view' => 'grid']) }}" class="view-link">Grid View</a>
                             </div>
                         </div>
@@ -108,6 +108,24 @@
         </div>
     </div>
 </div>
+<script>
+    function changePerPage() {
+        const perPage = document.getElementById('perPage').value;
+
+        // Get current URL and all query parameters
+        const url = new URL(window.location.href);
+
+        // Set the new perPage parameter
+        url.searchParams.set('perPage', perPage);
+
+        // Reset to the first page
+        url.searchParams.set('page', 1);
+
+        // Redirect to the updated URL
+        window.location.href = url.toString();
+    }
+</script>
+
 <style>
 /* Filter section container */
 .filter-section {

@@ -80,6 +80,7 @@ Route::post('/careers/{id}/apply', [CareersController::class, 'apply'])->name('c
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::post('/send-job-application', [CareersController::class, 'send'])->name('job.application.send');
 
 //All Products
 Route::get('/products/category', [ProductController::class, 'category'])->name('products_main');//All Products 

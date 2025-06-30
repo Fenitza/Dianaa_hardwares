@@ -25,7 +25,7 @@ public function submit(Request $request)
     ]);
 
     // Send email
-    Mail::to('dianaafasteners@gmail.com')->send(new ContactFormMail($validated));
+    Mail::to('dianaafastners.official@gmail.com')->send(new ContactFormMail($validated));
 
     return back()->with('success', 'Your message has been sent!');
 }

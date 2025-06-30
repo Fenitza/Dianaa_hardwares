@@ -58,8 +58,8 @@
 <body>
 <div class="email-container">
     <div class="email-header">
-        <img src="http://127.0.0.1:8000/images/logo/Diana_logo2.png" alt="Company Logo" class="logo">
-        Bulk Order Request
+    <img src="https://dhw.co.in/images/logo/Diana_logo2.png" alt="Company Logo" class="logo">
+    <h2> Bulk Order Request</h2>  
     </div>
     <div class="email-body">
         <h1>Hello Admin,</h1>
@@ -68,7 +68,7 @@
             <tbody>
                 <tr style="background-color: #f4f4f4;">
                     <td style="padding: 10px; border: 1px solid #dddddd;"><strong>Product</strong></td>
-                    <td style="padding: 10px; border: 1px solid #dddddd;">{{ $product_name ?? 'N/A' }}</td>
+                    <td style="padding: 10px; border: 1px solid #dddddd;">{{ $Description ?? 'N/A' }}</td>
                 </tr>
                 <tr style="background-color: #f4f4f4;">
                     <td style="padding: 10px; border: 1px solid #dddddd;"><strong>SKU</strong></td>

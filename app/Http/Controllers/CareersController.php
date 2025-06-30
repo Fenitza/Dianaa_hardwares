@@ -98,4 +98,51 @@ public function apply(Request $request, $id)
         return redirect()->route('admin.careers.index')->with('success', 'Job deleted successfully!');
     }
 
+
+
+    public function send(Request $request)
+    {
+        // Validate the form
+        $validated = $request->validate([
+            'first_name'     => 'required|string|max:255',
+            'last_name'      => 'required|string|max:255',
+            'dob'            => 'required|date',
+            'gender'         => 'required',
+            'address'        => 'nullable|string|max:500',
+            'pincode'        => 'nullable|string|max:10',
+            'city'           => 'nullable|string|max:255',
+            'mobile'         => 'required|string|max:15',
+            'email'          => 'required|email|max:255',
+            'total_exp'      => 'nullable|string|max:50',
+            'qualification'  => 'required|string|max:255',
+            'present_job'    => 'nullable|string|max:255',
+            'current_ctc'    => 'nullable|string|max:50',
+            'notice_period'  => 'nullable|string|max:50',
+            'expected_ctc'   => 'required|string|max:50',
+            'resume'         => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        // Handle File Upload
+        $resumePath = $request->file('resume')->store('resumes');
+
+        // Prepare Data for Email
+        $data = $request->all();
+        $data['resumePath'] = storage_path('app/' . $resumePath);
+
+        // Send Email
+        Mail::send('emails.job_mail', $data, function ($message) use ($data) {
+            $message->to([
+                // 'hr@dhw.co.in',
+                // 'benedict@dhw.co.in',
+                // 'nirmal@dhw.co.in',
+                // 'dianaadigital2024@gmail.com'
+                'fms.cool16@gmail.com'
+            ])
+            ->subject('New Job Application from ' . $data['first_name'] . ' ' . $data['last_name'])
+            ->attach($data['resumePath']);
+        });
+
+        return back()->with('success', 'Your application has been sent successfully!');
+    }
+
 }

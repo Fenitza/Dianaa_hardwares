@@ -283,7 +283,7 @@ public function handleBulkOrder(Request $request)
 
     try {
         $emailData = $request->all();
-        Mail::to('fms.cool16@gmail.com')->send(new BulkOrderMail($emailData));
+        Mail::to('dianaafastners.official@gmail.com')->send(new BulkOrderMail($emailData));
         return response()->json(['message' => 'Your bulk order request has been sent.']);
     } catch (\Exception $e) {
         Log::error('Mail sending error: ' . $e->getMessage());

@@ -5,41 +5,59 @@
 <div class="container-fluid catalog-view">
 
 @php
-    $productsByColor = $products->groupBy('Color');
-    @endphp
+    $productsBySize = $products->groupBy('Size');
+@endphp
 
-    @foreach ($productsByColor as $color => $products)
-        <strong>Color: {{ $color }}</strong>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Weight</th>
-                    <th>Dimension</th>
-                    <th>Material</th>
-                    <th>SKU</th>
-                    <th>Availability</th>
-                    <th>Sale Price</th>
-                    <!-- <th>Details</th> -->
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($products as $product)
+@foreach ($productsBySize as $size => $products)
+    <div class="mb-4">
+        <h5 class="text-primary">Thread Size: {{ $size }}</h5>
+
+        <!-- Responsive Table Wrapper -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="table">
                     <tr>
-                        <td>{{ $product->Weight }} g</td> <!-- Assuming there is a 'size' field -->
-                        <td>{{ $product->Dimension }}</td> <!-- Assuming there is a 'dimension' field -->
-                        <td>{{ $product->Material }}</td>
-                        <td>{{ $product->SKU }}</td>
-                        <td>{{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}</td>
-                        <td>₹{{ number_format($product->colorVariants->first()->online_price ?? $product->SalePrice, 2) }}</td>
-                        
+                        <th>SKU</th>
+                        <th>Thread Size</th>
+                        <th>Length</th>
+                        <th>Grade</th>
+                        <th>Pitch</th>
+                        <th>Weight (g)</th>
+                        <th>Availability</th>
+                        <th>Online Price</th>
                     </tr>
-                    
-                    <!-- <button class="btn btn-primary" onclick="showProductDetails({{ $product->id }})">View Details</button> -->
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($products as $product)
+                        @php
+                            $variant = $product->colorVariants->first();
+                            $salePrice = $variant->sale_price ?? $product->SalePrice;
+                            $discount = $product->discount ?? 0;
+                            $onlinePrice = $salePrice - ($salePrice * $discount / 100);
+                        @endphp
+                        <tr>
+                            <td>{{ $product->SKU }}</td>
+                            <td>{{ $product->Size }}</td>
+                            <td>{{ $product->Length }}</td>
+                            <td>{{ $product->grade }}</td>
+                            <td>{{ $product->pitch }}</td>
+                            <td>{{ $product->weight }}</td>
+                            <td>
+                                <span class="{{ $product->Quantity > 0 ? 'text-success' : 'text-danger' }}">
+                                    {{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                                </span>
+                            </td>
+                            <td>₹{{ number_format($onlinePrice, 2) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <!-- End Responsive Table Wrapper -->
 
-    @endforeach
+    </div>
+@endforeach
+
 </div>
 
 <!-- Spacer Block -->

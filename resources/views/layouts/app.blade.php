@@ -43,7 +43,37 @@
         <span>14-Day Money Back<br>If you are unable</span>
     </div>
     </div>
+
+    <a href="https://wa.me/919597512038" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp whatsapp-icon"></i>
+</a>
+
     <style>
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 1000;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    color: white;
+    text-decoration: none;
+}
+
+.whatsapp-icon {
+    font-size: 30px;
+}
+
+
 .product-service-offers {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap to the next line */

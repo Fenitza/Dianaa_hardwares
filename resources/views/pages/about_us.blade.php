@@ -482,83 +482,85 @@
   
 
   
-  <section class="section who-we-are-section" >
-  <main  class="container">
-      <h2 class="about-title "style="color:white;">Who We Are</h2>
-      <div class="row g-4 center">
-        <div class="col-md-5">
-          <img src="{{ asset('images/logo/Diana_logo2.jpg') }}" alt="Dianaa Fasteners Team" class="img-fluid">
-        </div>
-        <div class="col-md-7">
-          <div class="card-box">
-            <p>Dianaa Fasteners is the largest distributor of TVS Fasteners in India and a leading provider of engineered fastening solutions. With a footprint across vital industrial sectors, we champion innovation, precision, and excellence.</p>
-            <p>Our infrastructure, experience, and in-house technical capabilities allow us to serve diverse industrial needs with unmatched quality and timely delivery. We are proud to be at the forefront of India’s industrial supply chain.</p>
-          </div>
-        </div>
-      </div>
-      <div class="row g-4">
-        <div class="col-md-3">
-          <div class="info-box">
-            <i class="fas fa-rupee-sign"></i>
-            <h5>Annual Turnover</h5>
-            <p>₹500 Million Annual Turnover</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="info-box">
-            <i class="fas fa-users"></i>
-            <h5>Employees</h5>
-            <p>250 and plus Employees</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="info-box">
-            <i class="fas fa-location-dot"></i>
-            <h5>Locations</h5>
-            <p>Coimbatore & Chennai</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="info-box">
-            <i class="fas fa-location-dot"></i>
-            <h5>ERP System</h5>
-            <p>Integrated Since since 2021</p>
-          </div>
-        </div>
-      </div>
-</main>
-    </section>
 
 
-    
-    
-    <section class="vm-container">
-  <h2  class="about-title">Vision & Mission</h2>
-  <div class="row g-4">
-    <div class="col-md-6">
-      <div class="card h-100 text-center p-4 border-0 shadow rounded-4" style="border-top: 5px solid #0d6efd;">
-        <img src="https://cdn-icons-png.flaticon.com/512/2936/2936884.png" alt="Vision Icon" width="60" class="mb-3 mx-auto center">
-        <h5 class="text-primary">Vision</h5>
-        <p>To be the global benchmark in fastening technology.</p>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card h-100 text-center p-4 border-0 shadow rounded-4" style="border-top: 5px solid #fd7e14;">
-        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Mission Icon" width="60" class="mb-3 mx-auto">
-        <h5 class="text-warning">Mission</h5>
-        <p>Delivering precision-engineered fasteners that empower industries worldwide.</p>
-      </div>
-    </div>
-  </div>
+<!-- Who We Are Section -->
+<section class="section who-we-are-section">
+    <main class="container">
+        <h2 class="about-title" style="color:white;">Who We Are</h2>
+        <div class="row g-4 center">
+            <div class="col-md-5">
+                <img src="{{ asset('images/logo/Diana_logo2.jpg') }}" alt="Dianaa Fasteners Team" class="img-fluid">
+            </div>
+            <div class="col-md-7">
+                <div class="card-box">
+                    <p>Dianaa Fasteners is the largest distributor of TVS Fasteners in India and a leading provider of engineered fastening solutions. With a footprint across vital industrial sectors, we champion innovation, precision, and excellence.</p>
+                    <p>Our infrastructure, experience, and in-house technical capabilities allow us to serve diverse industrial needs with unmatched quality and timely delivery. We are proud to be at the forefront of India’s industrial supply chain.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-4">
+            <div class="col-md-3">
+                <div class="info-box">
+                    <i class="fas fa-rupee-sign"></i>
+                    <h5>Annual Turnover</h5>
+                    <p>₹500 Million</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box">
+                    <i class="fas fa-users"></i>
+                    <h5>Employees</h5>
+                    <p>250+ Employees</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box">
+                    <i class="fas fa-location-dot"></i>
+                    <h5>Locations</h5>
+                    <p>Coimbatore & Chennai</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box">
+                    <i class="fas fa-network-wired"></i>
+                    <h5>ERP System</h5>
+                    <p>Integrated Since 2021</p>
+                </div>
+            </div>
+        </div>
+    </main>
 </section>
 
+<!-- Vision & Mission Section -->
+<section class="vm-container">
+    <h2 class="about-title">Vision & Mission</h2>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100 text-center p-4 border-0 shadow rounded-4" style="border-top: 5px solid #0d6efd;">
+                <img src="https://cdn-icons-png.flaticon.com/512/2936/2936884.png" alt="Vision Icon" width="60" class="mb-3 mx-auto">
+                <h5 class="text-primary">Vision</h5>
+                <p>To be the global benchmark in fastening technology.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 text-center p-4 border-0 shadow rounded-4" style="border-top: 5px solid #fd7e14;">
+                <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Mission Icon" width="60" class="mb-3 mx-auto">
+                <h5 class="text-warning">Mission</h5>
+                <p>Delivering precision-engineered fasteners that empower industries worldwide.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Core Competencies Section -->
 <div class="core-process-section text-center">
     <div class="container">
         <h2 class="about-title">Core Competencies</h2>
         <p class="core-process-subtitle">What Sets Us Apart</p>
 
         <div class="row justify-content-center g-4">
-            <!-- Card 1 -->
             <div class="col-md-6 col-lg-3">
                 <div class="core-card">
                     <div class="core-icon bg-blue">
@@ -568,8 +570,6 @@
                     <div class="core-description">TVS Fasteners in India</div>
                 </div>
             </div>
-
-            <!-- Card 2 -->
             <div class="col-md-6 col-lg-3">
                 <div class="core-card">
                     <div class="core-icon bg-purple">
@@ -579,8 +579,6 @@
                     <div class="core-description">Adherence to client schedules</div>
                 </div>
             </div>
-
-            <!-- Card 3 -->
             <div class="col-md-6 col-lg-3">
                 <div class="core-card">
                     <div class="core-icon bg-pink">
@@ -590,8 +588,6 @@
                     <div class="core-description">In-house Zinc Flake Coating Facility</div>
                 </div>
             </div>
-
-            <!-- Card 4 -->
             <div class="col-md-6 col-lg-3">
                 <div class="core-card">
                     <div class="core-icon bg-orange">
@@ -604,113 +600,114 @@
         </div>
     </div>
 </div>
-</main>
+
+<!-- Strategic Infrastructure Section -->
 <div class="infra-section">
     <div class="container">
         <h2 class="infra-title">Strategic Infrastructure</h2>
         <p class="infra-subtitle">Facilities Designed for Excellence</p>
 
         <div class="infra-cards">
-            <!-- Coimbatore Unit -->
             <div class="infra-card">
                 <div class="infra-location">Coimbatore Unit</div>
                 <div class="infra-size">20,000 SQ. FT.</div>
             </div>
-
-            <!-- Chennai Unit -->
             <div class="infra-card">
                 <div class="infra-location">Chennai Unit</div>
                 <div class="infra-size">30,000 SQ. FT.</div>
-                <div class="infra-note">With Advanced Coating Capabilities</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- FontAwesome CDN (for icons) -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-
+<!-- Financial Milestones Section -->
 <div class="financial-section">
-    <h2 class="financial-title">Financial Highlights</h2>
-    <p class="financial-subtitle">Robust Growth Trajectory</p>
+    <div class="container">
+        <h2 class="financial-title">Financial Milestones</h2>
+        <p class="financial-subtitle">A Journey of Consistent Growth</p>
 
-    <div class="graph-steps">
+        <div class="graph-steps">
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="step-title">2020</div>
+                <div class="step-value">₹250M</div>
+            </div>
 
-        <!-- Step 1 -->
-        <div class="step-card">
-            <div class="step-icon"><i class="fas fa-chart-line"></i></div>
-            <div class="step-title">Annual Turnover</div>
-            <div class="step-value">₹500 Million</div>
-        </div>
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="step-title">2021</div>
+                <div class="step-value">₹300M</div>
+            </div>
 
-        <!-- Step 2 -->
-        <div class="step-card">
-            <div class="step-icon"><i class="fas fa-bullseye"></i></div>
-            <div class="step-title">YOY Growth Target</div>
-            <div class="step-value">20%</div>
-        </div>
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="step-title">2022</div>
+                <div class="step-value">₹350M</div>
+            </div>
 
-        <!-- Step 3 -->
-        <div class="step-card">
-            <div class="step-icon"><i class="fas fa-industry"></i></div>
-            <div class="step-title">Market Share</div>
-            <div class="step-value">60%</div>
-            <div class="step-title" style="font-size: 0.85rem; font-weight: 500; color: #555;">(Small Wind Fasteners)</div>
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="step-title">2023</div>
+                <div class="step-value">₹500M</div>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Certifications Section -->
 <div class="certification-section">
     <div class="certification-container">
-        <!-- Images (Left Side) -->
         <div class="certification-images">
-        <div class="cert-image">
-            <img src="{{ asset('images/banners/certificate_1.jpg') }}" alt="Certification Photo 1">
+            <div class="cert-image">
+                <img src="{{ asset('images/certifications/cert1.jpg') }}" alt="Certification 1">
+            </div>
+            <div class="cert-image">
+                <img src="{{ asset('images/certifications/cert2.jpg') }}" alt="Certification 2">
+            </div>
+            <div class="cert-image">
+                <img src="{{ asset('images/certifications/cert3.jpg') }}" alt="Certification 3">
+            </div>
+            <div class="cert-image">
+                <img src="{{ asset('images/certifications/cert4.jpg') }}" alt="Certification 4">
+            </div>
         </div>
-        <div class="cert-image">
-            <img src="{{ asset('images/banners/cert_2.png') }}" alt="Certification Photo 2">
-        </div>
-    </div>
-
-        <!-- Content (Right Side) -->
         <div class="certification-content">
-            <h2 class="certification-title">CERTIFICATIONS & COMPLIANCE</h2>
-            <p class="certification-subtitle">Adhering to Global Standards</p>
+            <h2 class="certification-title">Our Certifications</h2>
+            <p class="certification-subtitle">Endorsements that validate our quality and processes</p>
             <ul class="certification-points">
                 <li>ISO 9001:2015 Certified</li>
-                <li>Compliance with international quality standards</li>
-                <li>Regular audits to ensure excellence</li>
+                <li>ISO 14001:2015 Environmental Compliance</li>
+                <li>ISO 45001:2018 Health and Safety Certified</li>
+                <li>Recognized by Top Industrial Brands</li>
             </ul>
         </div>
     </div>
 </div>
+
+<!-- Team Section -->
 <div class="team-section">
-    <h2>Our Team</h2>
-    <div class="subtitle">Driven by Expertise</div>
+    <div class="container">
+        <h2>Meet Our Team</h2>
+        <p class="subtitle">Leadership that drives excellence</p>
 
-    <div class="team-cards">
-        <div class="team-card">
-            <img src="{{ asset('images/banners/people.jpg') }}" alt="Leadership">
-            <div class="team-role">Leadership</div>
-            <div class="team-desc">Visionary Professionals</div>
-        </div>
+        <div class="team-cards">
+            <div class="team-card">
+                <img src="{{ asset('images/team/team1.jpg') }}" alt="Team Member 1">
+                <div class="team-role">CEO</div>
+                <p class="team-desc">Driving strategy and growth with over 20 years of experience in the industry.</p>
+            </div>
 
-        <div class="team-card">
-            <img src="{{ asset('images/banners/hand_tools.jpg') }}" alt="Engineering">
-            <div class="team-role">Engineering</div>
-            <div class="team-desc">Skilled Engineers</div>
-        </div>
+            <div class="team-card">
+                <img src="{{ asset('images/team/team2.jpg') }}" alt="Team Member 2">
+                <div class="team-role">Operations Head</div>
+                <p class="team-desc">Ensuring seamless supply chain and timely deliveries nationwide.</p>
+            </div>
 
-        <div class="team-card">
-            <img src="{{ asset('images/banners/quality.jpg') }}" alt="Quality Assurance">
-            <div class="team-role">Quality Assurance</div>
-            <div class="team-desc">Dedicated Team</div>
-        </div>
-
-        <div class="team-card">
-            <img src="{{ asset('images/banners/culture.jpg') }}" alt="Customer Support">
-            <div class="team-role">Customer Support</div>
-            <div class="team-desc">Responsive Personnel</div>
+            <div class="team-card">
+                <img src="{{ asset('images/team/team3.jpg') }}" alt="Team Member 3">
+                <div class="team-role">Technical Director</div>
+                <p class="team-desc">Leading product innovation and technical excellence.</p>
+            </div>
         </div>
     </div>
 </div>
