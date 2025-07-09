@@ -44,7 +44,10 @@ public function apply(Request $request, $id)
 
     // Send email
     Mail::raw("Job Application for: {$job->title}\n\nFrom: {$validated['name']}\nEmail: {$validated['email']}\nQualification: {$validated['qualification']}\nPhone: {$validated['phone']}\n\nMessage:\n{$validated['message']}", function ($message) use ($validated) {
-        $message->to('dianaafastners@gmail.com') // 🔁 change to your receiving email
+        $message->to('dianaafastners@gmail.com',
+        'benedict@dhw.co.in',
+                'nirmal@dhw.co.in',
+                'dianaadigital2024@gmail.com') // 🔁 change to your receiving email
                 ->subject('New Job Application');
     });
 

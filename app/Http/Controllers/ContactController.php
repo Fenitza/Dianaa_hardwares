@@ -25,7 +25,10 @@ public function submit(Request $request)
     ]);
 
     // Send email
-    Mail::to('dianaafastners@gmail.com')->send(new ContactFormMail($validated));
+    Mail::to('dianaafastners@gmail.com',
+    'benedict@dhw.co.in',
+                'nirmal@dhw.co.in',
+                'dianaadigital2024@gmail.com')->send(new ContactFormMail($validated));
 
     return back()->with('success', 'Your message has been sent!');
 }

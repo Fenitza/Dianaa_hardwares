@@ -622,34 +622,37 @@
 
 <!-- Financial Milestones Section -->
 <div class="financial-section">
-    <div class="container">
-        <h2 class="financial-title">Financial Milestones</h2>
-        <p class="financial-subtitle">A Journey of Consistent Growth</p>
+    <h2 class="financial-title">Financial Highlights</h2>
+    <p class="financial-subtitle">Robust Growth Trajectory</p>
 
-        <div class="graph-steps">
-            <div class="step-card">
-                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
-                <div class="step-title">2020</div>
-                <div class="step-value">₹250M</div>
-            </div>
+    <div class="graph-steps">
 
-            <div class="step-card">
-                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
-                <div class="step-title">2021</div>
-                <div class="step-value">₹300M</div>
-            </div>
 
-            <div class="step-card">
-                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
-                <div class="step-title">2022</div>
-                <div class="step-value">₹350M</div>
-            </div>
 
-            <div class="step-card">
-                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
-                <div class="step-title">2023</div>
-                <div class="step-value">₹500M</div>
-            </div>
+
+
+
+
+        <!-- Step 1 -->
+        <div class="step-card">
+            <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="step-title">Annual Turnover</div>
+            <div class="step-value">₹500 Million</div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+            <div class="step-icon"><i class="fas fa-bullseye"></i></div>
+            <div class="step-title">YOY Growth Target</div>
+            <div class="step-value">20%</div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+            <div class="step-icon"><i class="fas fa-industry"></i></div>
+            <div class="step-title">Market Share</div>
+            <div class="step-value">60%</div>
+            <div class="step-title" style="font-size: 0.85rem; font-weight: 500; color: #555;">(Small Wind Fasteners)</div>
         </div>
     </div>
 </div>
@@ -659,17 +662,17 @@
     <div class="certification-container">
         <div class="certification-images">
             <div class="cert-image">
-                <img src="{{ asset('images/certifications/cert1.jpg') }}" alt="Certification 1">
+                <img src="{{ asset('images/banners/cert_2.png') }}" alt="Certification 1">
             </div>
             <div class="cert-image">
-                <img src="{{ asset('images/certifications/cert2.jpg') }}" alt="Certification 2">
+                <img src="{{ asset('images/banners/certificate_1.jpg') }}" alt="Certification 2">
             </div>
-            <div class="cert-image">
+            <!-- <div class="cert-image">
                 <img src="{{ asset('images/certifications/cert3.jpg') }}" alt="Certification 3">
             </div>
             <div class="cert-image">
                 <img src="{{ asset('images/certifications/cert4.jpg') }}" alt="Certification 4">
-            </div>
+            </div> -->
         </div>
         <div class="certification-content">
             <h2 class="certification-title">Our Certifications</h2>
@@ -692,19 +695,19 @@
 
         <div class="team-cards">
             <div class="team-card">
-                <img src="{{ asset('images/team/team1.jpg') }}" alt="Team Member 1">
+                <img src="{{ asset('images/banners/people.jpg') }}" alt="Team Member 1">
                 <div class="team-role">CEO</div>
                 <p class="team-desc">Driving strategy and growth with over 20 years of experience in the industry.</p>
             </div>
 
             <div class="team-card">
-                <img src="{{ asset('images/team/team2.jpg') }}" alt="Team Member 2">
+                <img src="{{ asset('images/banners/hand_tools.jpg') }}" alt="Team Member 2">
                 <div class="team-role">Operations Head</div>
                 <p class="team-desc">Ensuring seamless supply chain and timely deliveries nationwide.</p>
             </div>
 
             <div class="team-card">
-                <img src="{{ asset('images/team/team3.jpg') }}" alt="Team Member 3">
+                <img src="{{ asset('images/banners/quality.jpg') }}" alt="Team Member 3">
                 <div class="team-role">Technical Director</div>
                 <p class="team-desc">Leading product innovation and technical excellence.</p>
             </div>

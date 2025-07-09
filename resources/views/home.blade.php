@@ -211,7 +211,7 @@
 
 
 <!-- Testimonials Section -->
-<div class="testimonials-container my-4">
+<!-- <div class="testimonials-container my-4">
     <h2 class="section-title ">What Our Clients say</h2>
     <div class="row">
         <div class="col-md-4">
@@ -233,7 +233,7 @@
             </blockquote>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Latest News Section -->
 <div class="news-container my-4">
