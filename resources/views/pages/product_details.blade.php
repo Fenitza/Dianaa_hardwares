@@ -199,7 +199,7 @@
     </div>
 @else
     <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3">Sign in to add to cart</a>
-    <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-secondary mb-3">Sign in to request bulk order</a>
+    <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary mb-3">Sign in to request bulk order</a>
 @endif
 
         </div>

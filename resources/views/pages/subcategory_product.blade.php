@@ -20,7 +20,7 @@
                     $query = ['brand' => request()->input('brand', [])];
                 @endphp
 
-                <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}?{{ http_build_query($query) }}"></a>
+                <a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'categoryName' => $category->Name, 'subcategoryName' => $subcategory->Name]) }}?{{ http_build_query($query) }}"></a>
 
                 <div class="filter-section">
                     <h6>Filters</h6>

@@ -25,7 +25,7 @@
                         {{ $product->Quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                     </span>
                     <div class="actions-right d-flex align-items-center">
-                        <input type="number" value="1" min="1" name="quantity{{ $product->ProductID }}" id="quantity" class="quantity-input form-control form-control-sm me-2">
+                        <!-- <input type="number" value="1" min="1" name="quantity{{ $product->ProductID }}" id="quantity" class="quantity-input form-control form-control-sm me-2">
                         @if (auth()->check())
                             <button class="btn btn-primary btn-sm btn-add-to-cart" data-product-id="{{ $product->ProductID }}" data-cart-add-url="{{ route('cart.add') }}">
                                 <i class="fas fa-shopping-cart"></i>
@@ -34,7 +34,10 @@
                             <a href="{{ route('login') }}?redirect_to={{ url()->current() }}" class="btn btn-primary btn-sm btn-add-to-cart">
                                 <i class="fas fa-shopping-cart"></i>
                             </a>
-                        @endif
+                        @endif -->
+                        <a href="{{ route('product.details', ['ProductID' => $product->ProductID]) }}" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-eye"></i>
+                        </a>
                     </div>
                 </div>
             </div>

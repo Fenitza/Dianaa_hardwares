@@ -83,12 +83,12 @@ Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::post('/send-job-application', [CareersController::class, 'send'])->name('job.application.send');
 
 //All Products
-Route::get('/products/category', [ProductController::class, 'category'])->name('products_main');//All Products 
+Route::get('/products/fasteners/category', [ProductController::class, 'category'])->name('products_main');//All Products 
 Route::get('/products/brands/{brand_id}/categories', [ProductController::class, 'brandCategories'])->name('products.byBrandCategories');
 Route::get('/products/{category?}', [ProductController::class, 'show'])->name('products.show');//2nd categories
 Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'showByProducts'])->name('product.details');
 // Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');//grid page
-Route::get('/subcategory/{subCategoryId}', [SubCategoryController::class, 'applyFilters'])->name('subcategory_product');
+Route::get('/products/fasteners/{subCategoryId}/{categoryName}/{subcategoryName}', [SubCategoryController::class, 'applyFilters'])->name('subcategory_product');
 // Route::get('/brand-products/{brandId}', [SubCategoryController::class, 'brandProductsFiltered'])->name('brand.filtered');//home brands
 
 Route::get('/filters', [SubCategoryController::class, 'getFilters'])->name('subcategory_filters');
@@ -101,7 +101,7 @@ Route::get('/products/{category}', [ProductController::class, 'showByCategory'])
 Route::get('/products/{category}', [ProductController::class, 'showCategories'])->name('products.category');
 Route::get('/subcategories/{id}/products', [SubcategoryController::class, 'getProducts']); 
  
-//Home brands
+//Home brands 
 Route::get('/categories/manufacturer/{manufacturer}', [ProductController::class,'showByManufacturer'])->name('categories.show');
 
 // Login Routes

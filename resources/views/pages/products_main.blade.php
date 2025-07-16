@@ -22,10 +22,10 @@
                         <li>@php
     $brands = request()->input('brand', []);
     $query = ['brand' => (array) $brands];
-    $queryString = http_build_query($query);
+    $queryString = http_build_query($query); 
 @endphp
 
-<a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID]) }}{{ $queryString ? '?' . $queryString : '' }}" class="card-link-category">
+<a href="{{ route('subcategory_product', ['subCategoryId' => $subcategory->SubCategoryID, 'categoryName' => $category->Name, 'subcategoryName' => $subcategory->Name]) }}{{ $queryString ? '?' . $queryString : '' }}" class="card-link-category">
     {{ $subcategory->Name }}
 </a>
 

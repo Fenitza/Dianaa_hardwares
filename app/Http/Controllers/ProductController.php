@@ -470,7 +470,7 @@ public function store(Request $request)
         'point' => 'nullable|string',
         'pitch' => 'nullable|numeric',
         'pitchType' => 'nullable|string',
-        'length' => 'nullable|string',
+        'length' => 'nullable|string', 
         'weight' => 'nullable|numeric',
         'quantity' => 'required|integer',
         'image_path.*' => 'image|mimes:webp,jpeg,png,jpg,gif|max:2048',

@@ -116,9 +116,17 @@ public function getFilters(Request $request)
     ]);
 }
 
-public function applyFilters(Request $request, $subCategoryId)
+public function applyFilters(Request $request, $subCategoryId, $categoryName, $subcategoryName)
 {
     // Step 1: Base Query
+    $subcategoryName = urldecode($subcategoryName);
+    $category = Category::where('Name', $categoryName)->firstOrFail();
+
+    // Just match subcategory by name, ignore categoryName
+    $subcategory = SubCategory::where('Name', $subcategoryName)->firstOrFail();
+
+    // Now continue with the rest of your existing logic...
+
     $productsQuery = Product::where('SubCategoryID', $subCategoryId);
 
     // Step 2: Filter Mapping
@@ -190,7 +198,7 @@ public function applyFilters(Request $request, $subCategoryId)
     ]);
 
     // Step 7: Return View
-    return view('pages.subcategory_product', compact('subcategory', 'products', 'viewType'));
+    return view('pages.subcategory_product', compact('subcategory', 'category', 'products', 'viewType'));
 }
 
 
