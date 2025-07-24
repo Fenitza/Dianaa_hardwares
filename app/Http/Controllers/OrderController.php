@@ -12,6 +12,7 @@ use App\Models\CartItem;
 use App\Models\User;
 
 use App\Models\Product;
+use App\Models\ProductColorVariant;
 use App\Mail\OrderConfirmation;
 use App\Mail\BulkOrderMail;
 use Illuminate\Support\Facades\Mail;
@@ -119,14 +120,15 @@ class OrderController extends Controller
         ]);
         $order->save();
 
-        // Save order items
+        // Save order items 
         foreach ($cartItems as $item) {
             $order->items()->create([
                 'order_id' => $order->order_id,
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
-                'price' => floatval($item->product->SalePrice ?? 0),
-                'price' => floatval($item->productColorVariant->sale_price),
+                'price' => floatval($item->selected_price),
+                'variant' => $item->selected_color ?? null,
+
             ]);
         }
 

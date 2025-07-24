@@ -90,10 +90,14 @@ Route::get('/subcategories/product/{ProductID}', [ProductController::class, 'sho
 // Route::get('/subcategories/{subCategoryId}', [SubCategoryController::class, 'show'])->name('subcategory_product');//grid page
 Route::get('/products/fasteners/{subCategoryId}/{categoryName}/{subcategoryName}', [SubCategoryController::class, 'applyFilters'])->name('subcategory_product');
 // Route::get('/brand-products/{brandId}', [SubCategoryController::class, 'brandProductsFiltered'])->name('brand.filtered');//home brands
-
 Route::get('/filters', [SubCategoryController::class, 'getFilters'])->name('subcategory_filters');
 // Route::get('/filters', [ProductController::class, 'fetchFilters'])->name('product.filter');
 // Route::any('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
+
+//Bluedart shipping
+Route::post('/check-pincode', [App\Http\Controllers\BlueDartController::class, 'checkPincode'])->name('check.pincode');
+Route::post('/bluedart/shipping-charge', [App\Http\Controllers\BlueDartController::class, 'getShippingCharge']);
+
  
 //Home Products
 Route::get('/', [HomeController::class , 'index'])->name('home');
@@ -150,7 +154,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
     //order
-    Route::any('/place-order', [OrderController::class, 'placeOrder'])->name('place.order');
+    Route::any('/place-order', [OrderController::class, 'placeOrder'])->name('place.order'); 
     Route::post('/bulk-order', [OrderController::class, 'handleBulkOrder'])->name('bulk.order');
 
     //Razorpay

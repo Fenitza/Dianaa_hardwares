@@ -26,7 +26,7 @@ use App\Jobs\ImportProductsFromExcel;
 
 
 class ProductController extends Controller
-{
+{ 
     public function index()
     {
         // Fetch categories with their subcategories

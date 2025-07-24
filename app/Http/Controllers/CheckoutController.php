@@ -10,21 +10,30 @@ use Illuminate\Support\Facades\Auth;
 class CheckoutController extends Controller
 {
     public function index()
-    {
-        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-        if ($cartItems->isEmpty()) {
-            return redirect('/cart')->with('error', 'Your cart is empty.');
-        }
+{
+    $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
 
-        $subtotal = $cartItems->sum(fn($item) => $item->selected_price * $item->quantity);
-        
-        $total = $subtotal ;
-
-        // Fetch user details
-        $user = Auth::user();
-
-        return view('checkout.index', compact('cartItems', 'subtotal', 'total', 'user'));
+    if ($cartItems->isEmpty()) {
+        return redirect('/cart')->with('error', 'Your cart is empty.');
     }
+
+    // Calculate subtotal
+    $subtotal = $cartItems->sum(fn($item) => $item->selected_price * $item->quantity);
+
+    // Calculate total net weight
+    $netWeight = $cartItems->sum(function ($item) {
+        return $item->product->weight * $item->quantity;
+    });
+
+    // Initial total (before shipping)
+    $total = $subtotal;
+
+    // Fetch user
+    $user = Auth::user();
+
+    return view('checkout.index', compact('cartItems', 'subtotal', 'total', 'user', 'netWeight'));
+}
+
 
     public function updateBillingDetails(Request $request)
     {

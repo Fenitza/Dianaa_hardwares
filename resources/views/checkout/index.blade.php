@@ -29,15 +29,22 @@
                                 Price: ₹{{ number_format($item->selected_price, 2) }} x {{ $item->quantity }}<br>
                                 <strong class="text-dark">Total: ₹{{ number_format($item->selected_price * $item->quantity, 2) }}</strong>
                             </p>
+                            <p class="text-muted small mb-0"><strong>Net Weight:</strong> {{ number_format($netWeight, 2) }} g</p>
                         </div>
                     </div>
-                @endforeach
+                @endforeach 
 
                 <hr>
-                
-                <div class="d-flex justify-content-between fs-5 fw-bold text-primary mt-2">
-                    <span>Total:</span>
-                    <span>₹{{ number_format($total, 2) }}</span>
+                <div class="mb-2 text-muted">
+                    <strong>Total Net Weight:</strong> {{ number_format($netWeight, 2) }} g
+                </div>
+
+                <div class="mb-2">
+                    <strong>Shipping Charges:</strong> ₹<span id="shippingCharge">--</span>
+                </div>
+
+                <div class="fs-5 fw-bold text-success">
+                    <strong>Grand Total:</strong> ₹<span id="grandTotal">{{ number_format($total, 2) }}</span>
                 </div>
             </section>
         </div>
@@ -52,7 +59,10 @@
 
                 <form id="order-form">
                     @csrf
-                    
+
+                    <input type="hidden" id="net_weight" value="{{ $netWeight }}">
+                    <input type="hidden" id="base_total" value="{{ $total }}">
+
                     <!-- Billing Details -->
                     <div class="mb-2">
                         <label class="form-label small">Full Name</label>
@@ -100,13 +110,12 @@
                     </div>
                     
                     <!-- Buttons -->
-                    <button type="button" class="btn btn-primary btn-sm w-100 mt-2" id="place-order-btn">
+                    <button type="button" class="btn btn-primary btn-sm w-100 mt-2" id="place-order-btn" disabled>
                         🛒 Place Order
                     </button>
                     <button type="button" class="btn btn-success btn-sm w-100 mt-2" id="pay-btn" disabled>
                         💳 Pay Now ₹{{ number_format($total, 2) }}
                     </button>
-                    
                 </form>
             </section>
         </div>
@@ -126,137 +135,171 @@
         padding: 8px;
     }
     #pay-btn:disabled {
-    opacity: 0.6;
-    pointer-events: none;
+        opacity: 0.6;
+        pointer-events: none;
     }
 </style>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const postalInput = document.getElementById('postal_code');
+    const shippingChargeEl = document.getElementById('shippingCharge');
+    const grandTotalEl = document.getElementById('grandTotal');
     const placeOrderButton = document.getElementById('place-order-btn');
     const payButton = document.getElementById('pay-btn');
 
-    if (placeOrderButton) {
-        placeOrderButton.addEventListener('click', function (event) {
-            event.preventDefault();
+    let baseTotal = {{ $total }};
+    let weight = {{ $netWeight }};
+    let shippingCharge = 0;
 
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                state: document.getElementById('state').value,
-                postal_code: document.getElementById('postal_code').value,
-                country: document.getElementById('country').value,
-                total: {{ $total }}
-            };
+    postalInput.addEventListener('blur', function () {
+        const pincode = this.value.trim();
 
-            fetch('/place-order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to place order');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.status === 'success') {
-                    // ✅ Save order_id in a global variable
-                    window._placedOrderId = data.order_id;
-                alert("✅ Order placed successfully.");
-                payButton.disabled = false; // ✅ Enable Pay button now
-            } else {
-        alert("❌ Order placement failed.");
-    }
-})
-            .catch(error => {
-                console.error('Order Error:', error);
-                alert('❌ Order processing failed.');
-            });
-        });
-    }
-});
+        shippingCharge = 0;
+        shippingChargeEl.textContent = '--';
+        grandTotalEl.textContent = baseTotal.toFixed(2);
+        placeOrderButton.disabled = true;
+        payButton.disabled = true;
+        payButton.innerHTML = `💳 Pay Now ₹${baseTotal.toFixed(2)}`;
 
+        if (!/^\d{6}$/.test(pincode)) return;
 
-document.getElementById('pay-btn').addEventListener('click', function() {
-    const payload = {
-        amount: {{ (int)($total * 100) }},
-        order_id: window._placedOrderId
-    };
-
-    // 🔍 Log for debugging
-    console.log("Sending to /create-razorpay-order:", payload);
-    fetch('/create-razorpay-order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ amount: {{ (int)($total * 100) }},
-                               order_id: window._placedOrderId, }) 
-    })
-    .then(response => response.json())
-    .then(data => {
-        var options = {
-            "key": "{{ config('services.razorpay.key') }}",
-            "amount": data.amount,
-            "currency": "INR",
-            "name": "Dianaa Fasteners",
-            "description": "Order Payment",
-            "order_id": data.id,
-            "handler": function (response) {
-    // Send payment details to server
-    fetch('/razorpay-payment-success', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_signature: response.razorpay_signature
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert("✅ Payment Successful! Transaction ID: " + response.razorpay_payment_id);
-            window.location.href = "/checkout/success";
-        } else {
-            alert("⚠️ Payment recorded but order not updated.");
-        }
-    })
-    .catch(error => {
-        console.error("Error saving payment:", error);
-        alert("❌ Payment success, but server update failed.");
-    });
-},
-            "prefill": {
-                "name": document.getElementById('name').value,
-                "email": document.getElementById('email').value,
-                "contact": document.getElementById('phone').value
+        fetch('/bluedart/shipping-charge', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            "theme": {
-                "color": "#F6793F"
+            body: JSON.stringify({ pincode, weight })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                shippingCharge = parseFloat(data.shipping_charge);
+                const newTotal = baseTotal + shippingCharge;
+
+                shippingChargeEl.textContent = shippingCharge.toFixed(2);
+                grandTotalEl.textContent = newTotal.toFixed(2);
+                payButton.innerHTML = `💳 Pay Now ₹${newTotal.toFixed(2)}`;
+                placeOrderButton.disabled = false;
+            } else {
+                shippingChargeEl.textContent = 'N/A';
             }
+        })
+        .catch(() => {
+            shippingChargeEl.textContent = 'Error';
+        });
+    });
+
+    placeOrderButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        const grandTotal = parseFloat(grandTotalEl.textContent) || baseTotal;
+
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            postal_code: document.getElementById('postal_code').value,
+            country: document.getElementById('country').value,
+            total: grandTotal
         };
-        var rzp = new Razorpay(options);
-        rzp.open();
-    })
-    .catch(error => {
-        console.error('Payment Error:', error);
-        alert("Failed to initiate payment.");
+
+        fetch('/place-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window._placedOrderId = data.order_id;
+                alert("✅ Order placed successfully.");
+                payButton.disabled = false;
+            } else {
+                alert("❌ Order placement failed.");
+            }
+        })
+        .catch(error => {
+            console.error('Order Error:', error);
+            alert('❌ Order processing failed.');
+        });
+    });
+
+    payButton.addEventListener('click', function () {
+        const grandTotal = parseFloat(grandTotalEl.textContent) || baseTotal;
+        const amountInPaise = Math.round(grandTotal * 100);
+
+        fetch('/create-razorpay-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                amount: amountInPaise,
+                order_id: window._placedOrderId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            var options = {
+                "key": "{{ config('services.razorpay.key') }}",
+                "amount": data.amount,
+                "currency": "INR",
+                "name": "Dianaa Fasteners",
+                "description": "Order Payment",
+                "order_id": data.id,
+                "handler": function (response) {
+                    fetch('/razorpay-payment-success', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("✅ Payment Successful! Transaction ID: " + response.razorpay_payment_id);
+                            window.location.href = "/checkout/success";
+                        } else {
+                            alert("⚠️ Payment recorded but order not updated.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error saving payment:", error);
+                        alert("❌ Payment success, but server update failed.");
+                    });
+                },
+                "prefill": {
+                    "name": document.getElementById('name').value,
+                    "email": document.getElementById('email').value,
+                    "contact": document.getElementById('phone').value
+                },
+                "theme": {
+                    "color": "#F6793F"
+                }
+            };
+            var rzp = new Razorpay(options);
+            rzp.open();
+        })
+        .catch(error => {
+            console.error('Payment Error:', error);
+            alert("Failed to initiate payment.");
+        });
     });
 });
-
 </script>
 @endsection

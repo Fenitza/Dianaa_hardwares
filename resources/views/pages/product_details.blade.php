@@ -150,6 +150,15 @@
     <input type="number" id="quantity" name="quantity" min="{{ $product->moq }}" value="{{ $product->moq }}" class="form-control w-auto">
 </div>
 
+<div class="mb-3">
+    <label for="pincodeInput"><strong>Check Delivery Availability:</strong></label>
+    <div class="d-flex gap-2">
+        <input type="text" id="pincodeInput" class="form-control w-auto" placeholder="Enter Pincode" maxlength="6">
+        <button type="button" class="btn btn-outline-primary" id="checkPincodeBtn">Check</button>
+    </div>
+    <div id="pincodeStatus" class="mt-2 small text-muted"></div>
+</div>
+
 @if (auth()->check())
     <button class="btn btn-primary mb-3 btn-add-to-cart" 
         data-product-id="{{ $product->ProductID }}" 
@@ -193,7 +202,7 @@
 
                         <button type="submit" class="btn btn-primary">Submit Request</button>
                     </form>
-                </div>
+                </div> 
             </div>
         </div>
     </div>
@@ -342,6 +351,47 @@
 
 @push('scripts')
 <script>
+
+//bluedart
+document.getElementById('checkPincodeBtn').addEventListener('click', function () {
+    const pincode = document.getElementById('pincodeInput').value.trim();
+    const statusDiv = document.getElementById('pincodeStatus');
+
+    if (!/^\d{6}$/.test(pincode)) {
+        statusDiv.textContent = 'Please enter a valid 6-digit pincode.';
+        statusDiv.className = 'mt-2 small text-danger';
+        return;
+    }
+
+    statusDiv.textContent = 'Checking delivery availability...';
+    statusDiv.className = 'mt-2 small text-muted';
+
+    fetch('{{ route('check.pincode') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+        body: JSON.stringify({ pincode: pincode })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.available) {
+            statusDiv.textContent = 'Delivery is available to this pincode.';
+            statusDiv.className = 'mt-2 small text-success';
+        } else {
+            statusDiv.textContent = 'Delivery not available to this pincode.';
+            statusDiv.className = 'mt-2 small text-danger';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        statusDiv.textContent = 'Something went wrong while checking.';
+        statusDiv.className = 'mt-2 small text-danger';
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const colorSelect = document.getElementById('colorSelect');
     const selectedColorInput = document.getElementById('selectedColor');
