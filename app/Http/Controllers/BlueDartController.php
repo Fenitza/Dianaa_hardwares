@@ -7,27 +7,43 @@ use Illuminate\Support\Facades\Http;
 
 class BlueDartController extends Controller
 {
-    public function checkPincode(Request $request)
+    public function check(Request $request)
     {
-        $pincode = $request->input('pincode');
-        
-        // Sample JWT token (replace with your actual token generation logic)
-        $token = $this->getToken(); // You may store it in cache or session
+        $request->validate([
+            'pincode' => 'required|digits:6'
+        ]);
 
-        $response = Http::withToken($token)
-            ->post('https://bluedart-api-url/transit-time', [
-                'originArea' => 'Mumbai', // or dynamic
-                'destinationPincode' => $pincode,
-                'productCode' => 'A', // A for Express, E for Economy etc.
+        $pincode = $request->input('pincode');
+        $countryCode = 'IN'; // You can make this dynamic if needed
+        $apiKey = 'vsm79RlWYu5FmZIhDAtSmKACuD0FAiwV'; // Replace with env() if stored in .env
+
+        try {
+            $response = Http::withHeaders([
+                'DHL-API-Key' => $apiKey,
+            ])->get('https://api.dhl.com/location-finder/v1/locations', [
+                'countryCode' => $countryCode,
+                'postalCode' => $pincode
             ]);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            $available = isset($data['TransitAvailable']) && $data['TransitAvailable'] === true;
+            if ($response->successful()) {
+                $data = $response->json();
+                $locations = $data['locations'] ?? [];
 
-            return response()->json(['available' => $available]);
-        } else {
-            return response()->json(['available' => false], 500);
+                return response()->json([
+                    'available' => count($locations) > 0,
+                    'locations' => $locations,
+                ]);
+            } else {
+                return response()->json([
+                    'available' => false,
+                    'error' => 'DHL API returned an error: ' . $response->body()
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'available' => false,
+                'error' => 'Exception: ' . $e->getMessage()
+            ], 500);
         }
     }
 
