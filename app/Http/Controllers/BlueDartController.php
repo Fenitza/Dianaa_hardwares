@@ -7,45 +7,70 @@ use Illuminate\Support\Facades\Http;
 
 class BlueDartController extends Controller
 {
-    public function check(Request $request)
-    {
-        $request->validate([
-            'pincode' => 'required|digits:6'
-        ]);
 
-        $pincode = $request->input('pincode');
-        $countryCode = 'IN'; // You can make this dynamic if needed
-        $apiKey = 'vsm79RlWYu5FmZIhDAtSmKACuD0FAiwV'; // Replace with env() if stored in .env
+public function checkPincode(Request $request)
+{
+    dd('Controller method hit');
+    $request->validate([
+        'pincode' => 'required|digits:6'
+    ]);
 
-        try {
-            $response = Http::withHeaders([
-                'DHL-API-Key' => $apiKey,
-            ])->get('https://api.dhl.com/location-finder/v1/locations', [
-                'countryCode' => $countryCode,
-                'postalCode' => $pincode
-            ]);
+    $pincode = $request->input('pincode');
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $locations = $data['locations'] ?? [];
+    $clientID = env('BLUEDART_CLIENT_ID');
+    $clientSecret = env('BLUEDART_CLIENT_SECRET');
+    $loginID = env('BLUEDART_LOGIN_ID');
+    $licenseKey = env('BLUEDART_LICENSE_KEY');
 
-                return response()->json([
-                    'available' => count($locations) > 0,
-                    'locations' => $locations,
-                ]);
-            } else {
-                return response()->json([
-                    'available' => false,
-                    'error' => 'DHL API returned an error: ' . $response->body()
-                ], $response->status());
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'available' => false,
-                'error' => 'Exception: ' . $e->getMessage()
-            ], 500);
+    // Step 1: Get JWT Token (cached daily)
+    $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () use ($clientID, $clientSecret) {
+        $response = Http::withHeaders([
+            'ClientID' => $clientID,
+            'clientSecret' => $clientSecret
+        ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+
+        if ($response->successful()) {
+            $tokenData = $response->json();
+            return $tokenData['token'] ?? null;
         }
+
+        \Log::error('JWT token fetch failed', ['body' => $response->body()]);
+        return null;
+    });
+
+    if (!$jwtToken) {
+        return response()->json([
+            'available' => false,
+            'error' => 'Failed to generate JWT token.'
+        ], 500);
     }
+
+    // Step 2: Check pincode with BluDart
+    $payload = [
+        "pinCode" => $pincode,
+        "profile" => [
+            "Api_type" => "S",
+            "LicenceKey" => $licenseKey,
+            "LoginID" => $loginID
+        ]
+    ];
+
+    $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+        'JWTToken' => $jwtToken
+    ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/finder/v1/GetServicesforPincode', $payload);
+
+    // 🔍 Debug output
+    dd([
+        'jwtToken' => $jwtToken,
+        'request_payload' => $payload,
+        'response_status' => $response->status(),
+        'response_body' => $response->json(),
+    ]);
+}
+
+
+
 
     private function getToken()
     {

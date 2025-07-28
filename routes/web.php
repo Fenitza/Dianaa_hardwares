@@ -20,6 +20,7 @@ use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\BlueDartController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Mail\BulkOrderMail;
 use Illuminate\Support\Facades\Mail;
@@ -95,8 +96,8 @@ Route::get('/filters', [SubCategoryController::class, 'getFilters'])->name('subc
 // Route::any('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
 
 //Bluedart shipping
-Route::post('/check-pincode', [App\Http\Controllers\BlueDartController::class, 'checkPincode'])->name('check.pincode');
-Route::post('/bluedart/shipping-charge', [App\Http\Controllers\BlueDartController::class, 'getShippingCharge']);
+Route::post('/check-pincode', [BlueDartController::class, 'checkPincode'])->name('check.pincode');
+Route::post('/bluedart/shipping-charge', [BlueDartController::class, 'getShippingCharge']);
 
  
 //Home Products
