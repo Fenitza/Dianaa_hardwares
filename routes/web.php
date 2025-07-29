@@ -96,7 +96,7 @@ Route::get('/filters', [SubCategoryController::class, 'getFilters'])->name('subc
 // Route::any('/api/applyFilters/{subCategoryId}', [ProductController::class, 'applyFilters'])->name('apply.filters');
 
 //Bluedart shipping
-Route::post('/check-pincode', [BlueDartController::class, 'checkPincode'])->name('check.pincode');
+Route::any('/check-pincode', [BlueDartController::class, 'checkPincode'])->name('check.pincode');
 Route::post('/bluedart/shipping-charge', [BlueDartController::class, 'getShippingCharge']);
 
  

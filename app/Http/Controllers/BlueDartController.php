@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class BlueDartController extends Controller
 {
 
 public function checkPincode(Request $request)
 {
-     \Log::info('🔥 BlueDartController@checkPincode called');
-    dd('Controller method hit');
+    \Log::info('Pincode received:', ['pincode' => $request->pincode]);
     $request->validate([
         'pincode' => 'required|digits:6'
     ]);
@@ -23,21 +23,31 @@ public function checkPincode(Request $request)
     $loginID = env('BLUEDART_LOGIN_ID');
     $licenseKey = env('BLUEDART_LICENSE_KEY');
 
+    \Log::info('Making token request', [
+    'url' => 'https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login',
+    'clientID' => $clientID,
+    'clientSecret' => $clientSecret
+]);
+
     // Step 1: Get JWT Token (cached daily)
     $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () use ($clientID, $clientSecret) {
-        $response = Http::withHeaders([
-            'ClientID' => $clientID,
-            'clientSecret' => $clientSecret
-        ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+    \Log::info('Requesting BluDart token', ['clientID' => $clientID]);
 
-        if ($response->successful()) {
-            $tokenData = $response->json();
-            return $tokenData['token'] ?? null;
-        }
+    $response = Http::withHeaders([
+        'ClientID' => $clientID,
+        'ClientSecret' => $clientSecret,
+    ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
 
-        \Log::error('JWT token fetch failed', ['body' => $response->body()]);
-        return null;
-    });
+    \Log::info('BluDart token response status', ['status' => $response->status()]);
+    \Log::info('BluDart token response body', ['body' => $response->body()]);
+
+    if ($response->successful()) {
+        $tokenData = $response->json();
+        return $tokenData['JWTToken'] ?? null;
+    }
+
+    return null;
+});
 
     if (!$jwtToken) {
         return response()->json([
@@ -61,12 +71,26 @@ public function checkPincode(Request $request)
         'JWTToken' => $jwtToken
     ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/finder/v1/GetServicesforPincode', $payload);
 
-    // 🔍 Debug output
-    dd([
-        'jwtToken' => $jwtToken,
-        'request_payload' => $payload,
-        'response_status' => $response->status(),
-        'response_body' => $response->json(),
+    $responseData = $response->json();
+
+    \Log::info('Bluedart pincode response', [
+        'status' => $response->status(),
+        'response' => $responseData,
+    ]);
+
+    $isAvailable = false;
+
+    if (
+        isset($responseData['GetServicesforPincodeResult']) &&
+        isset($responseData['GetServicesforPincodeResult']['IsError']) &&
+        $responseData['GetServicesforPincodeResult']['IsError'] === false
+    ) {
+        $isAvailable = true;
+    }
+
+    return response()->json([
+        'available' => $isAvailable,
+        'data' => $responseData['GetServicesforPincodeResult'] ?? null,
     ]);
 }
 

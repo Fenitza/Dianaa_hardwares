@@ -351,9 +351,13 @@
 
 @push('scripts')
 <script>
+console.log("Product details script loaded.");
 
-//bluedart
 document.getElementById('checkPincodeBtn').addEventListener('click', function () {
+    console.log("DOM fully loaded");
+
+    const checkBtn = document.getElementById('checkPincodeBtn');
+    console.log("Check button in DOMContentLoaded is:", checkBtn);
     const pincode = document.getElementById('pincodeInput').value.trim();
     const statusDiv = document.getElementById('pincodeStatus');
 
