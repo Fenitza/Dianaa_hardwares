@@ -97,11 +97,7 @@ public function checkPincode(Request $request)
 
 
 
-    private function getToken()
-    {
-        // Replace with actual token generation using Client ID & Secret
-        return 'your-jwt-token-here';
-    }
+    
 
     public function getShippingCharge(Request $request)
 {
