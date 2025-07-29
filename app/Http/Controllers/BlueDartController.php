@@ -10,6 +10,7 @@ class BlueDartController extends Controller
 
 public function checkPincode(Request $request)
 {
+     \Log::info('🔥 BlueDartController@checkPincode called');
     dd('Controller method hit');
     $request->validate([
         'pincode' => 'required|digits:6'
