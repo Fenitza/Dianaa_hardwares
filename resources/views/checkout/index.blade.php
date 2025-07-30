@@ -29,7 +29,7 @@
                                 Price: ₹{{ number_format($item->selected_price, 2) }} x {{ $item->quantity }}<br>
                                 <strong class="text-dark">Total: ₹{{ number_format($item->selected_price * $item->quantity, 2) }}</strong>
                             </p>
-                            <p class="text-muted small mb-0"><strong>Net Weight:</strong> {{ number_format($netWeight, 2) }} g</p>
+                            <!-- <p class="text-muted small mb-0"><strong>Net Weight:</strong> {{ number_format($netWeight, 2) }} g</p> -->
                         </div>
                     </div>
                 @endforeach 
