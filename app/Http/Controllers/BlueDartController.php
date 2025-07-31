@@ -130,12 +130,12 @@ Log::info('Shipping Charge Requested', [
     $weightInKg = ceil($weightInGrams / 1000);
 
 
-    if ($weightInKg <= 10) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Shipping only available for packages over 10 kg.',
-        ]);
-    }
+    // if ($weightInKg <= 10) {
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Shipping only available for packages over 10 kg.',
+    //     ]);
+    // }
 
     $state = $this->getStateFromPincode($pincode);
 
