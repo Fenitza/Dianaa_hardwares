@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const grandTotal = parseFloat(grandTotalEl.textContent) || baseTotal;
         const netWeightText = document.getElementById('netWeight').textContent;
         const netWeight = parseFloat(netWeightText);
-        
+
         const formData = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
@@ -208,7 +208,8 @@ document.addEventListener('DOMContentLoaded', function () {
             postal_code: document.getElementById('postal_code').value,
             country: document.getElementById('country').value,
             total: grandTotal,
-            weight: netWeight
+            weight: netWeight,
+            shipping: shippingCharge
         };
 
         fetch('/place-order', {

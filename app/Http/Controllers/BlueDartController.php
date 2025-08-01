@@ -187,23 +187,65 @@ $state = ucwords(strtolower(trim($state)));
         ]);
     }
 
-    $regionRates = [
-        'SOUTH' => 321,
-        'WEST' => 350,
-        'NORTH' => 378,
-        'EAST' => 392,
-        'NE' => 548,
-        'J&K' => 548,
+    $rates = [
+        'SOUTH' => ['base_per_kg' => 9, 'flat_rate_10kg' => 321],
+        'WEST'  => ['base_per_kg' => 11, 'flat_rate_10kg' => 350],
+        'NORTH' => ['base_per_kg' => 13, 'flat_rate_10kg' => 378],
+        'EAST'  => ['base_per_kg' => 14, 'flat_rate_10kg' => 392],
+        'NE'    => ['base_per_kg' => 25, 'flat_rate_10kg' => 548],
+        'J&K'   => ['base_per_kg' => 25, 'flat_rate_10kg' => 548],
     ];
 
-    $ratePer10Kg = $regionRates[$region];
+    $rate = $rates[$region];
+    $shippingCharge = 0;
 
-    // Round up to nearest 10kg block (e.g., 13kg → 20kg)
-    $weightBlock = ceil($weightInKg / 10);
+    if ($weightInKg <= 10) {
+        $shippingCharge = $rate['flat_rate_10kg'];
 
-    // Final shipping charge
-    $shippingCharge = $ratePer10Kg * $weightBlock;
+        Log::info('Flat rate applied for ≤10kg', [
+            'region' => $region,
+            'state' => $state,
+            'flat_rate' => $shippingCharge,
+        ]);
+    } else {
+        $baseRatePerKg = $rate['base_per_kg'];
+        $baseRate = ($weightInKg * $baseRatePerKg)+ $baseRatePerKg;
+        $docketFee = 50;
+        $riskCharge = 100;
 
+        $subTotal = $baseRate + $docketFee + $riskCharge;
+        $fuelSurcharge = $subTotal * 0.39;
+        $fuelDiscount = $fuelSurcharge * 0.10;
+        $fuelFinal = $fuelSurcharge - $fuelDiscount;
+
+        $grandTotal = $subTotal + $fuelFinal;
+
+        $ras = 0;
+        $remoteStates = ['Bihar', 'Jharkhand', 'Kerala', 'Jammu & Kashmir', 'Ladakh'];
+        if (in_array($state, $remoteStates)) {
+            $extraKg = $weightInKg - 10;
+            $ras = $extraKg * 4;
+            $grandTotal += $ras;
+        }
+
+        $shippingCharge = round($grandTotal);
+
+        Log::info('Detailed shipping calculation for >10kg', [
+            'region' => $region,
+            'state' => $state,
+            'weight_kg' => $weightInKg,
+            'base_rate_per_kg' => $baseRatePerKg,
+            'base_rate_total' => $baseRate,
+            'docket_fee' => $docketFee,
+            'risk_charge' => $riskCharge,
+            'subtotal' => $subTotal,
+            'fuel_surcharge_39%' => round($fuelSurcharge, 2),
+            'fuel_discount_10%' => round($fuelDiscount, 2),
+            'fuel_final' => round($fuelFinal, 2),
+            'remote_area_surcharge' => $ras,
+            'grand_total' => $shippingCharge
+        ]);
+    }
 
     return response()->json([
         'success' => true,
@@ -214,6 +256,6 @@ $state = ucwords(strtolower(trim($state)));
     ]);
 }
 
-// helper function
+
 
 }

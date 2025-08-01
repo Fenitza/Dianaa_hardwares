@@ -94,6 +94,7 @@ class OrderController extends Controller
             'country' => 'required|string|max:255',
             'total' => 'required|numeric|min:0',
             'weight' => 'required|numeric|min:0',
+            'shipping' => 'required|numeric|min:0',
         ]);
 
         $user = Auth::user();
@@ -110,6 +111,7 @@ class OrderController extends Controller
         // Calculate total
         $totalAmount = $validatedData['total']; // Use frontend-confirmed total
         $actualWeight = $validatedData['weight'];
+        $shipping = $validatedData['shipping'];
 
         // Generate unique order ID
         $uniqueOrderId = strtoupper('ORD-' . dechex(time()) . '-' . dechex($user->id));
@@ -120,6 +122,7 @@ class OrderController extends Controller
             'user_id' => $user->id,
             'total_amount' => $totalAmount,
             'weight' => $actualWeight,
+            'shipping' => $shipping,
             'payment_status' => 'pending',
             'billing_details' => json_encode($validatedData),
         ]);
@@ -418,9 +421,7 @@ public function generateWaybill(Request $request, $id)
         ],
         "Services" => [
             "AWBNo" => "", // leave blank to generate new AWB
-            "ActualWeight" => round($order->items->sum(function ($item) {
-                return ($item->weight ?? 0.5) * $item->quantity;
-            }) / 1000, 2),
+            "ActualWeight" => round($order->weight, 2),
             "CollectableAmount" => 0,
             "Commodity" => [
                 "CommodityDetail1" => "General Goods",
@@ -450,6 +451,7 @@ public function generateWaybill(Request $request, $id)
             "Officecutofftime" => "",
             "PDFOutputNotRequired" => true,
             "PackType" => "",
+            // "PackType" => ($order->weight) > 10 ? 'L' : '',
             "ParcelShopCode" => "",
             "PayableAt" => "",
             "PickupDate" => "/Date(" . (strtotime($request->pickup_date) * 1000) . ")/",
@@ -513,30 +515,41 @@ Log::info(print_r($jwtToken, true));
     // Make request to BlueDart
     $response = Http::withHeaders([
     'Content-Type' => 'application/json',
-    'JWTToken' => $jwtToken
-])->withBody(json_encode($payload), 'application/json')
-  ->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/GenerateWayBill');
+    'JWTToken' => $jwtToken,
+])
+->withBody(json_encode($payload), 'application/json')
+->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/GenerateWayBill');
 
-    // Log and return
-   
-    Log::info('Bluedart waybill response', ['status' => $response->status(), 'body' => $response->body()]);
+// Log full response for debugging
+Log::info('Bluedart waybill response', [
+    'status' => $response->status(),
+    'body' => $response->body()
+]);
 
-    if ($response->successful()) {
+if ($response->successful()) {
     $data = $response->json();
     $result = $data['GenerateWayBillResult'] ?? [];
 
-    if (!empty($result['AWBNo']) && !$result['IsError']) {
-        $order->update(['awb_no' => $result['AWBNo']]);
-        return back()->with('success', 'Waybill generated successfully: ' . $result['AWBNo']);
+    $awbNo = $result['AWBNo'] ?? null;
+    $isError = $result['IsError'] ?? true;
+
+    if ($awbNo && !$isError) {
+        // Store AWB in DB
+        $order->update(['awb_number' => $awbNo]);
+
+        return back()->with('success', "Waybill generated successfully: $awbNo");
     }
 
+    // Get detailed error messages
     $statusMessages = collect($result['Status'] ?? [])
         ->pluck('StatusInformation')
-        ->implode(', ');
+        ->filter()
+        ->implode(', ') ?: 'Unknown error from Bluedart';
 
-    return back()->with('error', 'Waybill generation failed: ' . $statusMessages);
+    return back()->with('error', "Waybill generation failed: $statusMessages");
 }
 
+// Handle other HTTP errors (400, 500, etc.)
 return back()->with('error', 'Bluedart API error: ' . $response->body());
 }
 

@@ -10,7 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-         'order_id','user_id', 'total_amount','weight',
+         'order_id','user_id', 'total_amount','weight','awb_number','shipping',
         'billing_details','payment_status','transaction_id','razorpay_order_id','tracking_id'
     ];
 
