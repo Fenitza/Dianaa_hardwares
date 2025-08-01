@@ -223,6 +223,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'showOrders'])->name('admin.orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
     Route::put('/admin/orders/{id}/tracking', [OrderController::class, 'updateTracking'])->name('admin.orders.updateTracking');
+    
+    Route::post('/orders/{order}/generate-waybill', [OrderController::class, 'generateWaybill'])->name('admin.orders.generateWaybill');
 
     //careers
     Route::get('careers', [CareersController::class, 'admin'])->name('admin.careers.index');

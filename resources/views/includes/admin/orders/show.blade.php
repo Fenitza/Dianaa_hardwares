@@ -73,6 +73,24 @@
         </table>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @elseif(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    <div class="card p-3 mb-3">
+    <h5>Generate Waybill</h5>
+    <form action="{{ route('admin.orders.generateWaybill', $order->id) }}" method="POST">
+        @csrf
+        <div class="form-group mb-2">
+            <label for="pickup_date" class="form-label">Select Pickup Date</label>
+            <input type="date" name="pickup_date" id="pickup_date" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">🚚 Generate Waybill</button>
+    </form>
+</div>
+
     
 
     <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary mt-3">⬅ Back to Orders</a>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -16,6 +17,7 @@ use App\Models\ProductColorVariant;
 use App\Mail\OrderConfirmation;
 use App\Mail\BulkOrderMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
@@ -294,6 +296,214 @@ public function handleBulkOrder(Request $request)
         Log::error('Mail sending error: ' . $e->getMessage());
         return response()->json(['error' => 'Failed to send email, please try again.'], 500);
     }
+}
+
+public function generateWaybill(Request $request, $id)
+{
+    $request->validate([
+        'pickup_date' => 'required|date|after_or_equal:today',
+    ]);
+
+    $order = Order::with(['items.product'])->where('id', $id)->firstOrFail();
+    $billing = json_decode($order->billing_details); // Assuming billing_details is stored as JSON
+
+    $clientID = env('BLUEDART_CLIENT_ID');
+    $clientSecret = env('BLUEDART_CLIENT_SECRET');
+    $loginID = env('BLUEDART_LOGIN_ID');
+    $licenseKey = env('BLUEDART_LICENSE_KEY');
+
+    // Get JWT token
+    $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () {
+        
+
+        $response = Http::withHeaders([
+            'ClientID' => $clientID,
+            'ClientSecret' => $clientSecret,
+        ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data['JWTToken'] ?? null;
+        }
+
+        return null;
+    });
+
+    if (!$jwtToken) {
+        return back()->with('error', 'Failed to generate Bluedart token.');
+    }
+
+    // Build BlueDart API payload
+    $payload = [
+    "Request" => [
+        "Shipper" => [
+            "CustomerName" => "Your Company Name",
+            "CustomerMobile" => "9999999999",
+            "CustomerEmailID" => "your@email.com",
+            "CustomerPincode" => "641037",
+            "CustomerAddress1" => "Your Company Address 1",
+            "CustomerAddress2" => "Your Company Address 2",
+            "CustomerAddress3" => "Your Company Address 3",
+            "CustomerAddressinfo" => "",
+            "CustomerBusinessPartyTypeCode" => "",
+            "CustomerCode" => "000416",
+            "CustomerGSTNumber" => "",
+            "CustomerLatitude" => "",
+            "CustomerLongitude" => "",
+            "CustomerMaskedContactNumber" => "",
+            "CustomerTelephone" => "",
+            "IsToPayCustomer" => true,
+            "OriginArea" => "SAR", // Adjust accordingly
+            "Sender" => "Your Sender Name",
+            "VendorCode" => ""
+        ],
+        "Consignee" => [
+            "ConsigneeName" => $billing->name,
+            "ConsigneeAddress1" => $billing->address_line_1 ?? $billing->address,
+            "ConsigneeAddress2" => $billing->address_line_2 ?? "",
+            "ConsigneeAddress3" => "",
+            "ConsigneeAddressinfo" => "",
+            "ConsigneeAttention" => $billing->attention_name ?? "",
+            "ConsigneeEmailID" => $billing->email,
+            "ConsigneeFullAddress" => "",
+            "ConsigneeGSTNumber" => "",
+            "ConsigneeLatitude" => "",
+            "ConsigneeLongitude" => "",
+            "ConsigneeMaskedContactNumber" => "",
+            "ConsigneeMobile" => $billing->phone,
+            "ConsigneePincode" => $billing->postal_code,
+            "ConsigneeTelephone" => "",
+            "AvailableDays" => "",
+            "AvailableTiming" => ""
+        ],
+        "Returnadds" => [
+            "ManifestNumber" => "",
+            "ReturnAddress1" => "Return Address Line 1",
+            "ReturnAddress2" => "Return Address Line 2",
+            "ReturnAddress3" => "Return Address Line 3",
+            "ReturnAddressinfo" => "",
+            "ReturnContact" => "Return Contact Name",
+            "ReturnEmailID" => "return@email.com",
+            "ReturnLatitude" => "",
+            "ReturnLongitude" => "",
+            "ReturnMaskedContactNumber" => "",
+            "ReturnMobile" => "9999999999",
+            "ReturnPincode" => "123456",
+            "ReturnTelephone" => ""
+        ],
+        "Services" => [
+            "AWBNo" => "", // leave blank to generate new AWB
+            "ActualWeight" => number_format($order->items->sum(function ($item) {
+                return ($item->weight ?? 0.5) * $item->quantity;
+            }), 2),
+            "CollectableAmount" => 0,
+            "Commodity" => [
+                "CommodityDetail1" => "General Goods",
+                "CommodityDetail2" => "",
+                "CommodityDetail3" => ""
+            ],
+            "CreditReferenceNo" => "Order#" . $order->order_id,
+            "CreditReferenceNo2" => "",
+            "CreditReferenceNo3" => "",
+            "DeclaredValue" => $order->total_amount,
+            "DeliveryTimeSlot" => "",
+            "Dimensions" => $order->items->map(function ($item) {
+                return [
+                    "Length" => $item->length ?? 0,
+                    "Breadth" => $item->breadth ?? 0,
+                    "Height" => $item->height ?? 0,
+                    "Count" => $item->quantity,
+                ];
+            })->values()->toArray(),
+            "FavouringName" => "",
+            "IsDedicatedDeliveryNetwork" => false,
+            "IsDutyTaxPaidByShipper" => false,
+            "IsForcePickup" => false,
+            "IsPartialPickup" => false,
+            "IsReversePickup" => false,
+            "ItemCount" => $order->items->count(),
+            "Officecutofftime" => "",
+            "PDFOutputNotRequired" => true,
+            "PackType" => "",
+            "ParcelShopCode" => "",
+            "PayableAt" => "",
+            "PickupDate" => "/Date(" . (strtotime($request->pickup_date) * 1000) . ")/",
+            "PickupMode" => "",
+            "PickupTime" => "1600",
+            "PickupType" => "",
+            "PieceCount" => (string) $order->items->sum('quantity'),
+            "PreferredPickupTimeSlot" => "",
+            "ProductCode" => "E",  // Use correct product code
+            "ProductFeature" => "",
+            "ProductType" => 1,
+            "RegisterPickup" => true,
+            "SpecialInstruction" => "",
+            "SubProductCode" => "P",
+            "TotalCashPaytoCustomer" => 0,
+            "itemdtl" => $order->items->map(function ($item) use ($order) {
+                return [
+                    "CGSTAmount" => 0,
+                    "HSCode" => "",
+                    "IGSTAmount" => 0,
+                    "Instruction" => "",
+                    "InvoiceDate" => "/Date(" . (strtotime($order->created_at) * 1000) . ")/",
+                    "InvoiceNumber" => "Order#" . $order->order_id,
+                    "ItemID" => (string) $item->id,
+                    "ItemName" => $item->product->name ?? 'Unknown Product',
+                    "ItemValue" => $item->price,
+                    "Itemquantity" => $item->quantity,
+                    "PlaceofSupply" => "",
+                    "ProductDesc1" => "",
+                    "ProductDesc2" => "",
+                    "ReturnReason" => "",
+                    "SGSTAmount" => 0,
+                    "SKUNumber" => $item->product->sku ?? "",
+                    "SellerGSTNNumber" => "",
+                    "SellerName" => "",
+                    "SubProduct1" => "",
+                    "SubProduct2" => "",
+                    "TaxableAmount" => 0,
+                    "TotalValue" => $item->price * $item->quantity,
+                    "cessAmount" => "0.0",
+                    "countryOfOrigin" => "",
+                    "docType" => "",
+                    "subSupplyType" => 0,
+                    "supplyType" => ""
+                ];
+            })->values()->toArray(),
+            "noOfDCGiven" => 0
+        ],
+    ],
+    "Profile" => [
+        "LoginID" => "$loginID",
+        "LicenceKey" => "$licenseKey",
+        "Api_type" => "S"
+    ]
+];
+
+
+    // Make request to BlueDart
+    $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+        'JWTToken' => $jwtToken
+    ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/generateWaybill', $payload);
+
+    // Log and return
+    Log::info('Bluedart waybill request', ['payload' => $payload]);
+    Log::info('Bluedart waybill response', ['status' => $response->status(), 'body' => $response->body()]);
+
+    if ($response->successful()) {
+        $data = $response->json();
+
+        if (!empty($data['GenerateWayBillResult']['AWBNo'])) {
+            $order->update(['awb_no' => $data['GenerateWayBillResult']['AWBNo']]);
+            return back()->with('success', 'Waybill generated successfully: ' . $data['GenerateWayBillResult']['AWBNo']);
+        }
+
+        return back()->with('error', 'Waybill generation failed: ' . json_encode($data));
+    }
+
+    return back()->with('error', 'Bluedart API error: ' . $response->body());
 }
 
 
