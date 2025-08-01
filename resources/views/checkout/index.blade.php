@@ -36,7 +36,7 @@
 
                 <hr>
                 <div class="mb-2 text-muted">
-                    <strong>Total Net Weight:</strong> {{ number_format($netWeight, 2) }} g
+                    <strong>Total Net Weight:</strong><span id="netWeight"> {{ number_format($netWeight, 2) }} g
                 </div>
 
                 <div class="mb-2">
@@ -195,7 +195,9 @@ document.addEventListener('DOMContentLoaded', function () {
     placeOrderButton.addEventListener('click', function (event) {
         event.preventDefault();
         const grandTotal = parseFloat(grandTotalEl.textContent) || baseTotal;
-
+        const netWeightText = document.getElementById('netWeight').textContent;
+        const netWeight = parseFloat(netWeightText);
+        
         const formData = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
@@ -205,7 +207,8 @@ document.addEventListener('DOMContentLoaded', function () {
             state: document.getElementById('state').value,
             postal_code: document.getElementById('postal_code').value,
             country: document.getElementById('country').value,
-            total: grandTotal
+            total: grandTotal,
+            weight: netWeight
         };
 
         fetch('/place-order', {

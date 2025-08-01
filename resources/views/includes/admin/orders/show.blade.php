@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+
 <div class="container mt-4">
     <h4 class="mb-3">Order Details: {{ $order->order_id }}</h4>
 
@@ -74,22 +75,65 @@
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @elseif(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
+<!-- <pre>{{ print_r(session()->all(), true) }}</pre> -->
     <div class="card p-3 mb-3">
     <h5>Generate Waybill</h5>
     <form action="{{ route('admin.orders.generateWaybill', $order->id) }}" method="POST">
         @csrf
-        <div class="form-group mb-2">
-            <label for="pickup_date" class="form-label">Select Pickup Date</label>
-            <input type="date" name="pickup_date" id="pickup_date" class="form-control" required>
+
+        <h6 class="mt-3">Shipper Details</h6>
+
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label>Shipper Name</label>
+                <input type="text" name="shipper_customer_name" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Mobile</label>
+                <input type="text" name="shipper_customer_mobile" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Email</label>
+                <input type="email" name="shipper_customer_email" class="form-control">
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Pincode</label>
+                <input type="text" name="shipper_customer_pincode" class="form-control" required>
+            </div>
+            <div class="col-md-12 mb-2">
+                <label>Address Line 1</label>
+                <input type="text" name="shipper_customer_address1" class="form-control" required>
+            </div>
+            <div class="col-md-12 mb-2">
+                <label>Address Line 2</label>
+                <input type="text" name="shipper_customer_address2" class="form-control">
+            </div>
+            <div class="col-md-12 mb-2">
+                <label>Address Line 3</label>
+                <input type="text" name="shipper_customer_address3" class="form-control">
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Origin Area Code</label>
+                <input type="text" name="shipper_origin_area" class="form-control" required>
+            </div>
+            <div class="form-group col-md-6 mb-2">
+                <label for="pickup_date" class="form-label">Select Pickup Date</label>
+                <input type="date" name="pickup_date" id="pickup_date" class="form-control" required>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">🚚 Generate Waybill</button>
+
+        <button type="submit" class="btn btn-primary mt-3">🚚 Generate Waybill</button>
     </form>
 </div>
+
+
 
     
 

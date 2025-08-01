@@ -93,6 +93,7 @@ class OrderController extends Controller
             'postal_code' => 'required|string|max:10',
             'country' => 'required|string|max:255',
             'total' => 'required|numeric|min:0',
+            'weight' => 'required|numeric|min:0',
         ]);
 
         $user = Auth::user();
@@ -108,6 +109,7 @@ class OrderController extends Controller
 
         // Calculate total
         $totalAmount = $validatedData['total']; // Use frontend-confirmed total
+        $actualWeight = $validatedData['weight'];
 
         // Generate unique order ID
         $uniqueOrderId = strtoupper('ORD-' . dechex(time()) . '-' . dechex($user->id));
@@ -117,6 +119,7 @@ class OrderController extends Controller
             'order_id' => $uniqueOrderId,
             'user_id' => $user->id,
             'total_amount' => $totalAmount,
+            'weight' => $actualWeight,
             'payment_status' => 'pending',
             'billing_details' => json_encode($validatedData),
         ]);
@@ -300,8 +303,18 @@ public function handleBulkOrder(Request $request)
 
 public function generateWaybill(Request $request, $id)
 {
+    \Log::info('generateWaybill called');
     $request->validate([
         'pickup_date' => 'required|date|after_or_equal:today',
+        'shipper_customer_name' => 'required|string',
+        'shipper_customer_mobile' => 'required|string',
+        'shipper_customer_email' => 'nullable|email',
+        'shipper_customer_pincode' => 'required|string',
+        'shipper_customer_address1' => 'required|string',
+        'shipper_customer_address2' => 'nullable|string',
+        'shipper_customer_address3' => 'nullable|string',
+        'shipper_origin_area' => 'required|string',
+        
     ]);
 
     $order = Order::with(['items.product'])->where('id', $id)->firstOrFail();
@@ -312,38 +325,50 @@ public function generateWaybill(Request $request, $id)
     $loginID = env('BLUEDART_LOGIN_ID');
     $licenseKey = env('BLUEDART_LICENSE_KEY');
 
-    // Get JWT token
-    $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () {
-        
+    \Log::info('Making token request', [
+    'url' => 'https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login',
+    'clientID' => $clientID,
+    'clientSecret' => $clientSecret
+]);
 
-        $response = Http::withHeaders([
-            'ClientID' => $clientID,
-            'ClientSecret' => $clientSecret,
-        ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+    // Step 1: Get JWT Token (cached daily)
+    $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () use ($clientID, $clientSecret) {
+    \Log::info('Requesting BluDart token', ['clientID' => $clientID]);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            return $data['JWTToken'] ?? null;
-        }
+    $response = Http::withHeaders([
+        'ClientID' => $clientID,
+        'ClientSecret' => $clientSecret,
+    ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
 
-        return null;
-    });
+    \Log::info('BluDart token response status', ['status' => $response->status()]);
+    \Log::info('BluDart token response body', ['body' => $response->body()]);
+
+    if ($response->successful()) {
+        $tokenData = $response->json();
+        return $tokenData['JWTToken'] ?? null;
+    }
+
+    return null;
+});
 
     if (!$jwtToken) {
-        return back()->with('error', 'Failed to generate Bluedart token.');
+        return response()->json([
+            'available' => false,
+            'error' => 'Failed to generate JWT token.'
+        ], 500);
     }
 
     // Build BlueDart API payload
     $payload = [
     "Request" => [
         "Shipper" => [
-            "CustomerName" => "Your Company Name",
-            "CustomerMobile" => "9999999999",
-            "CustomerEmailID" => "your@email.com",
-            "CustomerPincode" => "641037",
-            "CustomerAddress1" => "Your Company Address 1",
-            "CustomerAddress2" => "Your Company Address 2",
-            "CustomerAddress3" => "Your Company Address 3",
+            "CustomerName" => $request->input('shipper_customer_name'),
+            "CustomerMobile" => $request->input('shipper_customer_mobile'),
+            "CustomerEmailID" => $request->input('shipper_customer_email'),
+            "CustomerPincode" => $request->input('shipper_customer_pincode'),
+            "CustomerAddress1" => $request->input('shipper_customer_address1'),
+            "CustomerAddress2" => $request->input('shipper_customer_address2'),
+            "CustomerAddress3" => $request->input('shipper_customer_address3'),
             "CustomerAddressinfo" => "",
             "CustomerBusinessPartyTypeCode" => "",
             "CustomerCode" => "000416",
@@ -353,8 +378,8 @@ public function generateWaybill(Request $request, $id)
             "CustomerMaskedContactNumber" => "",
             "CustomerTelephone" => "",
             "IsToPayCustomer" => true,
-            "OriginArea" => "SAR", // Adjust accordingly
-            "Sender" => "Your Sender Name",
+            "OriginArea" => $request->input('shipper_origin_area'),
+            "Sender" => "",
             "VendorCode" => ""
         ],
         "Consignee" => [
@@ -393,34 +418,34 @@ public function generateWaybill(Request $request, $id)
         ],
         "Services" => [
             "AWBNo" => "", // leave blank to generate new AWB
-            "ActualWeight" => number_format($order->items->sum(function ($item) {
+            "ActualWeight" => round($order->items->sum(function ($item) {
                 return ($item->weight ?? 0.5) * $item->quantity;
-            }), 2),
+            }) / 1000, 2),
             "CollectableAmount" => 0,
             "Commodity" => [
                 "CommodityDetail1" => "General Goods",
                 "CommodityDetail2" => "",
                 "CommodityDetail3" => ""
             ],
-            "CreditReferenceNo" => "Order#" . $order->order_id,
+            "CreditReferenceNo" => $order->order_id,
             "CreditReferenceNo2" => "",
             "CreditReferenceNo3" => "",
             "DeclaredValue" => $order->total_amount,
             "DeliveryTimeSlot" => "",
             "Dimensions" => $order->items->map(function ($item) {
                 return [
-                    "Length" => $item->length ?? 0,
-                    "Breadth" => $item->breadth ?? 0,
-                    "Height" => $item->height ?? 0,
+                    "Length" => $item->length ?? 1,
+                    "Breadth" => $item->breadth ?? 1,
+                    "Height" => $item->height ?? 1,
                     "Count" => $item->quantity,
                 ];
             })->values()->toArray(),
             "FavouringName" => "",
-            "IsDedicatedDeliveryNetwork" => false,
-            "IsDutyTaxPaidByShipper" => false,
-            "IsForcePickup" => false,
-            "IsPartialPickup" => false,
-            "IsReversePickup" => false,
+            "IsDedicatedDeliveryNetwork" => "0",
+            "IsDutyTaxPaidByShipper" => "0",
+            "IsForcePickup" => "0",
+            "IsPartialPickup" => "0",
+            "IsReversePickup" => "0",
             "ItemCount" => $order->items->count(),
             "Officecutofftime" => "",
             "PDFOutputNotRequired" => true,
@@ -447,9 +472,9 @@ public function generateWaybill(Request $request, $id)
                     "IGSTAmount" => 0,
                     "Instruction" => "",
                     "InvoiceDate" => "/Date(" . (strtotime($order->created_at) * 1000) . ")/",
-                    "InvoiceNumber" => "Order#" . $order->order_id,
+                    "InvoiceNumber" =>  $order->order_id,
                     "ItemID" => (string) $item->id,
-                    "ItemName" => $item->product->name ?? 'Unknown Product',
+                    "ItemName" => $item->product->Description ?? 'Unknown Product',
                     "ItemValue" => $item->price,
                     "Itemquantity" => $item->quantity,
                     "PlaceofSupply" => "",
@@ -481,29 +506,38 @@ public function generateWaybill(Request $request, $id)
     ]
 ];
 
+ Log::info('🔄 Bluedart Waybill Payload:');
+Log::info(print_r($payload, true));
+Log::info(print_r($jwtToken, true));
 
     // Make request to BlueDart
     $response = Http::withHeaders([
-        'Content-Type' => 'application/json',
-        'JWTToken' => $jwtToken
-    ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/generateWaybill', $payload);
+    'Content-Type' => 'application/json',
+    'JWTToken' => $jwtToken
+])->withBody(json_encode($payload), 'application/json')
+  ->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/GenerateWayBill');
 
     // Log and return
-    Log::info('Bluedart waybill request', ['payload' => $payload]);
+   
     Log::info('Bluedart waybill response', ['status' => $response->status(), 'body' => $response->body()]);
 
     if ($response->successful()) {
-        $data = $response->json();
+    $data = $response->json();
+    $result = $data['GenerateWayBillResult'] ?? [];
 
-        if (!empty($data['GenerateWayBillResult']['AWBNo'])) {
-            $order->update(['awb_no' => $data['GenerateWayBillResult']['AWBNo']]);
-            return back()->with('success', 'Waybill generated successfully: ' . $data['GenerateWayBillResult']['AWBNo']);
-        }
-
-        return back()->with('error', 'Waybill generation failed: ' . json_encode($data));
+    if (!empty($result['AWBNo']) && !$result['IsError']) {
+        $order->update(['awb_no' => $result['AWBNo']]);
+        return back()->with('success', 'Waybill generated successfully: ' . $result['AWBNo']);
     }
 
-    return back()->with('error', 'Bluedart API error: ' . $response->body());
+    $statusMessages = collect($result['Status'] ?? [])
+        ->pluck('StatusInformation')
+        ->implode(', ');
+
+    return back()->with('error', 'Waybill generation failed: ' . $statusMessages);
+}
+
+return back()->with('error', 'Bluedart API error: ' . $response->body());
 }
 
 
