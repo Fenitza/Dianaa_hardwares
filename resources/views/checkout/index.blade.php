@@ -195,8 +195,13 @@ document.addEventListener('DOMContentLoaded', function () {
     placeOrderButton.addEventListener('click', function (event) {
         event.preventDefault();
         const grandTotal = parseFloat(grandTotalEl.textContent) || baseTotal;
-        const netWeightText = document.getElementById('netWeight').textContent;
+        const netWeightText = document.getElementById('net_weight').value;
         const netWeight = parseFloat(netWeightText);
+
+        // Force to 2 decimal places if needed (optional)
+        const netWeightFloat = parseFloat(netWeight.toFixed(2));
+
+        console.log('Sending weight:', netWeightFloat);
 
         const formData = {
             name: document.getElementById('name').value,
@@ -208,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
             postal_code: document.getElementById('postal_code').value,
             country: document.getElementById('country').value,
             total: grandTotal,
-            weight: netWeight,
+            weight: netWeightFloat,
             shipping: shippingCharge
         };
 

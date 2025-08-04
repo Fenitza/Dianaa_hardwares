@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+    
+    protected $casts = [
+    'weight' => 'float',  // or 'decimal:2' if you want fixed decimal places
+];
 
     protected $fillable = [
          'order_id','user_id', 'total_amount','weight','awb_number','shipping',

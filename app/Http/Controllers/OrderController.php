@@ -86,7 +86,7 @@ class OrderController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'phone' => 'required|string|max:15',
+            'phone' => ['required', 'regex:/^[6-9]\d{9}$/'],
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
@@ -110,7 +110,7 @@ class OrderController extends Controller
 
         // Calculate total
         $totalAmount = $validatedData['total']; // Use frontend-confirmed total
-        $actualWeight = $validatedData['weight'];
+        $actualWeight = $validatedData['weight'] / 1000;
         $shipping = $validatedData['shipping'];
 
         // Generate unique order ID
@@ -121,7 +121,7 @@ class OrderController extends Controller
             'order_id' => $uniqueOrderId,
             'user_id' => $user->id,
             'total_amount' => $totalAmount,
-            'weight' => $actualWeight,
+            'weight' => (float) $actualWeight,
             'shipping' => $shipping,
             'payment_status' => 'pending',
             'billing_details' => json_encode($validatedData),
@@ -361,6 +361,18 @@ public function generateWaybill(Request $request, $id)
         ], 500);
     }
 
+    $actualWeight = round($order->weight, 2);
+
+    if ($actualWeight > 10) {
+        $productCode = 'A';
+        $subProductCode = 'P';
+        $packType = 'L';
+    } else {
+        $productCode = 'E';
+        $subProductCode = 'P';
+        $packType = '';
+    }
+
     // Build BlueDart API payload
     $payload = [
     "Request" => [
@@ -406,22 +418,22 @@ public function generateWaybill(Request $request, $id)
         ],
         "Returnadds" => [
             "ManifestNumber" => "",
-            "ReturnAddress1" => "Return Address Line 1",
-            "ReturnAddress2" => "Return Address Line 2",
-            "ReturnAddress3" => "Return Address Line 3",
+            "ReturnAddress1" => $request->input('shipper_customer_address1'),
+            "ReturnAddress2" => $request->input('shipper_customer_address2'),
+            "ReturnAddress3" => $request->input('shipper_customer_address3'),
             "ReturnAddressinfo" => "",
-            "ReturnContact" => "Return Contact Name",
-            "ReturnEmailID" => "return@email.com",
+            "ReturnContact" => $request->input('shipper_customer_name'),
+            "ReturnEmailID" => $request->input('shipper_customer_email'),
             "ReturnLatitude" => "",
             "ReturnLongitude" => "",
             "ReturnMaskedContactNumber" => "",
-            "ReturnMobile" => "9999999999",
-            "ReturnPincode" => "123456",
+            "ReturnMobile" =>  $request->input('shipper_customer_mobile'),
+            "ReturnPincode" => $request->input('shipper_customer_pincode'),
             "ReturnTelephone" => ""
         ],
         "Services" => [
             "AWBNo" => "", // leave blank to generate new AWB
-            "ActualWeight" => round($order->weight, 2),
+            "ActualWeight" => $actualWeight,
             "CollectableAmount" => 0,
             "Commodity" => [
                 "CommodityDetail1" => "General Goods",
@@ -433,24 +445,22 @@ public function generateWaybill(Request $request, $id)
             "CreditReferenceNo3" => "",
             "DeclaredValue" => $order->total_amount,
             "DeliveryTimeSlot" => "",
-            "Dimensions" => $order->items->map(function ($item) {
-                return [
-                    "Length" => $item->length ?? 1,
-                    "Breadth" => $item->breadth ?? 1,
-                    "Height" => $item->height ?? 1,
-                    "Count" => $item->quantity,
-                ];
-            })->values()->toArray(),
+            "Dimensions" => [[
+                "Length" => 1,
+                "Breadth" =>  1,
+                "Height" => 1,
+                "Count" => 1,
+            ]],
             "FavouringName" => "",
             "IsDedicatedDeliveryNetwork" => "0",
             "IsDutyTaxPaidByShipper" => "0",
             "IsForcePickup" => "0",
             "IsPartialPickup" => "0",
             "IsReversePickup" => "0",
-            "ItemCount" => $order->items->count(),
+            "ItemCount" => 1,
             "Officecutofftime" => "",
             "PDFOutputNotRequired" => true,
-            "PackType" => "",
+            "PackType" => $packType,
             // "PackType" => ($order->weight) > 10 ? 'L' : '',
             "ParcelShopCode" => "",
             "PayableAt" => "",
@@ -458,14 +468,14 @@ public function generateWaybill(Request $request, $id)
             "PickupMode" => "",
             "PickupTime" => "1600",
             "PickupType" => "",
-            "PieceCount" => (string) $order->items->sum('quantity'),
+            "PieceCount" => 1,
             "PreferredPickupTimeSlot" => "",
-            "ProductCode" => "E",  // Use correct product code
+            "ProductCode" => $productCode,  // Use correct product code
             "ProductFeature" => "",
             "ProductType" => 1,
             "RegisterPickup" => true,
             "SpecialInstruction" => "",
-            "SubProductCode" => "P",
+            "SubProductCode" =>$subProductCode,
             "TotalCashPaytoCustomer" => 0,
             "itemdtl" => $order->items->map(function ($item) use ($order) {
                 return [
@@ -478,7 +488,7 @@ public function generateWaybill(Request $request, $id)
                     "ItemID" => (string) $item->id,
                     "ItemName" => $item->product->Description ?? 'Unknown Product',
                     "ItemValue" => $item->price,
-                    "Itemquantity" => $item->quantity,
+                    "Itemquantity" => 1,
                     "PlaceofSupply" => "",
                     "ProductDesc1" => "",
                     "ProductDesc2" => "",
