@@ -317,6 +317,13 @@ public function generateWaybill(Request $request, $id)
         'shipper_customer_address2' => 'nullable|string',
         'shipper_customer_address3' => 'nullable|string',
         'shipper_origin_area' => 'required|string',
+        'box_count' => 'required|integer|min:1',
+
+        // Dimension validation
+        'boxes' => 'required|array|min:1',
+        'boxes.*.length' => 'required|numeric|min:0.1',
+        'boxes.*.breadth' => 'required|numeric|min:0.1',
+        'boxes.*.height' => 'required|numeric|min:0.1',
         
     ]);
 
@@ -372,7 +379,15 @@ public function generateWaybill(Request $request, $id)
         $subProductCode = 'P';
         $packType = '';
     }
-
+     $dimensions = [];
+    foreach ($request->boxes as $box) {
+        $dimensions[] = [
+            'Length' => (float) $box['length'],
+            'Breadth' => (float) $box['breadth'],
+            'Height' => (float) $box['height'],
+            'Count' => 1,
+        ];
+    }
     // Build BlueDart API payload
     $payload = [
     "Request" => [
@@ -392,7 +407,7 @@ public function generateWaybill(Request $request, $id)
             "CustomerLongitude" => "",
             "CustomerMaskedContactNumber" => "",
             "CustomerTelephone" => "",
-            "IsToPayCustomer" => true,
+            "IsToPayCustomer" => false,
             "OriginArea" => $request->input('shipper_origin_area'),
             "Sender" => "",
             "VendorCode" => ""
@@ -445,12 +460,7 @@ public function generateWaybill(Request $request, $id)
             "CreditReferenceNo3" => "",
             "DeclaredValue" => $order->total_amount,
             "DeliveryTimeSlot" => "",
-            "Dimensions" => [[
-                "Length" => 1,
-                "Breadth" =>  1,
-                "Height" => 1,
-                "Count" => 1,
-            ]],
+            "Dimensions" => $dimensions,
             "FavouringName" => "",
             "IsDedicatedDeliveryNetwork" => "0",
             "IsDutyTaxPaidByShipper" => "0",
@@ -468,12 +478,12 @@ public function generateWaybill(Request $request, $id)
             "PickupMode" => "",
             "PickupTime" => "1600",
             "PickupType" => "",
-            "PieceCount" => 1,
+            "PieceCount" => $request->input('box_count'),
             "PreferredPickupTimeSlot" => "",
             "ProductCode" => $productCode,  // Use correct product code
             "ProductFeature" => "",
             "ProductType" => 1,
-            "RegisterPickup" => true,
+            "RegisterPickup" => false,
             "SpecialInstruction" => "",
             "SubProductCode" =>$subProductCode,
             "TotalCashPaytoCustomer" => 0,
