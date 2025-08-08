@@ -24,20 +24,30 @@ public function checkPincode(Request $request)
     $loginID = env('BLUEDART_LOGIN_ID');
     $licenseKey = env('BLUEDART_LICENSE_KEY');
 
-    \Log::info('Making token request', [
-    'url' => 'https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login',
+//     \Log::info('Making token request', [
+//     'url' => 'https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login',
+//     'clientID' => $clientID,
+//     'clientSecret' => $clientSecret
+// ]);
+\Log::info('Making token request', [
+    'url' => 'https://apigateway.bluedart.com/in/transportation/token/v1/login',
     'clientID' => $clientID,
     'clientSecret' => $clientSecret
 ]);
-
+// Cache::forget('bluedart_jwt_token');
     // Step 1: Get JWT Token (cached daily)
     $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () use ($clientID, $clientSecret) {
     \Log::info('Requesting BluDart token', ['clientID' => $clientID]);
 
+    // $response = Http::withHeaders([
+    //     'ClientID' => $clientID,
+    //     'ClientSecret' => $clientSecret,
+    // ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+
     $response = Http::withHeaders([
         'ClientID' => $clientID,
         'ClientSecret' => $clientSecret,
-    ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+    ])->get('https://apigateway.bluedart.com/in/transportation/token/v1/login');
 
     \Log::info('BluDart token response status', ['status' => $response->status()]);
     \Log::info('BluDart token response body', ['body' => $response->body()]);
@@ -67,10 +77,15 @@ public function checkPincode(Request $request)
         ]
     ];
 
+    // $response = Http::withHeaders([
+    //     'Content-Type' => 'application/json',
+    //     'JWTToken' => $jwtToken
+    // ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/finder/v1/GetServicesforPincode', $payload);
+
     $response = Http::withHeaders([
         'Content-Type' => 'application/json',
         'JWTToken' => $jwtToken
-    ])->post('https://apigateway-sandbox.bluedart.com/in/transportation/finder/v1/GetServicesforPincode', $payload);
+    ])->post('https://apigateway.bluedart.com/in/transportation/finder/v1/GetServicesforPincode', $payload);
 
     $responseData = $response->json();
 

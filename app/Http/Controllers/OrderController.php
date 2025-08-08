@@ -335,20 +335,30 @@ public function generateWaybill(Request $request, $id)
     $loginID = env('BLUEDART_LOGIN_ID');
     $licenseKey = env('BLUEDART_LICENSE_KEY');
 
-    \Log::info('Making token request', [
-    'url' => 'https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login',
+//     \Log::info('Making token request', [
+//     'url' => 'https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login',
+//     'clientID' => $clientID,
+//     'clientSecret' => $clientSecret
+// ]);
+\Log::info('Making token request', [
+    'url' => 'https://apigateway.bluedart.com/in/transportation/token/v1/login',
     'clientID' => $clientID,
     'clientSecret' => $clientSecret
 ]);
-
+    // Cache::forget('bluedart_jwt_token');
     // Step 1: Get JWT Token (cached daily)
     $jwtToken = Cache::remember('bluedart_jwt_token', now()->addDay(), function () use ($clientID, $clientSecret) {
     \Log::info('Requesting BluDart token', ['clientID' => $clientID]);
 
+    // $response = Http::withHeaders([
+    //     'ClientID' => $clientID,
+    //     'ClientSecret' => $clientSecret,
+    // ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+
     $response = Http::withHeaders([
         'ClientID' => $clientID,
         'ClientSecret' => $clientSecret,
-    ])->get('https://apigateway-sandbox.bluedart.com/in/transportation/token/v1/login');
+    ])->get('https://apigateway.bluedart.com/in/transportation/token/v1/login');
 
     \Log::info('BluDart token response status', ['status' => $response->status()]);
     \Log::info('BluDart token response body', ['body' => $response->body()]);
@@ -368,9 +378,27 @@ public function generateWaybill(Request $request, $id)
         ], 500);
     }
 
-    $actualWeight = round($order->weight, 2);
+    // Calculate total CBM using surface area formula (volume / 27000)
+    $surfaceAreaTotal = 0;
 
-    if ($actualWeight > 10) {
+foreach ($request->boxes as $index => $box) {
+    $length = (float) $box['length'];
+    $breadth = (float) $box['breadth'];
+    $height = (float) $box['height'];
+
+    $cbm = ($length * $breadth * $height) / 27000;
+    \Log::info("Box #".($index+1)." Dimensions: Length=$length, Breadth=$breadth, Height=$height");
+    \Log::info("Box #".($index+1)." Volume (CBM before multiplier): $cbm");
+
+    $cbmWithMultiplier = $cbm * 7;
+    \Log::info("Box #".($index+1)." Volume (CBM after multiplying by 7): $cbmWithMultiplier");
+
+    $surfaceAreaTotal += $cbmWithMultiplier;
+}
+
+\Log::info('Total Surface Area (CBM after multiplier): ' . $surfaceAreaTotal);
+    // Decision based on total surface area (CBM)
+    if ($surfaceAreaTotal < 10) {
         $productCode = 'A';
         $subProductCode = 'P';
         $packType = 'L';
@@ -379,6 +407,9 @@ public function generateWaybill(Request $request, $id)
         $subProductCode = 'P';
         $packType = '';
     }
+
+    // You can still use actual weight if needed elsewhere
+    $actualWeight = round($order->weight ?? 0, 2);
      $dimensions = [];
     foreach ($request->boxes as $box) {
         $dimensions[] = [
@@ -462,11 +493,11 @@ public function generateWaybill(Request $request, $id)
             "DeliveryTimeSlot" => "",
             "Dimensions" => $dimensions,
             "FavouringName" => "",
-            "IsDedicatedDeliveryNetwork" => "0",
-            "IsDutyTaxPaidByShipper" => "0",
-            "IsForcePickup" => "0",
-            "IsPartialPickup" => "0",
-            "IsReversePickup" => "0",
+            "IsDedicatedDeliveryNetwork" => false,
+            "IsDutyTaxPaidByShipper" => false,
+            "IsForcePickup" => false,
+            "IsPartialPickup" => false,
+            "IsReversePickup" => false,
             "ItemCount" => 1,
             "Officecutofftime" => "",
             "PDFOutputNotRequired" => true,
@@ -529,16 +560,23 @@ public function generateWaybill(Request $request, $id)
 ];
 
  Log::info('🔄 Bluedart Waybill Payload:');
-Log::info(print_r($payload, true));
+Log::info('🔄 Bluedart Waybill Payload JSON: ' . json_encode($payload, JSON_PRETTY_PRINT));
 Log::info(print_r($jwtToken, true));
 
     // Make request to BlueDart
-    $response = Http::withHeaders([
+//     $response = Http::withHeaders([
+//     'Content-Type' => 'application/json',
+//     'JWTToken' => $jwtToken,
+// ])
+// ->withBody(json_encode($payload), 'application/json')
+// ->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/GenerateWayBill');
+
+$response = Http::withHeaders([
     'Content-Type' => 'application/json',
     'JWTToken' => $jwtToken,
 ])
 ->withBody(json_encode($payload), 'application/json')
-->post('https://apigateway-sandbox.bluedart.com/in/transportation/waybill/v1/GenerateWayBill');
+->post('https://apigateway.bluedart.com/in/transportation/waybill/v1/GenerateWayBill');
 
 // Log full response for debugging
 Log::info('Bluedart waybill response', [

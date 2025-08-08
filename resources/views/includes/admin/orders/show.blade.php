@@ -164,6 +164,41 @@
                     <label>Pickup Date</label>
                     <input type="date" name="pickup_date" class="form-control" required>
                 </div>
+               <!-- Total Weight -->
+                <!-- <div class="col-md-6 mb-2">
+                    <label>Total Weight (kg)</label>
+                    <input type="number" step="0.01" name="total_weight" class="form-control" id="totalWeight" required>
+                </div> -->
+                
+                <!-- Box Count -->
+                <div class="col-md-6 mb-2">
+    <label>Box Count</label>
+    <input type="number" name="box_count" class="form-control" id="boxCount" min="1" value="1" required>
+</div>
+
+<!-- Box Dimensions Section -->
+<div class="col-md-12 mt-3" id="boxDimensionsWrapper">
+    <h6>Box Dimensions (cm)</h6>
+    <div class="form-group" id="boxDimensionsFields">
+        <!-- Default one row of dimensions (Box 1) -->
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <label>Length (Box 1)</label>
+                <input type="number" name="boxes[1][length]" class="form-control" step="0.01" required>
+            </div>
+            <div class="col-md-4">
+                <label>Breadth (Box 1)</label>
+                <input type="number" name="boxes[1][breadth]" class="form-control" step="0.01" required>
+            </div>
+            <div class="col-md-4">
+                <label>Height (Box 1)</label>
+                <input type="number" name="boxes[1][height]" class="form-control" step="0.01" required>
+            </div>
+        </div>
+    </div>
+</div>
+
+
             </div>
 
             <button type="submit" class="btn btn-primary mt-3">🚚 Generate Waybill</button>
@@ -172,4 +207,45 @@
 
     <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary mt-3">⬅ Back to Orders</a>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const boxCountInput = document.getElementById("boxCount");
+    const boxFields = document.getElementById("boxDimensionsFields");
+
+    function generateBoxFields(count) {
+        boxFields.innerHTML = "";
+        for (let i = 1; i <= count; i++) {
+            boxFields.innerHTML += `
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <label>Length (Box ${i})</label>
+                        <input type="number" name="boxes[${i}][length]" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Breadth (Box ${i})</label>
+                        <input type="number" name="boxes[${i}][breadth]" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Height (Box ${i})</label>
+                        <input type="number" name="boxes[${i}][height]" class="form-control" step="0.01" required>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    boxCountInput.addEventListener("input", function () {
+        const count = parseInt(this.value);
+        if (!isNaN(count) && count > 0) {
+            generateBoxFields(count);
+        } else {
+            boxFields.innerHTML = "";
+        }
+    });
+});
+</script>
+@endpush
+
 @endsection
