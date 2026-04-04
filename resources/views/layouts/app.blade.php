@@ -44,7 +44,7 @@
     </div>
     </div>
 
-    <a href="https://wa.me/`919566275630`" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+    <a href="https://wa.me/919566275630" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
     <i class="fab fa-whatsapp whatsapp-icon"></i>
 </a>
 
